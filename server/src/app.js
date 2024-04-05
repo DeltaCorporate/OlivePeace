@@ -23,6 +23,7 @@ app.use(morganMiddleware);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
     res.status(404).send({

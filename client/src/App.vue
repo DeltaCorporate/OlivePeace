@@ -12,5 +12,5 @@ const handleClick = () => {
 </script>
 
 <template>
-  <Button @click="handleClick">Click me</Button>
+  <Button variant="destructive" @click="handleClick">Click me</Button>
 </template>
