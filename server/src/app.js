@@ -5,14 +5,20 @@ import cookieParser from 'cookie-parser';
 import logger from './utils/logger.js';
 import compression from 'compression';
 import helmet from 'helmet';
+import db from './models/index.js';
 import morganMiddleware from './middlewares/morgan.middleware.js';
-
-
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
-
-
 const app = express();
+
+try {
+    await db.sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+} catch (error) {
+    console.error('Unable to connect to the database:', error);
+}
+
+db.sequelize.sync();
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,10 +26,8 @@ app.use(cookieParser());
 app.use(compression());
 app.use(morganMiddleware);
 
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
     res.status(404).send({

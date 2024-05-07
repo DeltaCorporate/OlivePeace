@@ -8,6 +8,8 @@ services:
       - ./server:/usr/src/app
     working_dir: /usr/src/app
     command: sh -c "npm install && npm run dev"
+    env_file:
+      - ./server/.env
     depends_on:
         - mongodb
         - postgresdb
