@@ -5,11 +5,14 @@ import cookieParser from 'cookie-parser';
 import logger from './utils/logger.js';
 import compression from 'compression';
 import helmet from 'helmet';
-import db from './models/index.js';
+import db from './sequelize/models/index.js';
+import {mdb,mdb_connect} from "./mongoose/index.js";
 import morganMiddleware from './middlewares/morgan.middleware.js';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 const app = express();
+
+await mdb_connect();
 
 try {
     await db.sequelize.authenticate();
