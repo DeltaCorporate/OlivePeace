@@ -1,10 +1,11 @@
 {
   "development": {
-    "username": "",
-    "password": null,
-    "database": "",
-    "host": "",
-    "dialect": "mysql"
+    "username": "user",
+    "password": "password",
+    "database": "mydb",
+    "host": "postgresdb",
+    "port": 5432,
+    "dialect": "postgres"
   },
   "test": {
     "username": "",
