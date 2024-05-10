@@ -5,6 +5,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+src/uploads/*
+!src/uploads/.gitkeep
+!src/uploads/test.jpg
+!src/uploads/test2.webp
+!src/uploads/test3.webp
+
 # Runtime data
 pids
 *.pid

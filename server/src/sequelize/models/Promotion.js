@@ -1,6 +1,4 @@
-import ProductCategory from "./ProductCategory.js";
-
-const { Model, DataTypes,NOW } = require('sequelize');
+import { Model, DataTypes,NOW } from 'sequelize';
 import db from './index.js';
 
 class Promotion extends Model {}
@@ -21,8 +19,8 @@ Promotion.init({
         defaultValue: NOW
     }
 }, {
-    db,
+    sequelize: db.sequelize,
     modelName: 'Promotion'
 });
 
-module.exports = Promotion;
+export default Promotion;

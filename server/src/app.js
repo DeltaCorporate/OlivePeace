@@ -46,6 +46,8 @@ app.get("/status", (req, res) => {
         message: "The API is up and running!"
     });
 });
+app.use('/uploads', express.static('uploads'));
+
 
 // Startup
 app.listen(process.env.PORT, () => {

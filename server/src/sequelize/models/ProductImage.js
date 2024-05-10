@@ -1,13 +1,13 @@
 import {Model, DataTypes, NOW} from 'sequelize';
 import db from './index.js';
-import Product from './Product';
+import Product from './Product.js';
 
-class ProductMedia extends Model {}
+class ProductImage extends Model {}
 
-ProductMedia.init({
+ProductImage.init({
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     productId: { type: DataTypes.INTEGER, allowNull: false },
-    mediaName: { type: DataTypes.STRING(255), allowNull: false },
+    imageName: { type: DataTypes.STRING(255), allowNull: false },
     displayOrder: { type: DataTypes.INTEGER, allowNull: false },
     createdAt: {
         type: DataTypes.DATE,
@@ -20,10 +20,10 @@ ProductMedia.init({
         defaultValue: NOW
     }
 }, {
-    db,
-    modelName: 'ProductMedia'
+    sequelize: db.sequelize,
+    modelName: 'ProductImage'
 });
 
-ProductMedia.belongsTo(Product, { foreignKey: 'product_id' });
+ProductImage.belongsTo(Product, { foreignKey: 'productId' });
 
-export default ProductMedia;
+export default ProductImage;

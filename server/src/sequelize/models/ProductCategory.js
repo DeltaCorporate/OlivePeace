@@ -7,7 +7,7 @@ class ProductCategory extends Model {}
 ProductCategory.init({
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     name: { type: DataTypes.STRING(255), allowNull: false },
-    imageUrl: { type: DataTypes.STRING(255) },
+    imageName: { type: DataTypes.STRING(255) },
     description: { type: DataTypes.TEXT },
     slug: { type: DataTypes.STRING(200), allowNull: false },
     createdAt: {
@@ -21,9 +21,9 @@ ProductCategory.init({
         defaultValue: NOW
     }
 }, {
-    db,
+    sequelize: db.sequelize,
     modelName: 'ProductCategory'
 });
-ProductCategory.belongsTo(Promotion, { foreignKey: 'promotion_id' });
+ProductCategory.belongsTo(Promotion, { foreignKey: 'promotionId' });
 
 export default ProductCategory;

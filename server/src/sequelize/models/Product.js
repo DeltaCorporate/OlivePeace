@@ -1,7 +1,7 @@
 import {Model, DataTypes, NOW} from 'sequelize';
 import db from './index.js';
-import ProductCategory from './ProductCategory';
-import Promotion from './Promotion';
+import ProductCategory from './ProductCategory.js';
+import Promotion from './Promotion.js';
 
 class Product extends Model {}
 
@@ -24,12 +24,12 @@ Product.init({
         defaultValue: NOW
     }
 }, {
-    db,
+    sequelize: db.sequelize,
     modelName: 'Product',
 
 });
 
-Product.belongsTo(ProductCategory, { foreignKey: 'category_id' });
-Product.belongsTo(Promotion, { foreignKey: 'promotion_id' });
+Product.belongsTo(ProductCategory, { foreignKey: 'categoryId' });
+Product.belongsTo(Promotion, { foreignKey: 'promotionId' });
 
 export default Product;

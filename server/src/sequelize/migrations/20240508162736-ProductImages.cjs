@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ProductMedias', {
+    await queryInterface.createTable('ProductImages', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -17,7 +17,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      mediaName: {
+      imageName: {
         type: Sequelize.STRING(255),
         allowNull: false
       },
@@ -39,6 +39,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ProductMedias');
+    await queryInterface.dropTable('ProductImages');
   }
 };
