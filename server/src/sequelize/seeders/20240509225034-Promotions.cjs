@@ -9,16 +9,16 @@ module.exports = {
       bulkPromotions.push({
         name: faker.lorem.word(),
         value: faker.number.int({min: 5, max: 30}),
-        expirationDate: faker.date.future(), // camelCase and confirmed method
-        createdAt: new Date(),
-        updatedAt: new Date()
+        expiration_date: faker.date.future(), // camelCase and confirmed method
+        created_at: new Date(),
+        updated_at: new Date()
       });
     }
 
-    await queryInterface.bulkInsert('Promotions', bulkPromotions);
+    await queryInterface.bulkInsert('promotions', bulkPromotions);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Promotions', null, {});
+    await queryInterface.bulkDelete('promotions', null, {});
   }
 };

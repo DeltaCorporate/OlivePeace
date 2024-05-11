@@ -22,8 +22,9 @@ ProductCategory.init({
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'ProductCategory'
+    modelName: 'ProductCategory',
+    underscored: true
 });
-ProductCategory.belongsTo(Promotion, { foreignKey: 'promotionId' });
+ProductCategory.belongsTo(Promotion, { foreignKey: 'promotion_id' });
 
 export default ProductCategory;

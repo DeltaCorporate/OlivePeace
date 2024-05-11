@@ -14,19 +14,19 @@ module.exports = {
     for (let i = 1; i <= 5; i++) {
       bulkCategories.push({
         name: faker.commerce.department(),
-        imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
+        image_name: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
         description: faker.commerce.productDescription(),
         slug: faker.helpers.slugify(faker.commerce.department()),
-        promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null, // Utilise un ID de promotion existant ou null
-        createdAt: new Date(),
-        updatedAt: new Date()
+        promotion_id: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null, // Utilise un ID de promotion existant ou null
+        created_at: new Date(),
+        updated_at: new Date()
       });
     }
 
-    await queryInterface.bulkInsert('ProductCategories', bulkCategories);
+    await queryInterface.bulkInsert('product_categories', bulkCategories);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('ProductCategories', null, {});
+    await queryInterface.bulkDelete('product_categories', null, {});
   }
 };

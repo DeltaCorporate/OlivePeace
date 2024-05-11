@@ -14,19 +14,19 @@ module.exports = {
     for (let i = 0; i < productIds.length; i++) {
       for (let j = 1; j <= 3; j++) {
         bulkMedia.push({
-          productId: productIds[i],
-          imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
-          displayOrder: j,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          product_id: productIds[i],
+          image_name: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
+          display_order: j,
+          created_at: new Date(),
+          updated_at: new Date()
         });
       }
     }
 
-    await queryInterface.bulkInsert('ProductImages', bulkMedia);
+    await queryInterface.bulkInsert('product_images', bulkMedia);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('ProductImages', null, {});
+    await queryInterface.bulkDelete('product_images', null, {});
   }
 };

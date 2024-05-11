@@ -22,17 +22,17 @@ module.exports = {
         price: parseFloat(faker.commerce.price()),
         stock: faker.number.int({ min: 0, max: 100 }),
         slug: faker.helpers.slugify(faker.commerce.productName()),
-        categoryId: faker.helpers.arrayElement(categoryIds),
-        promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        category_id: faker.helpers.arrayElement(categoryIds),
+        promotion_id: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
+        created_at: new Date(),
+        updated_at: new Date()
       });
     }
 
-    await queryInterface.bulkInsert('Products', bulkProducts);
+    await queryInterface.bulkInsert('products', bulkProducts);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Products', null, {});
+    await queryInterface.bulkDelete('products', null, {});
   }
 };

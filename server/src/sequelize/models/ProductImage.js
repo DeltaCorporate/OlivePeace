@@ -21,9 +21,10 @@ ProductImage.init({
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'ProductImage'
+    modelName: 'ProductImage',
+    underscored: true
 });
 
-ProductImage.belongsTo(Product, { foreignKey: 'productId' });
+ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
 
 export default ProductImage;

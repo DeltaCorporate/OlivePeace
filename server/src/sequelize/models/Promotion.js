@@ -20,7 +20,8 @@ Promotion.init({
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'Promotion'
+    modelName: 'Promotion',
+    underscored: true
 });
 
 export default Promotion;
