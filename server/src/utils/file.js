@@ -46,7 +46,23 @@ async function moveTmpToUpload(fileName) {
     }
 }
 
+async function deleteUploadedFile(fileName) {
+    const filePath = path.join(__dirname, '../uploads', fileName);
+    try {
+        await fs.unlink(filePath);
+        console.log(`Fichier ${fileName} supprimé avec succès`);
+    } catch (err) {
+        if (err.code === 'ENOENT')
+            console.log(`Le fichier ${fileName} n'existe pas`);
+        else {
+            throw err;
+        }
+    }
+}
+
+
 export {
     moveFile,
-    moveTmpToUpload
+    moveTmpToUpload,
+    deleteUploadedFile
 };

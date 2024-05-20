@@ -1,10 +1,11 @@
+// controllers/ProductCategoryController.js
 import ProductCategory from '../../sequelize/models/product-category.js';
 import customJoi from '../../config/joi.js';
 import { getPagination, getPagedData } from '../../utils/pagination.js';
 import PromotionValidation from "../../validations/promotion.validation.js";
 import ProductCategoryValidation from "../../validations/product-category.validation.js";
 import upload from "../../config/multer.js";
-import {moveTmpToUpload} from "../../utils/file.js";
+import { deleteUploadedFile, moveTmpToUpload } from "../../utils/file.js";
 
 class ProductCategoryController {
     static categorySchemaCreate = customJoi.object({
@@ -13,71 +14,79 @@ class ProductCategoryController {
         slug: customJoi.slug().min(1).max(200).required().external(ProductCategoryValidation.slugNotExist),
         promotion_id: customJoi.any().external(PromotionValidation.isNotExistAndNotExpired).optional()
     });
-    static categorySchemaUpdate = ProductCategoryController.categorySchemaCreate.fork(['slug'],(schema) => schema.optional());
-
+    static categorySchemaUpdate = ProductCategoryController.categorySchemaCreate.fork(['slug'], (schema) => schema.optional());
 
     constructor() {}
 
     static async create(req, res) {
-        let file = await upload.image.single('image')(req, res, async (err) => {
-                if(err)
-                    return res.status(400).json({ message: err.message });
-                try {
-                    const data = req.body;
-                    await ProductCategoryController.categorySchemaCreate.validateAsync(data);
-                    if(req.file) {
-                        data.imageName = req.file.filename;
-                        moveTmpToUpload(req.file.filename);
-                    }
-                    const category = await ProductCategory.create(data);
-                    return res.status(201).json({message: "", data: category});
-                }catch (error) {
-                    res.status(400).json({ message: error.message });
-                }
-        });
+        await upload.image.single('image')(req, res, async (err) => {
+            if (err) return res.error(err.message, 400);
 
+            try {
+                const data = req.body;
+                await ProductCategoryController.categorySchemaCreate.validateAsync(data);
+                if (req.file) {
+                    data.imageName = req.file.filename;
+                    moveTmpToUpload(req.file.filename);
+                }
+                const category = await ProductCategory.create(data);
+                return res.created(category);
+            } catch (error) {
+                res.error(error.message, 400);
+            }
+        });
     }
 
     static async update(req, res) {
-        try {
-            const { id } = req.params;
-            const data = req.body;
-            if (req.file) {
-                data.image = await ProductCategoryService.uploadImage(req, res);
-            }
-            const validatedData = await ProductCategoryController.categorySchemaUpdate.validateAsync(data);
-            const category = await ProductCategory.update(validatedData, {
-                where: { id },
-                returning: true
-            });
+        await upload.image.single('image')(req, res, async (err) => {
+            if (err) return res.error(err.message, 400);
 
-            if (category[0] === 1) res.status(200).json(category[1][0]);
-            else res.status(404).json({ message: 'Category not found' });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
-        }
+            try {
+                const { id } = req.params;
+                const data = req.body;
+                await ProductCategoryController.categorySchemaUpdate.validateAsync(data);
+                const category = await ProductCategory.findByPk(id);
+                if (!category) return res.error('Category not found', 404);
+
+                if (req.file) {
+                    deleteUploadedFile(category.imageName);
+                    data.imageName = req.file.filename;
+                    moveTmpToUpload(req.file.filename);
+                }
+                await category.update(data);
+                return res.success(category);
+            } catch (error) {
+                res.error(error.message, 400);
+            }
+        });
     }
 
     static async delete(req, res) {
         try {
             const { id } = req.params;
-            await ProductCategoryService.deleteOldImage(id);
+            const category = await ProductCategory.findByPk(id);
+            if (!category) return res.error('Category not found', 404);
+
+            if (category.imageName)
+                deleteUploadedFile(category.imageName);
+
             const result = await ProductCategory.destroy({ where: { id } });
-            if (result) res.status(204).send();
-            else res.status(404).json({ message: 'Category not found' });
+            if (result) return res.status(204).send();
+            else res.error('Category not found', 404);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.error(error.message, 500);
         }
     }
+
 
     static async findOne(req, res) {
         try {
             const { id } = req.params;
             const category = await ProductCategory.findByPk(id);
-            if (category) res.status(200).json(category);
-            else res.status(404).json({ message: 'Category not found' });
+            if (category) res.success(category);
+            else res.error('Category not found', 404);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.error(error.message, 500);
         }
     }
 
@@ -93,9 +102,9 @@ class ProductCategoryController {
             });
 
             const categories = getPagedData(data, page, paginationLimit, totalItems);
-            res.status(200).json(categories);
+            res.success(categories);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.error(error.message, 500);
         }
     }
 }

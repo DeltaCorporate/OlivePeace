@@ -6,11 +6,12 @@ import logger from './utils/logger.js';
 import compression from 'compression';
 import helmet from 'helmet';
 import db from './sequelize/models/index.js';
-import {mdb,mdb_connect} from "./mongoose/index.js";
+import {mdb_connect} from "./mongoose/index.js";
 import morganMiddleware from './middlewares/morgan.middleware.js';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import productCategoriesRouter from './routes/admin/product-categories.js';
+import {responseHandler} from "./middlewares/responseHandler.js";
 const app = express();
 
 await mdb_connect();
@@ -29,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression());
 app.use(morganMiddleware);
-
+app.use(responseHandler);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin/product_categories', productCategoriesRouter);

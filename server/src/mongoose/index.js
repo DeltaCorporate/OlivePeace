@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 async function mdb_connect() {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
