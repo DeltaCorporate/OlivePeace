@@ -3,6 +3,8 @@ import customJoi from '../../config/joi.js';
 import { getPagination, getPagedData } from '../../utils/pagination.js';
 import PromotionValidation from "../../validations/promotion.validation.js";
 import ProductCategoryValidation from "../../validations/product-category.validation.js";
+import upload from "../../config/multer.js";
+import {moveTmpToUpload} from "../../utils/file.js";
 
 class ProductCategoryController {
     static categorySchemaCreate = customJoi.object({
@@ -17,15 +19,23 @@ class ProductCategoryController {
     constructor() {}
 
     static async create(req, res) {
-        try {
-            const data = req.body;
-            const validatedData = await ProductCategoryController.categorySchemaCreate.validateAsync(data);
-            validatedData.imageName = req.file?.filename ?? null;
-            const category = await ProductCategory.create(validatedData);
-            res.status(201).json(category);
-        } catch (error) {
-            res.status(400).json({ message: error.message });
-        }
+        let file = await upload.image.single('image')(req, res, async (err) => {
+                if(err)
+                    return res.status(400).json({ message: err.message });
+                try {
+                    const data = req.body;
+                    await ProductCategoryController.categorySchemaCreate.validateAsync(data);
+                    if(req.file) {
+                        data.imageName = req.file.filename;
+                        moveTmpToUpload(req.file.filename);
+                    }
+                    const category = await ProductCategory.create(data);
+                    return res.status(201).json({message: "", data: category});
+                }catch (error) {
+                    res.status(400).json({ message: error.message });
+                }
+        });
+
     }
 
     static async update(req, res) {

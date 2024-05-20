@@ -21,4 +21,5 @@ for (const file of validationFiles) {
     customJoi = customJoi.extend(extension);
 }
 
+
 export default customJoi;

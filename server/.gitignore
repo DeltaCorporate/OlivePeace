@@ -6,6 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 
 src/uploads/*
+src/tmp/*
+!src/tmp/.gitkeep
 !src/uploads/.gitkeep
 !src/uploads/test.jpg
 !src/uploads/test2.webp
