@@ -4,8 +4,8 @@ const { faker } = require('@faker-js/faker');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Importations dynamiques pour les modèles ES6
-    const ProductCategory = (await import('../models/ProductCategory.js')).default;
-    const Promotion = (await import('../models/Promotion.js')).default;
+    const ProductCategory = (await import('../models/product-category.js')).default;
+    const Promotion = (await import('../models/promotion.js')).default;
     // Récupérer les IDs de ProductCategories et Promotions
     const categories = await ProductCategory.findAll({ attributes: ['id'] });
     const categoryIds = categories.map(cat => cat.id);

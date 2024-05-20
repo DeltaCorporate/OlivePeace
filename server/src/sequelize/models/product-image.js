@@ -1,6 +1,6 @@
 import {Model, DataTypes, NOW} from 'sequelize';
 import db from './index.js';
-import Product from './Product.js';
+import Product from './product.js';
 
 class ProductImage extends Model {}
 

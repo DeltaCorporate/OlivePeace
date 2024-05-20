@@ -1,7 +1,7 @@
 import {Model, DataTypes, NOW} from 'sequelize';
 import db from './index.js';
-import ProductCategory from './ProductCategory.js';
-import Promotion from './Promotion.js';
+import ProductCategory from './product-category.js';
+import Promotion from './promotion.js';
 
 class Product extends Model {}
 

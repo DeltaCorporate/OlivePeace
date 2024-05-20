@@ -4,7 +4,7 @@ const faker= require('@faker-js/faker');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Importer le modèle Sequelize si nécessaire
-    const Product = (await import('../models/Product.js')).default;
+    const Product = (await import('../models/product.js')).default;
 
     // Récupérer les IDs des produits
     const products = await Product.findAll({ attributes: ['id'] });

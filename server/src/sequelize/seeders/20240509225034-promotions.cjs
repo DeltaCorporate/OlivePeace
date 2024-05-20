@@ -5,7 +5,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const bulkPromotions = [];
 
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 20; i++) {
       bulkPromotions.push({
         name: faker.lorem.word(),
         value: faker.number.int({min: 5, max: 30}),
