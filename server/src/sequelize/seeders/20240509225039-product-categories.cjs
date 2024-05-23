@@ -3,8 +3,12 @@ const { faker } = require('@faker-js/faker');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Importations dynamiques pour le modèle Promotion
+    // Connexion à MongoDB et importation des modèles
+    const { mdb_connect } = await import('../../mongoose/index.js');
+    await mdb_connect();
+
     const Promotion = (await import('../models/promotion.js')).default;
+    const ProductCategory = (await import('../models/product-category.js')).default;
 
     // Récupérer les IDs des promotions
     const promotions = await Promotion.findAll({ attributes: ['id'] });
@@ -14,19 +18,32 @@ module.exports = {
     for (let i = 1; i <= 20; i++) {
       bulkCategories.push({
         name: faker.commerce.department(),
-        image_name: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
+        imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
         description: faker.commerce.productDescription(),
         slug: faker.helpers.slugify(faker.commerce.department()),
-        promotion_id: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null, // Utilise un ID de promotion existant ou null
-        created_at: new Date(),
-        updated_at: new Date()
+        promotion_id: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
       });
     }
 
-    await queryInterface.bulkInsert('product_categories', bulkCategories);
+    // Utiliser les modèles pour créer les enregistrements et activer les hooks
+    for (const category of bulkCategories) {
+      await ProductCategory.create(category);
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('product_categories', null, {});
+    // Connexion à MongoDB et importation des modèles
+    const { mdb_connect } = await import('../../mongoose/index.js');
+    await mdb_connect();
+
+    const ProductCategory = (await import('../models/product-category.js')).default;
+
+    // Suppression des enregistrements sans désactivation des vérifications des clés étrangères
+    await ProductCategory.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      individualHooks: true
+    });
   }
 };

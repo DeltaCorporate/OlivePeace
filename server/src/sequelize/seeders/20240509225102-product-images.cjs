@@ -1,10 +1,14 @@
 'use strict';
-const faker= require('@faker-js/faker');
+const { faker } = require('@faker-js/faker');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Importer le modèle Sequelize si nécessaire
+    // Connexion à MongoDB et importation des modèles
+    const { mdb_connect } = await import('../../mongoose/index.js');
+    await mdb_connect();
+
     const Product = (await import('../models/product.js')).default;
+    const ProductImage = (await import('../models/product-image.js')).default;
 
     // Récupérer les IDs des produits
     const products = await Product.findAll({ attributes: ['id'] });
@@ -14,19 +18,32 @@ module.exports = {
     for (let i = 0; i < productIds.length; i++) {
       for (let j = 1; j <= 3; j++) {
         bulkMedia.push({
-          product_id: productIds[i],
-          image_name: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
-          display_order: j,
-          created_at: new Date(),
-          updated_at: new Date()
+          productId: productIds[i],
+          imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
+          displayOrder: j,
         });
       }
     }
 
-    await queryInterface.bulkInsert('product_images', bulkMedia);
+    // Utiliser les modèles pour créer les enregistrements et activer les hooks
+    for (const media of bulkMedia) {
+      await ProductImage.create(media);
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('product_images', null, {});
+    // Connexion à MongoDB et importation des modèles
+    const { mdb_connect } = await import('../../mongoose/index.js');
+    await mdb_connect();
+
+    const ProductImage = (await import('../models/product-image.js')).default;
+
+    // Suppression des enregistrements avec hooks activés
+    await ProductImage.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      individualHooks: true
+    });
   }
 };
