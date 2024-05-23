@@ -1,14 +1,17 @@
 import {Model, DataTypes, NOW} from 'sequelize';
 import db from './index.js';
-import Promotion from "./Promotion.js";
+import ProductCategory from './product-category.model.js';
+import Promotion from './promotion.model.js';
 
-class ProductCategory extends Model {}
+class Product extends Model {}
 
-ProductCategory.init({
+Product.init({
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     name: { type: DataTypes.STRING(255), allowNull: false },
-    imageName: { type: DataTypes.STRING(255) },
+    brand: { type: DataTypes.STRING(255), allowNull: false },
     description: { type: DataTypes.TEXT },
+    price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    stock: { type: DataTypes.INTEGER, allowNull: false },
     slug: { type: DataTypes.STRING(200), allowNull: false },
     createdAt: {
         type: DataTypes.DATE,
@@ -22,9 +25,12 @@ ProductCategory.init({
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'ProductCategory',
+    modelName: 'Product',
     underscored: true
-});
-ProductCategory.belongsTo(Promotion, { foreignKey: 'promotion_id' });
 
-export default ProductCategory;
+});
+
+Product.belongsTo(ProductCategory, { foreignKey: 'category_id' });
+Product.belongsTo(Promotion, { foreignKey: 'promotion_id' });
+
+export default Product;

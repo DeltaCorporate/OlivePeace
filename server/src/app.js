@@ -2,14 +2,16 @@ import {config} from 'dotenv';
 config();
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import logger from './utils/logger.js';
+import logger from './utils/logger.util.js';
 import compression from 'compression';
 import helmet from 'helmet';
 import db from './sequelize/models/index.js';
-import {mdb,mdb_connect} from "./mongoose/index.js";
+import {mdb_connect} from "./mongoose/index.js";
 import morganMiddleware from './middlewares/morgan.middleware.js';
-import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
+import indexRouter from './routes/index.route.js';
+import usersRouter from './routes/users.route.js';
+import productCategoriesRouter from './routes/admin/product-categories.route.js';
+import {responseHandler} from "./middlewares/response-handler.middleware.js";
 const app = express();
 
 await mdb_connect();
@@ -28,9 +30,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression());
 app.use(morganMiddleware);
-
+app.use(responseHandler);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/admin/product_categories', productCategoriesRouter);
+
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
     res.status(404).send({

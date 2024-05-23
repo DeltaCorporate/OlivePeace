@@ -3,9 +3,14 @@ const { faker } = require('@faker-js/faker');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Importations dynamiques pour les modèles ES6
-    const ProductCategory = (await import('../models/ProductCategory.js')).default;
-    const Promotion = (await import('../models/Promotion.js')).default;
+    // Connexion à MongoDB et importation des modèles
+    const { mdb_connect } = await import('../../mongoose/index.js');
+    await mdb_connect();
+
+    const ProductCategory = (await import('../models/product-category.model.js')).default;
+    const Promotion = (await import('../models/promotion.model.js')).default;
+    const Product = (await import('../models/product.model.js')).default;
+
     // Récupérer les IDs de ProductCategories et Promotions
     const categories = await ProductCategory.findAll({ attributes: ['id'] });
     const categoryIds = categories.map(cat => cat.id);
@@ -24,15 +29,28 @@ module.exports = {
         slug: faker.helpers.slugify(faker.commerce.productName()),
         category_id: faker.helpers.arrayElement(categoryIds),
         promotion_id: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
-        created_at: new Date(),
-        updated_at: new Date()
       });
     }
 
-    await queryInterface.bulkInsert('products', bulkProducts);
+    // Utiliser les modèles pour créer les enregistrements et activer les hooks
+    for (const product of bulkProducts) {
+      await Product.create(product);
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('products', null, {});
+    // Connexion à MongoDB et importation des modèles
+    const { mdb_connect } = await import('../../mongoose/index.js');
+    await mdb_connect();
+
+    const Product = (await import('../models/product.model.js')).default;
+
+    // Suppression des enregistrements sans désactivation des vérifications des clés étrangères
+    await Product.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      individualHooks: true
+    });
   }
 };
