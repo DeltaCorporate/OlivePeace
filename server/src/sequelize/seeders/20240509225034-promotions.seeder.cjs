@@ -7,7 +7,7 @@ module.exports = {
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
-    const Promotion = (await import('../models/promotion.js')).default;
+    const Promotion = (await import('../models/promotion.model.js')).default;
 
     const bulkPromotions = [];
     for (let i = 1; i <= 20; i++) {
@@ -29,7 +29,7 @@ module.exports = {
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
-    const Promotion = (await import('../models/promotion.js')).default;
+    const Promotion = (await import('../models/promotion.model.js')).default;
 
     // Suppression des enregistrements avec hooks activés
     await Promotion.destroy({

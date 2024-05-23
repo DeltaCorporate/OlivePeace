@@ -1,4 +1,4 @@
-import ProductCategory from '../../sequelize/models/product-category.js';
+import ProductCategory from '../../sequelize/models/product-category.model.js';
 import AbstractRepository from "./abstract.repository.js";
 
 class ProductCategoryRepository extends AbstractRepository{

@@ -7,8 +7,8 @@ module.exports = {
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
-    const Product = (await import('../models/product.js')).default;
-    const ProductImage = (await import('../models/product-image.js')).default;
+    const Product = (await import('../models/product.model.js')).default;
+    const ProductImage = (await import('../models/product-image.model.js')).default;
 
     // Récupérer les IDs des produits
     const products = await Product.findAll({ attributes: ['id'] });
@@ -36,7 +36,7 @@ module.exports = {
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
-    const ProductImage = (await import('../models/product-image.js')).default;
+    const ProductImage = (await import('../models/product-image.model.js')).default;
 
     // Suppression des enregistrements avec hooks activés
     await ProductImage.destroy({

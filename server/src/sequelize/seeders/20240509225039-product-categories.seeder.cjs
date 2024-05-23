@@ -7,8 +7,8 @@ module.exports = {
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
-    const Promotion = (await import('../models/promotion.js')).default;
-    const ProductCategory = (await import('../models/product-category.js')).default;
+    const Promotion = (await import('../models/promotion.model.js')).default;
+    const ProductCategory = (await import('../models/product-category.model.js')).default;
 
     // Récupérer les IDs des promotions
     const promotions = await Promotion.findAll({ attributes: ['id'] });
@@ -36,7 +36,7 @@ module.exports = {
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
-    const ProductCategory = (await import('../models/product-category.js')).default;
+    const ProductCategory = (await import('../models/product-category.model.js')).default;
 
     // Suppression des enregistrements sans désactivation des vérifications des clés étrangères
     await ProductCategory.destroy({

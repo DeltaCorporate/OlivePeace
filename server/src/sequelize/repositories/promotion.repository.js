@@ -1,4 +1,4 @@
-import Promotion from '../../sequelize/models/promotion.js';
+import Promotion from '../models/promotion.model.js';
 import AbstractRepository from "./abstract.repository.js";
 
 class PromotionRepository extends AbstractRepository{

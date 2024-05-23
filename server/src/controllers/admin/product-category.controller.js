@@ -1,11 +1,11 @@
 // controllers/ProductCategoryController.js
-import ProductCategory from '../../sequelize/models/product-category.js';
-import customJoi from '../../config/joi.js';
-import { getPagination, getPagedData } from '../../utils/pagination.js';
+import ProductCategory from '../../sequelize/models/product-category.model.js';
+import customJoi from '../../config/joi.config.js';
+import { getPagination, getPagedData } from '../../utils/pagination.util.js';
 import PromotionValidation from "../../validations/promotion.validation.js";
 import ProductCategoryValidation from "../../validations/product-category.validation.js";
-import upload from "../../config/multer.js";
-import { deleteUploadedFile, moveTmpToUpload } from "../../utils/file.js";
+import upload from "../../config/multer.config.js";
+import { deleteUploadedFile, moveTmpToUpload } from "../../utils/file.util.js";
 
 class ProductCategoryController {
     static categorySchemaCreate = customJoi.object({

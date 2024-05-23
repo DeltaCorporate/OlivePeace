@@ -1,6 +1,6 @@
 import { Model, DataTypes, NOW } from 'sequelize';
 import db from './index.js';
-import Promotion from './promotion.js';
+import Promotion from './promotion.model.js';
 import ProductCategoryMongoose from '../../mongoose/models/product-category.model.js'; // Import du modèle Mongoose
 
 class ProductCategory extends Model {}
