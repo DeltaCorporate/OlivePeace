@@ -4,8 +4,8 @@ import ProductCategoryController from '../../controllers/admin/product-category.
 const router = express.Router();
 
 router.post('/',ProductCategoryController.create);
-router.get('/', ProductCategoryController.findAndCountAll);
-router.get('/:id', ProductCategoryController.findOne);
+router.get('/', ProductCategoryController.list);
+router.get('/:slug', ProductCategoryController.findOne);
 router.patch('/:id', ProductCategoryController.update);
 router.delete('/:id', ProductCategoryController.delete);
 

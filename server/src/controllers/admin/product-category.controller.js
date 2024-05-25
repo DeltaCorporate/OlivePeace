@@ -1,11 +1,15 @@
 // controllers/ProductCategoryController.js
 import ProductCategory from '../../sequelize/models/product-category.model.js';
+import ProductCategoryMongoose from '../../mongoose/models/product-category.model.js';
+
 import customJoi from '../../config/joi.config.js';
 import { getPagination, getPagedData } from '../../utils/pagination.util.js';
 import PromotionValidation from "../../validations/promotion.validation.js";
 import ProductCategoryValidation from "../../validations/product-category.validation.js";
 import upload from "../../config/multer.config.js";
 import { deleteUploadedFile, moveTmpToUpload } from "../../utils/file.util.js";
+import SequelizeFilter from "../../services/filters/sequelize.filter.js";
+import MongooseFilter from "../../services/filters/mongoose.filter.js";
 
 class ProductCategoryController {
     static categorySchemaCreate = customJoi.object({
@@ -80,26 +84,31 @@ class ProductCategoryController {
 
 
     static async findOne(req, res) {
-        try {
-            const { id } = req.params;
-            const category = await ProductCategory.findByPk(id);
-            if (category) res.success(category);
-            else res.error('Category not found', 404);
-        } catch (error) {
-            res.error(error.message, 500);
-        }
+            try {
+                const { slug } = req.params;
+                const category = await ProductCategory.findOne({ where: { slug } });
+                if (category) res.success(category);
+                else res.error('Catégorie de produit non trouvée', 404);
+            } catch (error) {
+                res.error(error.message, 500);
+            }
     }
 
-    static async findAndCountAll(req, res) {
+
+    static async list(req, res) {
         try {
             const { page = 1, limit = 10 } = req.query;
             const { limit: paginationLimit, offset } = getPagination(page, limit);
 
-            const { count: totalItems, rows: data } = await ProductCategory.findAndCountAll({
-                limit: paginationLimit,
-                offset,
-                order: [['id', 'ASC']]
-            });
+            const mongooseFilter = new MongooseFilter(req.query).snakeCase()
+
+            const { filter, sort } = mongooseFilter.applyFilters();
+
+            const totalItems = await ProductCategoryMongoose.countDocuments(filter);
+            const data = await ProductCategoryMongoose.find(filter)
+                .sort(sort)
+                .skip(offset)
+                .limit(paginationLimit);
 
             const categories = getPagedData(data, page, paginationLimit, totalItems);
             res.success(categories);
@@ -107,6 +116,9 @@ class ProductCategoryController {
             res.error(error.message, 500);
         }
     }
+
+
+
 }
 
 export default ProductCategoryController;
