@@ -1,16 +1,7 @@
-<script setup lang="ts">
-import {Button} from "@/components/ui/button";
+<script setup>
 
-const handleClick = () => {
-  let confirmD = confirm('Are you sure you want to do this?')
-  if (confirmD) {
-    alert('You clicked OK!')
-  } else {
-    alert('You clicked Cancel!')
-  }
-}
 </script>
 
 <template>
-  <Button variant="destructive" @click="handleClick">Click me</Button>
+  <router-view/>
 </template>
