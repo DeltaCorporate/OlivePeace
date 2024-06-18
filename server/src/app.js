@@ -11,6 +11,7 @@ import morganMiddleware from './middlewares/morgan.middleware.js';
 import indexRouter from './routes/index.route.js';
 import usersRouter from './routes/users.route.js';
 import productCategoriesRouter from './routes/admin/product-categories.route.js';
+import cartRouter from './routes/cart.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(responseHandler);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin/product_categories', productCategoriesRouter);
+app.use('cart', cartRouter);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
