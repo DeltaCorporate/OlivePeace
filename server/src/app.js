@@ -15,6 +15,9 @@ import adminProductCategoriesRouter from './routes/admin/product-categories.rout
 import productCategoriesRouter from './routes/product-categories.route.js';
 import adminPromotionRouter from './routes/admin/promotion.route.js';
 import productRouter from './routes/product.route.js';
+import productCategoriesRouter from './routes/admin/product-categories.route.js';
+import promotionRouter from './routes/admin/promotion.route.js';
+import cartRouter from './routes/cart.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
 
@@ -51,6 +54,7 @@ app.use('/products', productRouter);
 app.use('/product_categories', productCategoriesRouter);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
+app.use('cart', cartRouter);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
