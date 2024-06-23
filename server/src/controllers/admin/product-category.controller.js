@@ -107,7 +107,7 @@ class ProductCategoryController {
                 .sort(sort)
                 .skip(offset)
                 .limit(paginationLimit)
-                .select(['-__v','-_id'])
+                .select(['-__v'])
 
             const categories = getPagedData(data, page, paginationLimit, totalItems);
             res.success(categories);

@@ -1,7 +1,8 @@
 import { Model, DataTypes, NOW } from 'sequelize';
 import db from './index.js';
 import Promotion from './promotion.model.js';
-import ProductCategoryMongoose from '../../mongoose/models/product-category.model.js'; // Import du modèle Mongoose
+import ProductCategoryMongoose from '../../mongoose/models/product-category.model.js';
+import {denormalizeProductCategory} from "../../services/denormalizations/product-category.denormalizer.js"; // Import du modèle Mongoose
 
 class ProductCategory extends Model {}
 
@@ -33,37 +34,10 @@ ProductCategory.init({
     underscored: true,
     hooks: {
         afterCreate: async (category, options) => {
-            try {
-                await ProductCategoryMongoose.create({
-                    productCategoryId: category.id,
-                    name: category.name,
-                    imageName: category.imageName,
-                    description: category.description,
-                    slug: category.slug,
-                    createdAt: category.createdAt,
-                    updatedAt: category.updatedAt,
-                    promotionId: category.promotionId
-                });
-            } catch (error) {
-                console.error('Failed to create category in MongoDB:', error);
-            }
+            await denormalizeProductCategory(category);
         },
         afterUpdate: async (category, options) => {
-            try {
-                await ProductCategoryMongoose.findOneAndUpdate(
-                    { productCategoryId: category.id },
-                    {
-                        name: category.name,
-                        imageName: category.imageName,
-                        description: category.description,
-                        slug: category.slug,
-                        updatedAt: category.updatedAt,
-                        promotionId: category.promotionId
-                    }
-                );
-            } catch (error) {
-                console.error('Failed to update category in MongoDB:', error);
-            }
+            await denormalizeProductCategory(category);
         },
         afterDestroy: async (category, options) => {
             try {
