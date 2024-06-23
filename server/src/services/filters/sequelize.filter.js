@@ -31,6 +31,17 @@ class SequelizeFilter extends AbstractFilter {
         if (!this.filters[field]) this.filters[field] = {};
         this.filters[field][Op.lte] = value;
     }
+
+    contains(field, value) {
+        if (!this.filters[field]) this.filters[field] = {};
+        this.filters[field][Op.like] = `%${value}%`;
+    }
+
+    equal(field, value) {
+        if (!this.filters[field]) this.filters[field] = {};
+        this.filters[field][Op.eq] = value;
+    }
+
 }
 
 export default SequelizeFilter;

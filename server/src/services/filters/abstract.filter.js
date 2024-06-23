@@ -27,6 +27,12 @@ class AbstractFilter {
         throw new Error('max method must be implemented');
     }
 
+    equal(field, value) {
+        throw new Error('equal method must be implemented');
+    }
+    contains(field, value) {
+        throw new Error('contains method must be implemented');
+    }
     // Convert fields to snake_case or custom case
     snakeCase(customFormat = {}) {
         this.caseFormat = {
@@ -62,18 +68,43 @@ class AbstractFilter {
         return fieldName;
     }
 
-    // Parse query parameters and apply the filters
+    parseCriteria(criteriaString) {
+        const criteria = [];
+        let currentCriteria = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < criteriaString.length; i++) {
+            const char = criteriaString[i];
+            if (char === '"')
+                inQuotes = !inQuotes;
+            else if (char === ',' && !inQuotes) {
+                criteria.push(currentCriteria.trim());
+                currentCriteria = '';
+            } else
+                currentCriteria += char;
+        }
+        criteria.push(currentCriteria.trim());
+
+        return criteria.map(item => {
+            const [criteriaType, criteriaValue] = item.split(':');
+            if (criteriaType === 'contains' || criteriaType === 'equal')
+                return [criteriaType, criteriaValue.replace(/(^"|"$)/g, '')];
+            return [criteriaType, criteriaValue];
+        });
+    }
+
     parseQueryParams() {
         const filters = Object.entries(this.queryParams)
             .filter(([param]) => param.startsWith('f_'))
             .map(([param, value]) => ({
                 field: param.substring(2),
-                criteria: value.split(',').map(criteria => criteria.split(':'))
+                criteria: this.parseCriteria(value)
             }));
 
         filters.forEach(({ field }) => {
-            if (this.disallowedAttributes.includes(field) || this.disallowedAttributes.includes(this.convertFieldName(field)))
+            if (this.disallowedAttributes.includes(field) || this.disallowedAttributes.includes(this.convertFieldName(field))) {
                 throw new Error(`Le filtrage par "${field}" n'est pas autorisé`);
+            }
         });
 
         return filters.reduce((acc, { field, criteria }) => {
@@ -81,6 +112,8 @@ class AbstractFilter {
             return acc;
         }, {});
     }
+
+
 
     disallow(attributes) {
         const convertedAttributes = attributes.map(attr => this.convertFieldName(attr));

@@ -30,6 +30,16 @@ class MongooseFilter extends AbstractFilter {
         if (!this.filters[field]) this.filters[field] = {};
         this.filters[field].$lte = value;
     }
+    equal(field, value) {
+        if (!this.filters[field]) this.filters[field] = {};
+        this.filters[field] = value;
+    }
+
+    contains(field, value) {
+        if (!this.filters[field]) this.filters[field] = {};
+        this.filters[field].$regex = value;
+        this.filters[field].$options = 'i';
+    }
 }
 
 export default MongooseFilter;
