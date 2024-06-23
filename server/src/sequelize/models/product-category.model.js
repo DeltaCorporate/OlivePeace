@@ -20,10 +20,16 @@ ProductCategory.init({
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: NOW
+    },
+    promotionId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Promotion,
+            key: 'id'
+        }
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'ProductCategory',
     underscored: true,
     hooks: {
         afterCreate: async (category, options) => {
@@ -36,7 +42,7 @@ ProductCategory.init({
                     slug: category.slug,
                     createdAt: category.createdAt,
                     updatedAt: category.updatedAt,
-                    promotion_id: category.promotion_id
+                    promotionId: category.promotionId
                 });
             } catch (error) {
                 console.error('Failed to create category in MongoDB:', error);
@@ -52,7 +58,7 @@ ProductCategory.init({
                         description: category.description,
                         slug: category.slug,
                         updatedAt: category.updatedAt,
-                        promotion_id: category.promotion_id
+                        promotionId: category.promotionId
                     }
                 );
             } catch (error) {
@@ -69,6 +75,6 @@ ProductCategory.init({
     }
 });
 
-ProductCategory.belongsTo(Promotion, { foreignKey: 'promotion_id' });
+ProductCategory.belongsTo(Promotion);
 
 export default ProductCategory;

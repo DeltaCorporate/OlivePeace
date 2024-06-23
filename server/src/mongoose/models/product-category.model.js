@@ -8,7 +8,7 @@ const ProductCategorySchema = new Schema({
     slug: { type: String, required: true, maxlength: 200 },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    promotion_id: { type: Number }
+    promotionId: { type: Number, default: null }
 });
 
 const ProductCategory = model('ProductCategory', ProductCategorySchema);

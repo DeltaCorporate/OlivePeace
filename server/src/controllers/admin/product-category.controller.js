@@ -15,7 +15,7 @@ class ProductCategoryController {
         name: customJoi.string().max(255).required(),
         description: customJoi.string().allow(null, ''),
         slug: customJoi.slug().min(1).max(200).required().external(ProductCategoryValidation.slugNotExist),
-        promotion_id: customJoi.any().external(PromotionValidation.isNotExistAndNotExpired).optional()
+        promotionId: customJoi.any().external(PromotionValidation.isNotExistAndNotExpired).optional()
     });
     static categorySchemaUpdate = ProductCategoryController.categorySchemaCreate.fork(['slug'], (schema) => schema.optional());
 
@@ -99,9 +99,7 @@ class ProductCategoryController {
             const { page = 1, limit = 10 } = req.query;
             const { limit: paginationLimit, offset } = getPagination(page, limit);
 
-            const mongooseFilter = new MongooseFilter(req.query).camelCase({
-                'promotion_id': 'promotion_id'
-            })
+            const mongooseFilter = new MongooseFilter(req.query);
 
             const { filter, sort } = mongooseFilter.applyFilters();
             const totalItems = await ProductCategoryMongoose.countDocuments(filter);

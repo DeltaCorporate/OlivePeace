@@ -8,14 +8,14 @@ class PromotionRepository extends AbstractRepository{
     }
     /**
      * Vérifie si une promotion existe et n'est pas expirée
-     * @param {number} promotion_id - L'identifiant de la promotion
+     * @param {number} promotionId - L'identifiant de la promotion
      * @returns {Promise<boolean>} - Retourne true si la promotion existe et n'est pas expirée, sinon false
-     * @throws {Error} - Lance une erreur si promotion_id n'est pas fourni
+     * @throws {Error} - Lance une erreur si promotionId n'est pas fourni
      */
-    static async isPromotionExistAndNotExpired(promotion_id) {
-        if (!promotion_id)
+    static async isPromotionExistAndNotExpired(promotionId) {
+        if (!promotionId)
             throw new Error('Promotion ID is required');
-        const promotion = await Promotion.findByPk(promotion_id);
+        const promotion = await Promotion.findByPk(promotionId);
         if (!promotion)
             return false;
 
