@@ -1,12 +1,8 @@
 <script setup>
-import {getProductCategories} from "@/api/admin/product-category.api.ts";
-import Filter from "@/utils/filter.util.ts";
+import ProductCategoryTable from "@/components/admin/ProductCategoryTable.vue";
 
-let testFilter = new Filter()
-
-let data = await getProductCategories(testFilter);
 </script>
 <template>
-
+  <ProductCategoryTable />
 </template>
 <style scoped> </style>

@@ -1,5 +1,6 @@
 import apiClient from '@/../config/axios.ts';
 import { ProductCategory } from '@/types/product-category.type.ts';
+import Filter from "@/utils/filter.util.ts";
 
 /**
  * Obtenir toutes les catégories de produits avec des filtres optionnels
