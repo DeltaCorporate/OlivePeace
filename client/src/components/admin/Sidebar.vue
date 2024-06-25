@@ -17,7 +17,6 @@ const sidebarStore = useSidebarStore();
 </script>
 
 <template>
-  <div>
     <button @click="sidebarStore.toggleSidebar" class="lg:hidden p-4 text-white bg-gray-800 fixed top-4 right-4 z-50 rounded-xl shadow-lg">
       <Menu class="h-6 w-6"/>
     </button>
@@ -41,7 +40,6 @@ const sidebarStore = useSidebarStore();
         </nav>
       </div>
     </div>
-  </div>
 </template>
 
 
