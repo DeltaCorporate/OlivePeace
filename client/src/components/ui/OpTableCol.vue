@@ -12,16 +12,16 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(['sort']);
-const property = reactive(props.property);
+const property = ref(props.property);
 function handleSortAsk() {
   if (props.sortable)
-    emits('sort', props.property);
+    emits('sort', property.value);
 }
 
 const thClasses = computed(() => {
   return [
-    'px-6 py-3 text-left text-sm font-medium text-white uppercase tracking-wider cursor-pointer',
-    { 'bg-primary-600': props.sortOrders[property] }
+    'sticky px-6 py-3 text-left text-sm font-medium text-white uppercase tracking-wider cursor-pointer',
+    { 'bg-primary-600': props.sortOrders[property.value] }
   ];
 });
 
@@ -43,9 +43,9 @@ const thClasses = computed(() => {
       </span>
     </div>
   </th>
-  <td v-else-if="props.renderAs === 'cell'" class="px-6 py-4">
-    <slot :value="props.property ? props.row[props.property] : props.row">
-      {{ props.property ? props.row[props.property] : '' }}
+  <td v-else-if="props.renderAs === 'cell'" class="px-3 py-1.5">
+    <slot :value="property ? props.row[property] : props.row">
+      {{ property ? props.row[property] : '' }}
     </slot>
   </td>
 </template>
