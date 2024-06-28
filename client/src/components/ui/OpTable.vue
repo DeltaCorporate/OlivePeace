@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref, defineEmits, defineProps, useSlots } from 'vue';
+import { ref, defineEmits, defineProps, useSlots, reactive, computed } from 'vue';
 import FilterBuilder from '@/utils/filter.util.ts';
 import OpTablePagination from './OpTablePagination.vue';
-import {PaginationInterface} from "@/types/pagination.type.ts";
+import { SfInput } from '@storefront-ui/vue';
+import { PaginationInterface } from "@/types/pagination.type.ts";
+import {debounce} from "@/utils/debounce.utils.ts";
 
 const props = defineProps<{
   rowKeyField: string;
@@ -10,10 +12,11 @@ const props = defineProps<{
   pagination: PaginationInterface;
 }>();
 
-const emits = defineEmits(['sort', 'pageChange']);
+const emits = defineEmits(['sort', 'pageChange', 'search']);
 const slots = useSlots();
 
 const sortOrders = ref<{ [key: string]: 'ASC' | 'DESC' | null }>({});
+const searchTerms = reactive<{ [key: string]: string }>({});
 const filterBuilder = ref(new FilterBuilder());
 
 function handleSort(property: string) {
@@ -21,11 +24,10 @@ function handleSort(property: string) {
   else if (sortOrders.value[property] === 'DESC') sortOrders.value[property] = null;
   else sortOrders.value[property] = 'ASC';
 
-  filterBuilder.value = new FilterBuilder();
   Object.keys(sortOrders.value).forEach((key) => {
-    if (sortOrders.value[key]) {
+    if (sortOrders.value[key])
       filterBuilder.value.add(key).ord(sortOrders.value[key]);
-    }
+    else filterBuilder.value.remove(key, 'ord');
   });
   emits('sort', filterBuilder.value);
 }
@@ -33,6 +35,20 @@ function handleSort(property: string) {
 function handlePageChange(page: number) {
   emits('pageChange', page);
 }
+
+const handleSearch = debounce((property: string, value: string) => {
+  searchTerms[property] = value;
+  Object.keys(searchTerms).forEach((key) => {
+    filterBuilder.value.add(key).contains(searchTerms[key]);
+  });
+  emits('search', filterBuilder.value);
+}, 500);
+
+
+const hasSearchableColumns = computed(() => {
+  const cols = slots.default ? slots.default() : [];
+  return cols.filter((vnode: any) => vnode.props.hasOwnProperty('searchable')).length > 0;
+});
 
 const renderCols = (props: any) => {
   const cols = slots.default ? slots.default() : [];
@@ -50,8 +66,12 @@ const renderCols = (props: any) => {
       <tr>
         <render-cols :renderAs="'header'" @sort="handleSort" :sortOrders="sortOrders" />
       </tr>
+
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
+      <tr v-if="hasSearchableColumns">
+        <render-cols :renderAs="'search'" @search="handleSearch" :searchTerms="searchTerms" />
+      </tr>
       <tr
           v-for="row in props.data"
           :key="row[props.rowKeyField]"

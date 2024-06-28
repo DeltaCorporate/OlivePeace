@@ -1,20 +1,19 @@
-import {ref, onMounted, watchEffect, reactive, computed} from 'vue';
+import { ref, onMounted, reactive, computed } from 'vue';
 import { usePagination } from './usePagination';
 import FilterBuilder from "@/utils/filter.util.ts";
-import {PaginationInterface} from "@/types/pagination.type.ts";
 
-export function useTable(fetchData: (params: string) => Promise<void>) {
+export function useTable(fetchData: (params: string) => Promise<any>) {
     const data = reactive([]);
     const { pagination, setPagination } = usePagination();
     const buildParams = reactive({
-       filterBuilder: new FilterBuilder(),
+        filterBuilder: new FilterBuilder(),
         page: computed(() => pagination.currentPage),
     });
+
     async function fetchTableData() {
-        let result = await fetchData(buildQueryParams());
+        const result = await fetchData(buildQueryParams());
         data.splice(0, data.length, ...result.data.data);
         setPagination(result.data.pagination);
-        return data;
     }
 
     function buildQueryParams() {
@@ -23,11 +22,11 @@ export function useTable(fetchData: (params: string) => Promise<void>) {
         return filterParams.toString();
     }
 
-
     onMounted(fetchTableData);
 
-    async function handleSort(filterBuilder: FilterBuilder) {
+    async function handleUpdateFilters(filterBuilder: FilterBuilder) {
         buildParams.filterBuilder = filterBuilder;
+        pagination.currentPage = 1;
         await fetchTableData();
     }
 
@@ -36,10 +35,11 @@ export function useTable(fetchData: (params: string) => Promise<void>) {
         await fetchTableData();
     }
 
+
     return {
         data,
         pagination,
-        handleSort,
         handlePageChange,
+        handleUpdateFilters
     };
 }

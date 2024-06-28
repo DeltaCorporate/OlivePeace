@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import {defineProps, defineEmits, computed, watch, onMounted, ref, reactive} from 'vue';
+import { defineProps, defineEmits, computed, ref } from 'vue';
 import { ArrowUpNarrowWide, ArrowDownWideNarrow } from 'lucide-vue-next'; // Utilisation des icônes Lucid
+import { SfInput } from '@storefront-ui/vue';
 
 const props = defineProps<{
   renderAs?: string;
@@ -8,14 +9,21 @@ const props = defineProps<{
   property?: string;
   row?: any;
   sortable?: boolean;
+  searchable?: boolean;
   sortOrders?: { [key: string]: 'ASC' | 'DESC' | null };
+  searchTerms?: { [key: string]: string };
 }>();
 
-const emits = defineEmits(['sort']);
+const emits = defineEmits(['sort', 'search']);
 const property = ref(props.property);
+
 function handleSortAsk() {
   if (props.sortable)
     emits('sort', property.value);
+}
+
+function handleSearch(event) {
+  emits('search', property.value, event.target.value);
 }
 
 const thClasses = computed(() => {
@@ -24,7 +32,6 @@ const thClasses = computed(() => {
     { 'bg-primary-600': props.sortOrders[property.value] }
   ];
 });
-
 </script>
 
 <template>
@@ -47,5 +54,14 @@ const thClasses = computed(() => {
     <slot :value="property ? props.row[property] : props.row">
       {{ property ? props.row[property] : '' }}
     </slot>
+  </td>
+  <td v-else-if="props.renderAs === 'search'" class="px-3 py-1.5">
+    <SfInput
+        v-if="props.searchable"
+        :placeholder="props.header"
+        @input="handleSearch"
+        :value="props.searchTerms[property.value]"
+
+    />
   </td>
 </template>
