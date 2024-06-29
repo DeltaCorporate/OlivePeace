@@ -18,13 +18,19 @@ ProductImage.init({
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: NOW
+    },
+    ProductId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Product,
+            key: 'id'
+        }
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'ProductImage',
     underscored: true
 });
 
-ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
+ProductImage.belongsTo(Product);
 
 export default ProductImage;

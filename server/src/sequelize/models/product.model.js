@@ -22,15 +22,28 @@ Product.init({
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: NOW
+    },
+    productCategoryId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: ProductCategory,
+            key: 'id'
+        }
+    },
+    promotionId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Promotion,
+            key: 'id'
+        }
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'Product',
     underscored: true
 
 });
 
-Product.belongsTo(ProductCategory, { foreignKey: 'category_id' });
-Product.belongsTo(Promotion, { foreignKey: 'promotion_id' });
+Product.belongsTo(ProductCategory);
+Product.belongsTo(Promotion);
 
 export default Product;

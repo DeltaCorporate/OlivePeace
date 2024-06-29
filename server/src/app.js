@@ -6,6 +6,7 @@ import logger from './utils/logger.util.js';
 import compression from 'compression';
 import helmet from 'helmet';
 import db from './sequelize/models/index.js';
+import cors from 'cors';
 import {mdb_connect} from "./mongoose/index.js";
 import morganMiddleware from './middlewares/morgan.middleware.js';
 import indexRouter from './routes/index.route.js';
@@ -25,6 +26,11 @@ try {
 
 db.sequelize.sync();
 app.use(helmet());
+app.use(cors({
+    origin: process.env.CLIENT_URL, // variable environnement CLIENT_URL sur le .env
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization'
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

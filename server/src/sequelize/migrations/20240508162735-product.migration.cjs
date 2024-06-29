@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.STRING(200),
         allowNull: false
       },
-      category_id: {
+      product_category_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'product_categories',

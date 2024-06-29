@@ -3,7 +3,6 @@ const { faker } = require('@faker-js/faker');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Connexion à MongoDB et importation des modèles
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
@@ -11,7 +10,6 @@ module.exports = {
     const Promotion = (await import('../models/promotion.model.js')).default;
     const Product = (await import('../models/product.model.js')).default;
 
-    // Récupérer les IDs de ProductCategories et Promotions
     const categories = await ProductCategory.findAll({ attributes: ['id'] });
     const categoryIds = categories.map(cat => cat.id);
 
@@ -27,25 +25,22 @@ module.exports = {
         price: parseFloat(faker.commerce.price()),
         stock: faker.number.int({ min: 0, max: 100 }),
         slug: faker.helpers.slugify(faker.commerce.productName()),
-        category_id: faker.helpers.arrayElement(categoryIds),
-        promotion_id: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
+        productCategoryId: faker.helpers.arrayElement(categoryIds),
+        promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
       });
     }
 
-    // Utiliser les modèles pour créer les enregistrements et activer les hooks
     for (const product of bulkProducts) {
       await Product.create(product);
     }
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Connexion à MongoDB et importation des modèles
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
     const Product = (await import('../models/product.model.js')).default;
 
-    // Suppression des enregistrements sans désactivation des vérifications des clés étrangères
     await Product.destroy({
       where: {},
       truncate: true,

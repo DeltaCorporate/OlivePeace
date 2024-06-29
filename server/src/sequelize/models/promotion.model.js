@@ -20,7 +20,6 @@ Promotion.init({
     }
 }, {
     sequelize: db.sequelize,
-    modelName: 'Promotion',
     underscored: true
 });
 
