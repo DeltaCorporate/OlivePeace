@@ -31,5 +31,6 @@ export const updateProductCategory = async (id: number, category: ProductCategor
 
 // Supprimer une catégorie de produit
 export const deleteProductCategory = async (id: number): Promise<void> => {
-    await apiClient.delete(`/admin/product_categories/${id}`);
+    const response = await apiClient.delete(`/admin/product_categories/${id}`);
+    return response.status === 204;
 };

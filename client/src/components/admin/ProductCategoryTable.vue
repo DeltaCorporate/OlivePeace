@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import OpTable from '@/components/ui/OpTable.vue';
 import OpTableCol from '@/components/ui/OpTableCol.vue';
-import { getProductCategories } from '@/api/admin/product-category.api';
+import { getProductCategories, deleteProductCategory } from '@/api/admin/product-category.api';
 import { useTable } from '@/composables/useTable';
+import OpTableActions from "@/components/ui/OpTableActions.vue";
 
 const {
   data,
   pagination,
   handlePageChange,
   handleUpdateFilters,
-} = useTable(getProductCategories);
+} = useTable({
+  fetchData: getProductCategories,
+
+});
 </script>
 
 <template>
@@ -23,11 +27,9 @@ const {
   >
     <OpTableCol header="Nom" property="name" sortable searchable />
     <OpTableCol header="Description" property="description" sortable searchable />
-    <OpTableCol header="Actions" property="actions">
-      <template #default="{ row }">
-        <button class="text-primary-600 hover:text-indigo-900" @click="console.log(row)">
-          Action
-        </button>
+    <OpTableCol header="Actions">
+      <template #default="row">
+        <OpTableActions :row="row" :data="data" editRoute="/" viewRoute="/" :deleteMethod="deleteProductCategory" />
       </template>
     </OpTableCol>
   </OpTable>

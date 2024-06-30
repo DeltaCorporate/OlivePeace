@@ -40,8 +40,8 @@ ProductCategory.init({
             await denormalizeProductCategory(category);
         },
         afterDestroy: async (category, options) => {
-            try {
-                await ProductCategoryMongoose.findOneAndDelete({ productCategoryId: category.id });
+           try {
+                await ProductCategoryMongoose.findByIdAndDelete(category.id);
             } catch (error) {
                 console.error('Failed to delete category in MongoDB:', error);
             }

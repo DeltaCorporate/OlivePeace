@@ -7,7 +7,7 @@ const props = defineProps<{
   renderAs?: string;
   header?: string;
   property?: string;
-  row?: any;
+  row?: object;
   sortable?: boolean;
   searchable?: boolean;
   sortOrders?: { [key: string]: 'ASC' | 'DESC' | null };

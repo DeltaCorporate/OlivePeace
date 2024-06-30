@@ -73,7 +73,7 @@ class ProductCategoryController {
             if (category.imageName)
                 deleteUploadedFile(category.imageName);
 
-            const result = await ProductCategory.destroy({ where: { id } });
+            const result = await category.destroy();
             if (result) return res.status(204).send();
             else res.error('Category not found', 404);
         } catch (error) {

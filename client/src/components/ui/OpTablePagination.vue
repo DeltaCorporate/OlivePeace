@@ -44,7 +44,7 @@ function prevPage() {
           v-for="page in pages"
           :key="page"
           class="px-3 py-1"
-          :class="{'bg-primary-500 text-white': page === props.currentPage, 'bg-white text-black': page !== props.currentPage}"
+          :class="{'bg-primary-500 text-white': page === props.currentPage, 'bg-white text-primary-600 hover:text-white': page !== props.currentPage}"
           @click="changePage(page)"
       >
         {{ page }}
