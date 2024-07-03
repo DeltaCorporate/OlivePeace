@@ -1,5 +1,6 @@
 // tailwind.config.js
 import { tailwindConfig } from '@storefront-ui/vue/tailwind-config';
+import sfTypography from '@storefront-ui/typography';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -16,5 +17,8 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-animated'),
+    sfTypography
+  ],
 };

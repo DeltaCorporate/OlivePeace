@@ -17,10 +17,12 @@
     "pinia": "^2.1.7",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-animated": "^1.1.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
+    "@storefront-ui/typography": "^2.6.1",
     "@storefront-ui/vue": "^2.6.3",
     "@types/node": "^20.12.4",
     "@vitejs/plugin-vue": "^5.0.4",

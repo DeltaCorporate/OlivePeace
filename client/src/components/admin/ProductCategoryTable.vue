@@ -18,28 +18,36 @@ const {
 </script>
 
 <template>
-  <OpTable
-      :data="data"
-      :pagination="pagination"
-      row-key-field="_id"
-      @sort="handleUpdateFilters"
-      @pageChange="handlePageChange"
-      @search="handleUpdateFilters"
-  >
-    <OpTableCol header="ff">
-      <template #default="row">
-        <img :src="UPLOAD_PATH + '/' + row.value.imageName" class="w-10 h-10 object-cover rounded-full" />
-      </template>
-    </OpTableCol>
-    <OpTableCol header="Nom" property="name" sortable searchable />
-    <OpTableCol header="Description" property="description" sortable searchable />
-    <OpTableCol header="Slug" property="slug"/>
-    <OpTableCol header="Actions">
-      <template #default="row">
-        <OpTableActions :row="row" :data="data" editRoute="/" viewRoute="/" :deleteMethod="deleteProductCategory" />
-      </template>
-    </OpTableCol>
-  </OpTable>
+  <div class="w-full overflow-auto">
+    <OpTable
+        :data="data"
+        :pagination="pagination"
+        row-key-field="_id"
+        @sort="handleUpdateFilters"
+        @pageChange="handlePageChange"
+        @search="handleUpdateFilters"
+    >
+      <OpTableCol header="">
+        <template #default="row">
+          <img :src="UPLOAD_PATH + '/' + row.value.imageName" class="w-10 h-10 object-cover rounded-full" />
+        </template>
+      </OpTableCol>
+      <OpTableCol header="Nom" property="name" sortable searchable />
+      <OpTableCol header="Description" property="description" sortable searchable />
+      <OpTableCol header="Slug" property="slug"/>
+      <OpTableCol header="Date de création" property="createdAt" sortable>
+        <template #default="row">
+          {{ new Date(row.value).toLocaleDateString() }}
+        </template>
+      </OpTableCol>
+      <OpTableCol header="Actions">
+        <template #default="row">
+          <OpTableActions :row="row" :data="data" editRoute="/" viewRoute="/" :deleteMethod="deleteProductCategory" />
+        </template>
+      </OpTableCol>
+    </OpTable>
+  </div>
+
 </template>
 
 <style scoped>

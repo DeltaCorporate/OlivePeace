@@ -10,6 +10,8 @@
 import DeleteButton from './DeleteButton.vue';
 import EditButton from './EditButton.vue';
 import ViewButton from './ViewButton.vue';
+import { useAlertStore } from '@/stores/alerts.store.ts';
+
 import {defineProps, defineEmits, reactive} from 'vue';
 
 const props = defineProps({
@@ -38,6 +40,7 @@ const props = defineProps({
     default: '_id'
   }
 });
+const alertStore = useAlertStore();
 
 const loaders = reactive({
   delete: false,
@@ -48,8 +51,11 @@ const handleDelete = async () => {
   const id = props.row.value[props.itemIdKey];
   loaders.delete = true;
   const response = await props.deleteMethod(id);
-  if(response)
+  if(response) {
     props.data?.splice(props.data?.findIndex((item: any) => item[props.itemIdKey] === id), 1);
+    alertStore.showAlert('La ligne a bien été supprimée', 'positive');
 
+  }  else
+    alertStore.showAlert('Impossible de supprimer la ligne', 'negative');
   };
 </script>
