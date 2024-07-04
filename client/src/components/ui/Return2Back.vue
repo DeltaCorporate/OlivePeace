@@ -1,9 +1,13 @@
 <script lang="ts" setup>
-import {previousRoute} from '@/router/index.ts';
 import {ChevronLeft} from 'lucide-vue-next';
+import {useRouter} from "vue-router";
+const router = useRouter();
+
+
+
 </script>
 <template>
-  <router-link :to="previousRoute" class="flex items-center gap-2 text-neutral-500">
+  <div @click="router.back()" class="flex items-center gap-2 cursor-pointer text-neutral-50">
     <span class="flex hover:animate-shake"><ChevronLeft />Retour</span>
-  </router-link>
+  </div>
 </template>

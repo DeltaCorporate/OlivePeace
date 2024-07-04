@@ -20,7 +20,7 @@
       </tbody>
     </table>
     <OpTablePagination
-        class="sticky bottom-5 right-10"
+        class="sticky bottom-5 my-5 right-10"
         :totalItems="props.pagination.totalItems"
         :totalPages="props.pagination.totalPages"
         :currentPage="props.pagination.currentPage"

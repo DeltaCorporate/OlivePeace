@@ -36,11 +36,11 @@ function prevPage() {
 
 <template>
   <div class="flex items-center justify-end gap-2 mt-4">
-    <SfButton class="!bg-primary-600 !text-neutral-50" @click="prevPage" v-if="props.currentPage > 1">
+    <SfButton size="sm" class="!bg-primary-600 !text-neutral-50" @click="prevPage" v-if="props.currentPage > 1">
       <
     </SfButton>
     <div class="flex space-x-2">
-      <SfButton
+      <SfButton size="sm"
           v-for="page in pages"
           :key="page"
           class="px-3 py-1"
@@ -50,7 +50,7 @@ function prevPage() {
         {{ page }}
       </SfButton>
     </div>
-    <SfButton class="!bg-primary-600 !text-neutral-50" @click="nextPage" v-if="props.currentPage < props.totalPages">
+    <SfButton size="sm" class="!bg-primary-600 !text-neutral-50" @click="nextPage" v-if="props.currentPage < props.totalPages">
       >
     </SfButton>
   </div>

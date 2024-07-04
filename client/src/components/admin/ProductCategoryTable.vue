@@ -5,6 +5,7 @@ import { getProductCategories, deleteProductCategory } from '@/api/admin/product
 import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
 import { UPLOAD_PATH } from "@config/global.ts";
+import {errorImage} from "@/utils/image.util.ts";
 
 const {
   data,
@@ -29,7 +30,7 @@ const {
     >
       <OpTableCol header="">
         <template #default="row">
-          <img :src="UPLOAD_PATH + '/' + row.value.imageName" class="w-10 h-10 object-cover rounded-full" />
+          <img @error="errorImage" :src="UPLOAD_PATH + '/' + row.value.imageName" class="w-16 object-cover aspect-square rounded-full" />
         </template>
       </OpTableCol>
       <OpTableCol header="Nom" property="name" sortable searchable />

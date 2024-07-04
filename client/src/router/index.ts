@@ -32,12 +32,6 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 })
-let previousRoute = null;
-router.beforeEach((to, from, next) => {
-    previousRoute = from;
-    next();
-});
 
-export { previousRoute };
 
 export default router;
