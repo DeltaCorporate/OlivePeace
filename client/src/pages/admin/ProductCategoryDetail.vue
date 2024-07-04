@@ -1,50 +1,49 @@
-<template>
-  <div class="container mx-auto p-4">
-    <div class="flex flex-row items-start">
-      <img :src="UPLOAD_PATH + '/' + category.imageName" class="w-40 h-40 object-cover rounded-full mr-4" />
-      <div class="flex flex-col">
-        <h1 class="typography-headline-1">{{ category.name }}</h1>
-        <p class="typography-text-base">{{ category.description }}</p>
-        <p class="text-sm text-gray-500">{{ formattedDate }}</p>
-        <p class="text-sm text-gray-500">{{ category._id }}</p>
-      </div>
-    </div>
-  </div>
-</template>
+
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { getProductCategoryBySlug } from '@/api/admin/product-category.api.ts';
-import { toFrenchDate } from '@/utils/date.util';
-import { UPLOAD_PATH } from "@/../config/global.ts";
-import {useAdminLayoutStore} from "@/stores/admin/admin-layout.store.ts";
+import {computed, onMounted, ref} from 'vue';
+import {useRoute} from 'vue-router';
+import {getProductCategory} from '@/api/admin/product-category.api';
+import {toFrenchDate} from '@/utils/date.util';
+import {UPLOAD_PATH} from "@/../config/global.ts";
+import {useAdminLayoutStore} from '@/stores/admin/admin-layout.store.ts';
+import {ProductCategoryType} from "@/types/product-category.type.ts";
+import Return2Back from "@/components/ui/Return2Back.vue";
 
 const route = useRoute();
-const category = ref(null);
-const formattedDate = ref('');
-
+const category = ref<ProductCategoryType>({});
 const adminLayoutStore = useAdminLayoutStore();
 
-const fetchCategory = async () => {
-  const response = await getProductCategoryById(route.params.id);
+const formattedCreatedAt = computed(() => {
+  return toFrenchDate(category.value.createdAt);
+});
+const fetchProductCategory = async () => {
+  const response = await getProductCategory(route.params.slug);
   category.value = response.data;
-  formattedDate.value = toFrenchDate(category.value.createdAt);
-  adminLayoutStore.setPageTitle(`Détails de ${category.value.name}`);
+
 };
 
-onMounted(fetchCategory);
+onMounted( () => {
+  adminLayoutStore.setPageTitle('Détail de la catégorie');
+  fetchProductCategory();
+});
 </script>
 
-<style scoped>
-.container {
-  max-width: 800px;
-}
-.typography-headline-1 {
-  font-size: 2rem;
-  font-weight: bold;
-}
-.typography-text-base {
-  font-size: 1rem;
-}
-</style>
+<template>
+  <div class="container mx-auto p-4">
+    <div class="flex flex-row items-start gap-5">
+      <div class="w-52">
+        <img :src="UPLOAD_PATH + '/' + category.imageName" class="w-full aspect-square h-full object-cover rounded-full" />
+      </div>
+      <div class="flex flex-col p-2 w-full">
+        <h1 class="typography-headline-2">{{ category.name }}</h1>
+        <p class="text-base">{{ category.description }}</p>
+        <p class="text-base">Promotion appliquée : {{ category.promotionId }}</p>
+        <p class="text-sm text-right text-neutral-500">{{ formattedCreatedAt }}</p>
+      </div>
+      <!--  retour en arriere -->
+    </div>
+    <Return2Back/>
+
+  </div>
+</template>

@@ -1,8 +1,9 @@
-export interface ProductCategory {
-    id?: number;
+export type ProductCategoryType = {
+    _id: number;
     name: string;
-    imageName?: string;
-    description?: string;
     slug: string;
-    promotionId?: number;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+    promotionId: number;
 }

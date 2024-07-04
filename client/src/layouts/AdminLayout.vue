@@ -15,8 +15,8 @@ const pageTitle = computed(() => adminLayoutStore.pageTitle);
     </div>
     <main class="px-6 py-6 flex-1 relative bg-gray-100 overflow-y-auto">
       <SfAlert/>
-      <h1 class="typography-headline-1 my-5">{{ pageTitle }}</h1>
-      <router-view/>
+      <h1 class="typography-headline-1 my-5">{{ pageTitle }} </h1>
+      <router-view class="animate-fade"/>
     </main>
   </div>
 </template>

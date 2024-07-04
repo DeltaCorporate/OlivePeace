@@ -42,7 +42,7 @@ const {
       </OpTableCol>
       <OpTableCol header="Actions">
         <template #default="row">
-          <OpTableActions :row="row" :data="data" editRoute="/" viewRoute="/" :deleteMethod="deleteProductCategory" />
+          <OpTableActions :row="row" :data="data" editRoute="'/'" :viewRoute="'/admin/product_categories/view/'+row.value._id" :deleteMethod="deleteProductCategory" />
         </template>
       </OpTableCol>
     </OpTable>

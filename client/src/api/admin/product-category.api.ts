@@ -13,7 +13,7 @@ export const getProductCategories = async (filterInstance?: Filter): Promise<Pro
     return response.data;
 };
 
-export const getProductCategoryBySlug = async (slug: string): Promise<ProductCategory> => {
+export const getProductCategory = async (slug: string): Promise<ProductCategory> => {
     const response = await apiClient.get(`/admin/product_categories/${slug}`);
     return response.data;
 };

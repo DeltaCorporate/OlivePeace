@@ -25,7 +25,7 @@
 import { computed } from 'vue';
 import { useAlertStore } from '@/stores/alerts.store.ts';
 import { SfIconClose, SfIconCheckCircle, SfIconInfo, SfIconWarning } from '@storefront-ui/vue';
-
+import {Ban} from "lucide-vue-next";
 const store = useAlertStore();
 
 const visible = computed(() => store.visible);
@@ -38,7 +38,7 @@ const icon = computed(() => {
     case 'positive':
       return SfIconCheckCircle;
     case 'negative':
-      return SfIconClose;
+      return Ban;
     case 'warning':
       return SfIconWarning;
     case 'info':

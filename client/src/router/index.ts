@@ -1,8 +1,9 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router'
 
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import ProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
+import ProductCategoryDetail from "@/pages/admin/ProductCategoryDetail.vue";
 
 const routes = [
     {
@@ -12,16 +13,31 @@ const routes = [
     {
         path:  '/admin',
         component: AdminLayout,
-        children: [{
-            path: 'product_categories',
-            component: ProductCategoryList
-        }]
+        children: [
+            {
+                path: 'product_categories',
+                component: ProductCategoryList
+            },
+            {
+                path: 'product_categories/view/:slug',
+                component: ProductCategoryDetail,
+            },
+
+
+        ]
     }
 ]
 
 const router = createRouter({
-    history: createMemoryHistory(),
+    history: createWebHistory(),
     routes,
 })
+let previousRoute = null;
+router.beforeEach((to, from, next) => {
+    previousRoute = from;
+    next();
+});
+
+export { previousRoute };
 
 export default router;

@@ -1,6 +1,6 @@
 <template>
-  <div class="relative">
-    <table class="relative min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
+  <div class="relative break-normal">
+    <table class="relative min-w-full divide-y text-sm divide-gray-200 rounded-lg overflow-hidden">
       <thead class="bg-primary-500">
       <tr>
         <render-cols :renderAs="'header'" @sort="handleSort" :sortOrders="sortOrders" />
