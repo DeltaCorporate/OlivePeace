@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/',ProductCategoryController.create);
 router.get('/', ProductCategoryController.list);
-router.get('/:slug', ProductCategoryController.findOne);
+router.get('/:slugOrId', ProductCategoryController.findOne);
 router.patch('/:id', ProductCategoryController.update);
 router.delete('/:id', ProductCategoryController.delete);
 

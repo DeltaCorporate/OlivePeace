@@ -11,6 +11,7 @@ UserCog,
 } from 'lucide-vue-next';
 import { RouterLink } from 'vue-router';
 import {useSidebarStore} from "@/stores/admin/sidebar.store.ts";
+import Return2Back from "@/components/ui/Return2Back.vue";
 
 const sidebarStore = useSidebarStore();
 
@@ -21,7 +22,7 @@ const sidebarStore = useSidebarStore();
       <Menu class="h-6 w-6"/>
     </button>
     <div :class="{'translate-x-0': sidebarStore.isSidebarOpen, '-translate-x-full': !sidebarStore.isSidebarOpen}" class="sf-sidebar w-64 bg-gray-900 text-white h-screen lg:relative fixed lg:translate-x-0 transform transition-transform duration-300 ease-in-out z-40 shadow-lg rounded-tr-3xl rounded-br-3xl">
-      <div class="flex flex-col items-center py-6">
+      <div class="flex flex-col items-center relative py-6">
         <img src="https://sponsors.vuejs.org/images/chrome_frameworks_fund.png" alt="Admin Logo" class="w-24 mb-6"/>
         <nav class="w-full">
           <router-link @click="sidebarStore.closeSidebar" to="/admin/product_categories" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
@@ -39,6 +40,7 @@ const sidebarStore = useSidebarStore();
 
         </nav>
       </div>
+      <Return2Back class="bottom-5 left-5 absolute"/>
     </div>
 </template>
 

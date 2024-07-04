@@ -13,7 +13,7 @@ export const getProductCategories = async (filterInstance?: Filter): Promise<Pro
     return response.data;
 };
 
-export const getProductCategoryBySlug = async (slug: string): Promise<ProductCategory> => {
+export const getProductCategory = async (slug: string): Promise<ProductCategory> => {
     const response = await apiClient.get(`/admin/product_categories/${slug}`);
     return response.data;
 };
@@ -31,5 +31,6 @@ export const updateProductCategory = async (id: number, category: ProductCategor
 
 // Supprimer une catégorie de produit
 export const deleteProductCategory = async (id: number): Promise<void> => {
-    await apiClient.delete(`/admin/product_categories/${id}`);
+    const response = await apiClient.delete(`/admin/product_categories/${id}`);
+    return response.status === 204;
 };

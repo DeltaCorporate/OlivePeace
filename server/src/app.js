@@ -13,6 +13,8 @@ import indexRouter from './routes/index.route.js';
 import usersRouter from './routes/users.route.js';
 import productCategoriesRouter from './routes/admin/product-categories.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
+import {__root} from "./config/filePath.js";
+
 const app = express();
 
 await mdb_connect();
@@ -25,11 +27,13 @@ try {
 }
 
 db.sequelize.sync();
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: false,
+}));
 app.use(cors({
     origin: process.env.CLIENT_URL, // variable environnement CLIENT_URL sur le .env
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization'
+    allowedHeaders: '*'
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -37,6 +41,7 @@ app.use(cookieParser());
 app.use(compression());
 app.use(morganMiddleware);
 app.use(responseHandler);
+app.use('/uploads', express.static(__root+'/src/uploads'));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin/product_categories', productCategoriesRouter);
@@ -56,7 +61,6 @@ app.get("/status", (req, res) => {
         message: "The API is up and running!"
     });
 });
-app.use('/uploads', express.static('uploads'));
 
 
 // Startup

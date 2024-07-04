@@ -1,22 +1,28 @@
-import { defineStore } from 'pinia'
-import {AlerteType} from "@/types/alerte.type.ts";
+import { defineStore } from 'pinia';
 
-export const useAlertsStore = defineStore('alerts', {
-    // other options...
+export const useAlertStore = defineStore('alert', {
     state: () => ({
-        alerts: [] as Array<AlerteType>,
+        message: '',
+        type: '', // 'positive', 'negative', 'info', 'warning'
+        visible: false,
+        timeout: 1000 // Valeur par défaut de 1 seconde
     }),
     actions: {
-        addAlert(alert: AlerteType) {
-            this.alerts.push(alert)
+        showAlert(message, type, timeout = this.timeout) {
+            this.message = message;
+            this.type = type;
+            this.visible = true;
+
+            if (timeout > 0) {
+                setTimeout(() => {
+                    this.hideAlert();
+                }, timeout);
+            }
         },
-        removeAlert(index: number) {
-            this.alerts.splice(index, 1)
-        },
-    },
-    getters: {
-        getAlerts(): Array<AlerteType> {
-            return this.alerts
-        },
-    },
-})
+        hideAlert() {
+            this.message = '';
+            this.type = '';
+            this.visible = false;
+        }
+    }
+});

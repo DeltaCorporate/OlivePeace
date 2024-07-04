@@ -2,8 +2,12 @@ import { ref, onMounted, reactive, computed } from 'vue';
 import { usePagination } from './usePagination';
 import FilterBuilder from "@/utils/filter.util.ts";
 
-export function useTable(fetchData: (params: string) => Promise<any>) {
-    const data = reactive([]);
+interface UseTableOptions {
+    fetchData: (params: string) => Promise<any>;
+}
+
+export function useTable({ fetchData }: UseTableOptions) {
+    const data = reactive<any[]>([]);
     const { pagination, setPagination } = usePagination();
     const buildParams = reactive({
         filterBuilder: new FilterBuilder(),
@@ -40,6 +44,6 @@ export function useTable(fetchData: (params: string) => Promise<any>) {
         data,
         pagination,
         handlePageChange,
-        handleUpdateFilters
+        handleUpdateFilters,
     };
 }

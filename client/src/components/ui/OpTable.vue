@@ -1,10 +1,43 @@
+<template>
+  <div class="relative break-normal">
+    <table class="relative min-w-full divide-y text-sm divide-gray-200 rounded-lg overflow-hidden">
+      <thead class="bg-primary-500">
+      <tr>
+        <render-cols :renderAs="'header'" @sort="handleSort" :sortOrders="sortOrders" />
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <tr v-if="hasSearchableColumns">
+        <render-cols :renderAs="'search'" @search="handleSearch" :searchTerms="searchTerms" />
+      </tr>
+      <tr
+          v-for="row in props.data"
+          :key="row[props.rowKeyField]"
+          class="odd:bg-primary-50 hover:bg-primary-100 even:bg-white"
+      >
+        <render-cols :renderAs="'cell'" :row="row"/>
+      </tr>
+      </tbody>
+    </table>
+    <OpTablePagination
+        class="sticky bottom-5 my-5 right-10"
+        :totalItems="props.pagination.totalItems"
+        :totalPages="props.pagination.totalPages"
+        :currentPage="props.pagination.currentPage"
+        :pageSize="props.pagination.pageSize"
+        @pageChange="handlePageChange"
+    />
+  </div>
+</template>
+
 <script setup lang="ts">
-import { ref, defineEmits, defineProps, useSlots, reactive, computed } from 'vue';
+import {ref, defineEmits, defineProps, useSlots, reactive, computed, onMounted, onBeforeUnmount} from 'vue';
 import FilterBuilder from '@/utils/filter.util.ts';
 import OpTablePagination from './OpTablePagination.vue';
 import { SfInput } from '@storefront-ui/vue';
 import { PaginationInterface } from "@/types/pagination.type.ts";
-import {debounce} from "@/utils/debounce.utils.ts";
+import { debounce } from "@/utils/debounce.utils.ts";
+import OpTableActions from './OpTableActions.vue';
 
 const props = defineProps<{
   rowKeyField: string;
@@ -18,6 +51,8 @@ const slots = useSlots();
 const sortOrders = ref<{ [key: string]: 'ASC' | 'DESC' | null }>({});
 const searchTerms = reactive<{ [key: string]: string }>({});
 const filterBuilder = ref(new FilterBuilder());
+
+
 
 function handleSort(property: string) {
   if (sortOrders.value[property] === 'ASC') sortOrders.value[property] = 'DESC';
@@ -45,6 +80,7 @@ const handleSearch = debounce((property: string, value: string) => {
 }, 500);
 
 
+
 const hasSearchableColumns = computed(() => {
   const cols = slots.default ? slots.default() : [];
   return cols.filter((vnode: any) => vnode.props.hasOwnProperty('searchable')).length > 0;
@@ -57,37 +93,5 @@ const renderCols = (props: any) => {
   });
   return cols;
 };
+
 </script>
-
-<template>
-  <div class="relative">
-    <table class="relative min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
-      <thead class="bg-primary-500">
-      <tr>
-        <render-cols :renderAs="'header'" @sort="handleSort" :sortOrders="sortOrders" />
-      </tr>
-
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-      <tr v-if="hasSearchableColumns">
-        <render-cols :renderAs="'search'" @search="handleSearch" :searchTerms="searchTerms" />
-      </tr>
-      <tr
-          v-for="row in props.data"
-          :key="row[props.rowKeyField]"
-          class="odd:bg-primary-50 hover:bg-primary-100 even:bg-white"
-      >
-        <render-cols :renderAs="'cell'" :row="row" />
-      </tr>
-      </tbody>
-    </table>
-    <OpTablePagination
-        class="sticky bottom-5 right-10"
-        :totalItems="props.pagination.totalItems"
-        :totalPages="props.pagination.totalPages"
-        :currentPage="props.pagination.currentPage"
-        :pageSize="props.pagination.pageSize"
-        @pageChange="handlePageChange"
-    />
-  </div>
-</template>

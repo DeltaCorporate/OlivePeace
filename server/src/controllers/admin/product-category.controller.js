@@ -68,30 +68,32 @@ class ProductCategoryController {
         try {
             const { id } = req.params;
             const category = await ProductCategory.findByPk(id);
+
             if (!category) return res.error('Category not found', 404);
 
             if (category.imageName)
                 deleteUploadedFile(category.imageName);
 
-            const result = await ProductCategory.destroy({ where: { id } });
+            const result = await category.destroy();
             if (result) return res.status(204).send();
             else res.error('Category not found', 404);
         } catch (error) {
             res.error(error.message, 500);
         }
     }
-
-
     static async findOne(req, res) {
-            try {
-                const { slug } = req.params;
-                const category = await ProductCategory.findOne({ where: { slug } });
-                if (category) res.success(category);
-                else res.error('Catégorie de produit non trouvée', 404);
-            } catch (error) {
-                res.error(error.message, 500);
-            }
+        try {
+            const { slugOrId } = req.params;
+            const query = isNaN(slugOrId) ? { slug: slugOrId } : { _id: slugOrId };
+
+            const category = await ProductCategoryMongoose.findOne(query);
+            if (category) res.success(category);
+            else res.error('Catégorie de produit non trouvée', 404);
+        } catch (error) {
+            res.error(error.message, 500);
+        }
     }
+
 
 
     static async list(req, res) {
@@ -100,7 +102,6 @@ class ProductCategoryController {
             const { limit: paginationLimit, offset } = getPagination(page, limit);
 
             const mongooseFilter = new MongooseFilter(req.query);
-
             const { filter, sort } = mongooseFilter.applyFilters();
             const totalItems = await ProductCategoryMongoose.countDocuments(filter);
             const data = await ProductCategoryMongoose.find(filter)
