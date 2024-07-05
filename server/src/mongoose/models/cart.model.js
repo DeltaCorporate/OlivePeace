@@ -13,6 +13,13 @@ const CartItemSchema = new Schema({
         type: Number,
         required: true,
         min: 1
+    },
+    reserved: {
+        type: Boolean,
+        default: false
+    },
+    reservationExpiry: {
+        type: Date
     }
 });
 
@@ -43,6 +50,10 @@ CartSchema.pre('save', function (next) {
     this.updatedAt = Date.now();
     next();
 });
+
+// Définition des index
+CartSchema.index({ user: 1 });
+CartSchema.index({ "items.reservationExpiry": 1 });
 
 const Cart = mongoose.model('Cart', CartSchema);
 
