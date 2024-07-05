@@ -13,8 +13,10 @@ import indexRouter from './routes/index.route.js';
 import usersRouter from './routes/users.route.js';
 import productCategoriesRouter from './routes/admin/product-categories.route.js';
 import cartRouter from './routes/cart.route.js';
+import {errorHandlerMiddleware} from "./middlewares/error-handler.middleware.js";
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "./config/filePath.js";
+import '/scheduler';
 
 const app = express();
 
@@ -47,6 +49,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin/product_categories', productCategoriesRouter);
 app.use('cart', cartRouter);
+app.use(errorHandlerMiddleware);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
