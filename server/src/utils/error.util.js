@@ -1,13 +1,15 @@
 /**
  * Construit les détails de l'erreur au format { field, message }.
- * @param {Error} error - L'erreur Joi à formater.
  * @returns {Array} - Un tableau d'objets { field, message }.
+ * @param schema
+ * @param data
  */
-export const formatJoiErrors = (error) => {
-    return error.details.map(detail => ({
+export const formatJoiErrors = (schema,data) => {
+    let error = schema.validate(data,{abortEarly: false}).error;
+    return error ? error.details.map(detail => ({
         field: detail.context.key,
         message: detail.message
-    }));
+    })) : [];
 };
 
 /**

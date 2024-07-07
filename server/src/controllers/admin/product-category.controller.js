@@ -7,28 +7,25 @@ import MongooseFilter from "../../services/filters/mongoose.filter.js";
 import { productCategorySchemaCreate, productCategorySchemaUpdate } from '#shared/validations/schema/product-category.validation-schema.js';
 import PromotionRepository from "#app/src/sequelize/repositories/promotion.repository.js";
 import {formatJoiErrors, handleError} from '../../utils/error.util.js';
-import {ProductCategoryMessage, ImageMessage, PromotionMessage} from '#app/src/validations/errors.messages.js';
+import {
+    ProductCategoryMessage,
+    ImageMessage,
+    PromotionMessage,
+    GlobalMessage
+} from '#app/src/validations/errors.messages.js';
 
 class ProductCategoryController {
     constructor() {}
 
     static async create(req, res) {
         await upload.image.single('image')(req, res, async (err) => {
-            const errors = [];
+            let errors = [];
             if (err) errors.push({ field: 'image', message: ImageMessage.uploadError });
 
             try {
                 const data = req.body;
-                try {
-                    await productCategorySchemaCreate.validateAsync(data, { abortEarly: false });
-                } catch (validationError) {
-                    errors.push(...formatJoiErrors(validationError));
-                }
-
-                if (errors.length > 0) {
-                    return res.error('Erreur de validation', 400, errors);
-                }
-
+                errors = errors.concat(formatJoiErrors(productCategorySchemaCreate,data))
+                if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
                 if (req.file) {
                     data.imageName = req.file.filename;
                     await moveTmpToUpload(req.file.filename);
@@ -43,7 +40,7 @@ class ProductCategoryController {
 
     static async update(req, res) {
         await upload.image.single('image')(req, res, async (err) => {
-            const errors = [];
+            let errors = [];
             if (err) errors.push({ field: 'image', message: ImageMessage.uploadError });
 
             try {
@@ -54,16 +51,10 @@ class ProductCategoryController {
                     const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.promotionId);
                     if (!isPromotionExistAndNotExpired) errors.push({ field: 'promotionId', message: PromotionMessage.notAvailable });
                 }
-
-                try {
-                    await productCategorySchemaUpdate.validateAsync(data, { abortEarly: false });
-                } catch (validationError) {
-                    errors.push(...formatJoiErrors(validationError));
-                }
-
+                errors = errors.concat(formatJoiErrors(productCategorySchemaUpdate,data))
                 const category = await ProductCategory.findByPk(id);
                 if (!category) errors.push({ message: ProductCategoryMessage.notFound });
-                if (errors.length > 0) return res.error('Erreur de validation', 400, errors);
+                if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
                 if (req.file) {
                     await deleteUploadedFile(category.imageName);
                     data.imageName = req.file.filename;
@@ -85,7 +76,7 @@ class ProductCategoryController {
 
             if (!category) errors.push({ message: ProductCategoryMessage.notFound });
             if (category && category.imageName) deleteUploadedFile(category.imageName);
-            if (errors.length > 0) return res.error('Erreur de validation', 400, errors);
+            if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
 
             const result = await category.destroy();
             if (result) return res.status(204).send();
@@ -104,7 +95,7 @@ class ProductCategoryController {
             const category = await ProductCategoryMongoose.findOne(query);
             if (!category) errors.push({ message: ProductCategoryMessage.notFound });
 
-            if (errors.length > 0) return res.error('Erreur de validation', 400, errors);
+            if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
 
 
             res.success(category);

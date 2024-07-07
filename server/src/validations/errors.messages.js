@@ -9,3 +9,6 @@ export const ImageMessage = {
 export const PromotionMessage = {
     notAvailable: "La promotion n'est pas valide"
 }
+export const GlobalMessage = {
+    validationError: 'Erreur de validation'
+}
