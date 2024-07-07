@@ -4,7 +4,8 @@ export function responseHandler(req, res, next) {
         res.status(200).json({
             status: 'success',
             message,
-            data
+            data,
+            errors: []
         });
     };
 
@@ -12,14 +13,17 @@ export function responseHandler(req, res, next) {
         res.status(201).json({
             status: 'success',
             message,
-            data
+            data,
+            errors: []
         });
     };
 
-    res.error = function (message, status = 400) {
+    res.error = function (message, status = 400, errors = []) {
         res.status(status).json({
             status: 'error',
-            message
+            message,
+            data: null,
+            errors
         });
     };
 
