@@ -1,4 +1,4 @@
-import customJoi from "#config/joi.config.js";
+import customJoi from "#shared/config/joi.config.js";
 
 export const productCategorySchemaCreate = customJoi.object({
     name: customJoi.string().max(255).required(),

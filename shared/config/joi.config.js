@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const sharedValidationsPath = path.join(__dirname, './../shared/validations/rules');
-const validationPath = path.join(__dirname, './../src/validations/rules');
+const sharedValidationsPath = path.join(__dirname, './../validations/rules');
+const validationPath = path.join(__dirname, './../../src/validations/rules');
 
 const sharedValidationFiles = fs.readdirSync(sharedValidationsPath);
 const validationFiles = fs.readdirSync(validationPath);

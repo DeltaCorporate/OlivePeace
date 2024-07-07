@@ -21,7 +21,6 @@ class ProductCategoryController {
         await upload.image.single('image')(req, res, async (err) => {
             let errors = [];
             if (err) errors.push({ field: 'image', message: ImageMessage.uploadError });
-
             try {
                 const data = req.body;
                 errors = errors.concat(formatJoiErrors(productCategorySchemaCreate,data))
