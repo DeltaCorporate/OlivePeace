@@ -52,9 +52,7 @@ class ProductCategoryController {
 
                 if (data.promotionId) {
                     const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.promotionId);
-                    if (!isPromotionExistAndNotExpired) {
-                        errors.push({ field: 'promotionId', message: PromotionMessage.notAvailable });
-                    }
+                    if (!isPromotionExistAndNotExpired) errors.push({ field: 'promotionId', message: PromotionMessage.notAvailable });
                 }
 
                 try {
@@ -65,11 +63,7 @@ class ProductCategoryController {
 
                 const category = await ProductCategory.findByPk(id);
                 if (!category) errors.push({ message: ProductCategoryMessage.notFound });
-
-                if (errors.length > 0) {
-                    return res.error('Erreur de validation', 400, errors);
-                }
-
+                if (errors.length > 0) return res.error('Erreur de validation', 400, errors);
                 if (req.file) {
                     await deleteUploadedFile(category.imageName);
                     data.imageName = req.file.filename;
@@ -90,13 +84,8 @@ class ProductCategoryController {
             const category = await ProductCategory.findByPk(id);
 
             if (!category) errors.push({ message: ProductCategoryMessage.notFound });
-
-            if (category && category.imageName)
-                deleteUploadedFile(category.imageName);
-
-            if (errors.length > 0) {
-                return res.error('Erreur de validation', 400, errors);
-            }
+            if (category && category.imageName) deleteUploadedFile(category.imageName);
+            if (errors.length > 0) return res.error('Erreur de validation', 400, errors);
 
             const result = await category.destroy();
             if (result) return res.status(204).send();
@@ -115,9 +104,8 @@ class ProductCategoryController {
             const category = await ProductCategoryMongoose.findOne(query);
             if (!category) errors.push({ message: ProductCategoryMessage.notFound });
 
-            if (errors.length > 0) {
-                return res.error('Erreur de validation', 400, errors);
-            }
+            if (errors.length > 0) return res.error('Erreur de validation', 400, errors);
+
 
             res.success(category);
         } catch (error) {
