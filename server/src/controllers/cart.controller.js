@@ -99,18 +99,33 @@ class CartController {
         }
     }
 
-    static async list(req, res, next) {
+    static async getCart(req, res, next) {
         try {
-            const { page = 1, limit = 10 } = req.query;
-            const { limit: paginationLimit, offset } = getPagedData(page, limit);
+            const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
+            if (!cart) return res.status(404).send({ message: 'Cart not found' });
 
-            const totalItems = await Cart.countDocuments(filter);
-            const data = await Cart.find(filter)
-                .skip(offset)
-                .limit(paginationLimit);
+            const items = await Promise.all(cart.items.map(async (item) => {
+                const product = await Product.findByPk(item.product._id);
+                return {
+                    id: item._id,
+                    product: {
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                    },
+                    quantity: item.quantity,
+                    reserved: item.reserved,
+                    reservationExpiry: item.reservationExpiry,
+                };
+            }));
 
-            const carts = getPagedData(data, page, paginationLimit, totalItems);
-            res.success(carts);
+            res.send({
+                items,
+                totalPrice: cart.totalPrice,
+                shippingPrice: 10, // Exemple, à remplacer
+                discountPrice: 5, // Exemple, à remplacer
+            });
         } catch (error) {
             next(error);
         }
