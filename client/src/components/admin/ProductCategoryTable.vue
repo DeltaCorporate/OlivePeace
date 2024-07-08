@@ -4,7 +4,7 @@ import OpTableCol from '@/components/ui/OpTableCol.vue';
 import { getProductCategories, deleteProductCategory } from '@/api/admin/product-category.api';
 import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
-import { UPLOAD_PATH } from "@config/global.ts";
+import { UPLOAD_PATH } from "@/../config/global.ts";
 import {errorImage} from "@/utils/image.util.ts";
 
 const {
@@ -30,7 +30,10 @@ const {
     >
       <OpTableCol header="">
         <template #default="row">
-          <img @error="errorImage" :src="UPLOAD_PATH + '/' + row.value.imageName" class="w-16 object-cover aspect-square rounded-full" />
+          <div class="w-16 object-cover aspect-square">
+            <img @error="errorImage" :src="UPLOAD_PATH + '/' + row.value.imageName" class="w-16 object-cover aspect-square rounded-full" />
+
+          </div>
         </template>
       </OpTableCol>
       <OpTableCol header="Nom" property="name" sortable searchable />

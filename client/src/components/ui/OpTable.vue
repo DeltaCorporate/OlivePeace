@@ -77,7 +77,7 @@ const handleSearch = debounce((property: string, value: string) => {
     filterBuilder.value.add(key).contains(searchTerms[key]);
   });
   emits('search', filterBuilder.value);
-}, 500);
+}, 300);
 
 
 

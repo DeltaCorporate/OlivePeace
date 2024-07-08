@@ -7,7 +7,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const uploadsDir = path.resolve(__dirname, '../tmp');
+const uploadsDir = path.resolve(__dirname, '../src/tmp');
 
 
 
