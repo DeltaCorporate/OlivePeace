@@ -6,6 +6,7 @@ import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
 import { UPLOAD_PATH } from "@/../config/global.ts";
 import {errorImage} from "@/utils/image.util.ts";
+import {Filter} from "lucide-vue-next";
 
 const {
   data,
