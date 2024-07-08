@@ -13,7 +13,7 @@ import indexRouter from './routes/index.route.js';
 import usersRouter from './routes/users.route.js';
 import productCategoriesRouter from './routes/admin/product-categories.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
-import {__root} from "./config/filePath.js";
+import {__root} from "#config/filePath.js";
 
 const app = express();
 

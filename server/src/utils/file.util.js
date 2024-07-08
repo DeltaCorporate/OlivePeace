@@ -33,7 +33,7 @@ async function moveTmpToUpload(fileName) {
 
     const from = path.join(tmpDir, fileName);
     const to = path.join(uploadDir, fileName);
-
+    let result = false;
     try {
         await fs.access(from);
         await moveFile(from, to);
@@ -42,8 +42,8 @@ async function moveTmpToUpload(fileName) {
             console.log(`Le fichier ${from} n'existe pas`);
         else
             throw err;
-
     }
+
 }
 
 async function deleteUploadedFile(fileName) {

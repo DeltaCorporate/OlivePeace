@@ -1,8 +1,8 @@
-import Joi from 'joi';
+import Joi from "joi";
 
-const SlugValidation = {};
+const SlugRule = {};
 
-SlugValidation.joi = (joi) => ({
+SlugRule.joi = (joi) => ({
     type: 'slug',
     base: joi.string(),
     messages: {
@@ -13,8 +13,6 @@ SlugValidation.joi = (joi) => ({
             return {value,errors: helpers.error('slug.invalid')};
         return {value};
     }
-
-
 });
 
-export default SlugValidation;
+export default SlugRule;
