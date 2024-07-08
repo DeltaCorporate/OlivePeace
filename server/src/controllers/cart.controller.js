@@ -67,7 +67,7 @@ class CartController {
             await CartController.cartSchemaUpdate.validateAsync(data);
 
             // Utilisation de transactions pour les opérations atomiques
-            await performTransactionalOperation(cartId, data); // Utilisation de la fonction performTransactionalOperation
+            await performTransactionalOperation(cartId, data);
 
             return res.success('Cart updated successfully');
         } catch (error) {
@@ -104,7 +104,6 @@ class CartController {
             const { page = 1, limit = 10 } = req.query;
             const { limit: paginationLimit, offset } = getPagedData(page, limit);
 
-            const filter = {}; // Ajoutez ici la logique de filtrage si nécessaire
             const totalItems = await Cart.countDocuments(filter);
             const data = await Cart.find(filter)
                 .skip(offset)
