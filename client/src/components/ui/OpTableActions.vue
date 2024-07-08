@@ -50,16 +50,14 @@ const emit = defineEmits(['delete']);
 const handleDelete = async () => {
   const id = props.row.value[props.itemIdKey];
   loaders.delete = true;
-
-  try {
-    const response = await props.deleteMethod(id);
-    if (response) {
-      props.data?.splice(props.data?.findIndex((item: any) => item[props.itemIdKey] === id), 1);
-      alertStore.showAlert('La ligne a bien été supprimée', 'positive');
-    }
-  } catch (error) {
-    alertStore.showAlert('Impossible de supprimer la ligne : ' + error.message, 'negative');
+  const response = await props.deleteMethod(id);
+  if (response.code === 204) {
+    props.data?.splice(props.data?.findIndex((item: any) => item[props.itemIdKey] === id), 1);
+    alertStore.showAlert('La ligne a bien été supprimée', 'positive');
   }
+  else
+    alertStore.showAlert('Une erreur est survenue lors de la suppression', 'negative');
+
   loaders.delete = false;
 }
 </script>
