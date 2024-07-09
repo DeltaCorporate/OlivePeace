@@ -5,8 +5,8 @@ import CartController from './controllers/cart.controller.js';
 cron.schedule('* * * * *', async () => {
     try {
         await CartController.releaseExpiredReservations();
-        console.log('Expired reservations released');
+        console.log('réservation expirée');
     } catch (error) {
-        console.error('Failed to release expired reservations:', error);
+        console.error('Impossible de résilier la réservation:', error);
     }
 });
