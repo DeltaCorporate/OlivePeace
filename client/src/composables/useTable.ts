@@ -1,7 +1,6 @@
-import { ref, onMounted, reactive, computed } from 'vue';
+import {ref, onMounted, reactive, computed, onUnmounted} from 'vue';
 import { usePagination } from './usePagination';
 import FilterBuilder from "@/utils/filter.util.ts";
-import {createProductCategory} from "@/api/admin/product-category.api.ts";
 
 interface UseTableOptions {
     fetchData: (params: string) => Promise<any>;
@@ -10,13 +9,16 @@ interface UseTableOptions {
 export function useTable({ fetchData }: UseTableOptions) {
     const data = reactive<any[]>([]);
     const { pagination, setPagination } = usePagination();
+    let abortController = new AbortController();
     const buildParams = reactive({
         filterBuilder: new FilterBuilder(),
         page: computed(() => pagination.currentPage),
     });
 
     async function fetchTableData() {
-        const result = await fetchData(buildQueryParams());
+        abortController.abort();
+        abortController = new AbortController();
+        const result = await fetchData(buildQueryParams(), abortController.signal);
         data.splice(0, data.length, ...result.data.data);
         setPagination(result.data.pagination);
     }
@@ -28,7 +30,7 @@ export function useTable({ fetchData }: UseTableOptions) {
     }
 
     onMounted(fetchTableData);
-
+    onUnmounted(() => abortController.abort());
     async function handleUpdateFilters(filterBuilder: FilterBuilder) {
         buildParams.filterBuilder = filterBuilder;
         pagination.currentPage = 1;
