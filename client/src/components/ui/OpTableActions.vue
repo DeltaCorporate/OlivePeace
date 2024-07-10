@@ -1,8 +1,13 @@
 <template>
   <div class="flex space-x-2">
-    <DeleteButton class="text-xs" :loading="loaders.delete" @click="handleDelete" />
-    <EditButton :route="editRoute" class="text-xs" />
-    <ViewButton :route="viewRoute" class="text-xs" />
+
+    <DeleteButton v-if="deleteMethod"  class="text-xs" :loading="loaders.delete" @click="handleDelete" />
+    <EditButton v-if="editRoute" :route="editRoute" class="text-xs" />
+    <ViewButton v-if="viewRoute" :route="viewRoute" class="text-xs" />
+
+    <EditButton @click="editMethod" class="text-xs" />
+    <ViewButton v-if="viewMethod" @click="viewMethod" class="text-xs" />
+
   </div>
 </template>
 
@@ -19,8 +24,16 @@ const props = defineProps({
     type: String,
     required: true
   },
+  editMethod: {
+    type: Function,
+    required: true
+  },
   viewRoute: {
     type: String,
+    required: true
+  },
+  viewMethod: {
+    type: Function,
     required: true
   },
   deleteMethod: {

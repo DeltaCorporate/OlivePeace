@@ -13,6 +13,7 @@ import {
     PromotionMessage,
     GlobalMessage
 } from '#app/src/validations/errors.messages.js';
+import Promotion from "#app/src/sequelize/models/promotion.model.js";
 
 class ProductCategoryController {
     constructor() {}
@@ -89,9 +90,11 @@ class ProductCategoryController {
         const errors = [];
         try {
             const { slugOrId } = req.params;
-            const query = isNaN(slugOrId) ? { slug: slugOrId } : { _id: slugOrId };
+            const category = await ProductCategory.findOne({
+                    where: isNaN(slugOrId) ? { slug: slugOrId } : { id: parseInt(slugOrId) },
+                include: Promotion
 
-            const category = await ProductCategoryMongoose.findOne(query);
+            });
             if (!category) errors.push({ message: ProductCategoryMessage.notFound });
 
             if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);

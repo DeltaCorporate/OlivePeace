@@ -4,6 +4,11 @@ import OpTableCol from '@/components/ui/OpTableCol.vue';
 import { getPromotions, deletePromotion } from '@/api/admin/promotion.api';
 import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
+import {SfButton, SfIconClose, SfModal, useDisclosure} from "@storefront-ui/vue";
+import {onMounted, ref} from "vue";
+import PromotionFormModal from "@/components/admin/PromotionFormModal.vue";
+import PromotionForm from "@/components/admin/PromotionForm.vue";
+const { isOpen, open, close } = useDisclosure({ initialValue: false });
 
 const {
   data,
@@ -14,9 +19,21 @@ const {
   fetchData: getPromotions,
 });
 
+const promotionFormModalId = ref<number>();
+const openPromotionFormModal = (id: number) => {
+  promotionFormModalId.value = id;
+  open();
+}
 
 </script>
-<template>
+<template class="relative">
+  <div v-if="isOpen" class="fixed inset-0 z-10 bg-neutral-700 bg-opacity-50" />
+  <SfModal class="z-10 absolute  animate-fade md:max-w-[60%]" v-model="isOpen">
+      <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
+        <SfIconClose />
+      </SfButton>
+      <PromotionForm :id="promotionFormModalId"/>
+    </SfModal>
   <div class="flex justify-center">
     <div class="min-w-[40%]">
       <OpTable
@@ -36,7 +53,7 @@ const {
         </OpTableCol>
         <OpTableCol header="Actions">
           <template #default="row">
-            <OpTableActions :row="row" :data="data" editRoute="/" viewRoute="/" :deleteMethod="deletePromotion" />
+            <OpTableActions :row="row" :data="data" :editMethod="() => openPromotionFormModal(row.value._id)" :deleteMethod="deletePromotion" />
           </template>
         </OpTableCol>
       </OpTable>

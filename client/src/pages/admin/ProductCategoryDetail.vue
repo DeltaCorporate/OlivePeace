@@ -2,14 +2,14 @@
 
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue';
-import {useRoute} from 'vue-router';
+import {RouterLink, useRoute} from 'vue-router';
 import {getProductCategory} from '@/api/admin/product-category.api';
 import {toFrenchDate} from '@/utils/date.util';
-import {UNDEFINED_DEFAULT_IMG, UPLOAD_PATH} from "@/../config/global.ts";
+import {UPLOAD_PATH} from "@/../config/global.ts";
 import {useAdminLayoutStore} from '@/stores/admin/admin-layout.store.ts';
 import {ProductCategoryType} from "@/types/product-category.type.ts";
-import Return2Back from "@/components/ui/Return2Back.vue";
 import {errorImage} from "@/utils/image.util.ts";
+import {SfButton} from "@storefront-ui/vue";
 
 const route = useRoute();
 const category = ref<ProductCategoryType>({});
@@ -21,7 +21,6 @@ const formattedCreatedAt = computed(() => {
 const fetchProductCategory = async () => {
   const response = await getProductCategory(route.params.slug);
   category.value = response.data;
-
 };
 
 onMounted( () => {
@@ -39,8 +38,15 @@ onMounted( () => {
       <div class="flex flex-col p-2 w-full">
         <h1 class="typography-headline-2">{{ category.name }}</h1>
         <p class="text-base">{{ category.description }}</p>
-        <p class="text-base">Promotion appliquée : {{ category.promotionId }}</p>
-        <p class="text-sm text-right text-neutral-500">{{ formattedCreatedAt }}</p>
+
+        <div v-if="category.Promotion">
+          <router-link :to="`/admin/promotions/${category.Promotion.id}`">
+            <SfButton class="relative !rounded-full mt-10" size="sm" variant="primary">
+              Promotion : {{ category.Promotion.name }}
+            </SfButton>
+          </router-link>
+        </div>
+          <p class="text-sm text-right text-neutral-500">{{ formattedCreatedAt }}</p>
       </div>
     </div>
   </div>

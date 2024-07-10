@@ -1,5 +1,4 @@
 import ProductCategoryMongoose from '../../mongoose/models/product-category.model.js'; // Import du modèle Mongoose
-
 export const denormalizeProductCategory = async (category) => {
     try {
         let productCategoryMongo = await ProductCategoryMongoose.findByIdAndUpdate(
