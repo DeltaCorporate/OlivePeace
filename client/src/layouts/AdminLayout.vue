@@ -13,7 +13,7 @@ const pageTitle = computed(() => adminLayoutStore.pageTitle);
     <div>
       <Sidebar/>
     </div>
-    <main class="px-6 py-6 flex-1 relative bg-neutral-100 overflow-y-auto">
+    <main class="px-6 py-6 flex-1 relative bg-neutral-100 relative overflow-y-auto">
       <SfAlert/>
       <h1 class="typography-headline-1 my-5">{{ pageTitle }} </h1>
       <router-view class="animate-fade"/>

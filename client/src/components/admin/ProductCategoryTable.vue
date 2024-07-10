@@ -6,7 +6,11 @@ import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
 import { UPLOAD_PATH } from "@/../config/global.ts";
 import {errorImage} from "@/utils/image.util.ts";
-import {Filter} from "lucide-vue-next";
+import {ref} from "vue";
+
+import ProductCategoryForm from "@/components/admin/ProductCategoryForm.vue";
+import {SfButton, SfIconClose, SfModal, useDisclosure} from "@storefront-ui/vue";
+const { isOpen, open, close } = useDisclosure({ initialValue: false });
 
 const {
   data,
@@ -17,9 +21,21 @@ const {
   fetchData: getProductCategories,
 
 });
+
+const productCategoryFormModalId = ref<number>();
+const openProductCategoryFormModal = (id: number) => {
+  productCategoryFormModalId.value = id;
+  open();
+}
 </script>
 
 <template>
+  <SfModal class="z-10 absolute  animate-fade md:max-w-[60%]" v-model="isOpen">
+    <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
+      <SfIconClose />
+    </SfButton>
+      <ProductCategoryForm />
+  </SfModal>
   <div class="w-full overflow-auto">
     <OpTable
         :data="data"
@@ -47,7 +63,7 @@ const {
       </OpTableCol>
       <OpTableCol header="Actions">
         <template #default="row">
-          <OpTableActions :row="row" :data="data" editRoute="'/'" :viewRoute="'/admin/product_categories/view/'+row.value._id" :deleteMethod="deleteProductCategory" />
+          <OpTableActions :row="row" :data="data" :editMethod="() => openProductCategoryFormModal(row.value._id)" :viewRoute="'/admin/product_categories/view/'+row.value._id" :deleteMethod="deleteProductCategory" />
         </template>
       </OpTableCol>
     </OpTable>
