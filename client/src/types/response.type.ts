@@ -4,13 +4,14 @@ export type ResponseType<T> = {
     message: string;
     code: number;
     status: string;
+    isSuccess: boolean;
     data: {
         pagination?: PaginationInterface;
         data?: T;
     };
-    errors: [
+    errors?: [
         {
-            field: string;
+            field?: string;
             message: string;
         }
     ] | [];

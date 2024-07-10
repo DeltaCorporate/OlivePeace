@@ -5,7 +5,7 @@ export const formatAxiosError = (error: AxiosError) => {
         return {
             message: error.response.data.message || error.message,
             code: error.response.status,
-            status: error.response.data.status,
+            isSuccess: false,
             data: error.response.data.data,
             errors: error.response.data.errors || [],
         };
@@ -13,7 +13,7 @@ export const formatAxiosError = (error: AxiosError) => {
     return {
         message: error.message,
         code: 500,
-        status: 'error',
+        isSuccess: false,
         data: null,
         errors: [],
     };
@@ -21,7 +21,7 @@ export const formatAxiosError = (error: AxiosError) => {
 export const formatAxiosResponse = <T>(response: AxiosResponse<ResponseType<T>>): ResponseType<T> => {
     return {
         ...response.data,
+        isSuccess: true,
         code: response.status,
-        errors: [],
     };
 };

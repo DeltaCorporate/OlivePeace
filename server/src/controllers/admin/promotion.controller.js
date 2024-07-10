@@ -19,7 +19,7 @@ class PromotionController {
             const isNameTaken = await PromotionRepository.isNameTaken(data.name ?? null);
             if(isNameTaken) errors.push({ field:"name", message: PromotionMessage.nameIsTaken });
 
-            if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
+            if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);
 
             const promotion = await Promotion.create(data);
             return res.created(promotion);
@@ -38,7 +38,7 @@ class PromotionController {
             if (!promotion) errors.push({ message: PromotionMessage.notFound });
             if(isNameTaken) errors.push({ field:"name", message: PromotionMessage.nameIsTaken });
 
-            if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
+            if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);
 
             Object.assign(promotion, data);
             await promotion.save();

@@ -25,7 +25,7 @@ class ProductCategoryController {
             try {
                 const data = req.body;
                 errors = errors.concat(formatJoiErrors(productCategorySchemaCreate,data))
-                if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
+                if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);
                 if (req.file) {
                     data.imageName = req.file.filename;
                     await moveTmpToUpload(req.file.filename);
@@ -54,7 +54,7 @@ class ProductCategoryController {
                 errors = errors.concat(formatJoiErrors(productCategorySchemaUpdate,data))
                 const category = await ProductCategory.findByPk(id);
                 if (!category) errors.push({ message: ProductCategoryMessage.notFound });
-                if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
+                if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);
                 if (req.file) {
                     await deleteUploadedFile(category.imageName);
                     data.imageName = req.file.filename;
@@ -76,11 +76,10 @@ class ProductCategoryController {
 
             if (!category) errors.push({ message: ProductCategoryMessage.notFound });
             if (category && category.imageName) deleteUploadedFile(category.imageName);
-            if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
+            if (errors.length > 0) return res.error(GlobalMessage.validationError, 404, errors);
 
             const result = await category.destroy();
             if (result) return res.status(204).send();
-            else res.error(ProductCategoryMessage.notFound, 404, [{ field: 'id', message: ProductCategoryMessage.notFound }]);
         } catch (error) {
             handleError(res, error);
         }
@@ -97,7 +96,7 @@ class ProductCategoryController {
             });
             if (!category) errors.push({ message: ProductCategoryMessage.notFound });
 
-            if (errors.length > 0) return res.error(GlobalMessage.validationError, 400, errors);
+            if (errors.length > 0) return res.error(GlobalMessage.validationError, 404, errors);
 
 
             res.success(category);

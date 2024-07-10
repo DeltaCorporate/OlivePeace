@@ -64,7 +64,7 @@ const handleDelete = async () => {
   const id = props.row.value[props.itemIdKey];
   loaders.delete = true;
   const response = await props.deleteMethod(id);
-  if (response.code === 204) {
+  if (response.isSuccess) {
     props.data?.splice(props.data?.findIndex((item: any) => item[props.itemIdKey] === id), 1);
     alertStore.showAlert('La ligne a bien été supprimée', 'positive');
   }
