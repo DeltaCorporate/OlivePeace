@@ -5,8 +5,7 @@ import { getPromotions, deletePromotion } from '@/api/admin/promotion.api';
 import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
 import {SfButton, SfIconClose, SfModal, useDisclosure} from "@storefront-ui/vue";
-import {onMounted, ref} from "vue";
-import PromotionFormModal from "@/components/admin/PromotionFormModal.vue";
+import {ref} from "vue";
 import PromotionForm from "@/components/admin/PromotionForm.vue";
 const { isOpen, open, close } = useDisclosure({ initialValue: false });
 

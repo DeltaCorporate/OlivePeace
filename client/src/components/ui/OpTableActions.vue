@@ -5,7 +5,7 @@
     <EditButton v-if="editRoute" :route="editRoute" class="text-xs" />
     <ViewButton v-if="viewRoute" :route="viewRoute" class="text-xs" />
 
-    <EditButton @click="editMethod" class="text-xs" />
+    <EditButton v-if="editMethod" @click="editMethod" class="text-xs" />
     <ViewButton v-if="viewMethod" @click="viewMethod" class="text-xs" />
 
   </div>
