@@ -27,16 +27,30 @@
     </div>
     <div class="cart-summary mt-8 p-4 bg-gray-100 rounded-lg text-right">
       <p class="text-lg font-bold mb-4">Total: {{ formatPrice(orderSummary.total) }}</p>
-      <SfButton variant="primary" size="lg" class="w-full" @click="placeOrder">Commander</SfButton>
+        <SfButton variant="primary" size="lg" class="w-full" @click="open">Commander</SfButton>
     </div>
+    <SfModal v-if="isOpen" class="z-10 absolute animate-fade md:max-w-[60%]" v-model="isOpen">
+      <div class="p-4">
+        <div class="p-4 text-center">
+          <h2 class="text-2xl font-bold mb-4">Confirmer la Commande</h2>
+          <p class="mb-4">Voulez-vous vraiment passer la commande ?</p>
+          <router-link to="/" class="router-link-button">
+            <SfButton variant="primary" size="lg" class="w-full mb-2" @click="placeOrder">Valider la Commande</SfButton>
+          </router-link>
+          <SfButton variant="secondary" size="lg" class="w-full" @click="close">Annuler</SfButton>
+        </div>
+      </div>
+    </SfModal>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { SfButton, SfInput } from '@storefront-ui/vue';
+import { SfButton, SfInput, SfModal, useDisclosure } from '@storefront-ui/vue';
 import { fetchCart } from '@/api/cart.api.ts';
 import Return2Back from "@/components/ui/Return2Back.vue";
+const { isOpen, open, close } = useDisclosure({ initialValue: false });
+
 
 const orderSummary = ref({
   title: 'Mon Panier',
@@ -66,7 +80,8 @@ const updateTotal = () => {
 };
 
 const placeOrder = () => {
-  alert('Commande validée !');
+  alert('Commande passée !')
+  // Implémentation de la validation à faire
 };
 
 onMounted(async () => {
