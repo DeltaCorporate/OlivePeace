@@ -4,6 +4,7 @@ import AdminLayout from '@/layouts/AdminLayout.vue'
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import ProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryDetail from "@/pages/admin/ProductCategoryDetail.vue";
+import PromotionList from "@/pages/admin/PromotionList.vue";
 
 const routes = [
     {
@@ -22,8 +23,10 @@ const routes = [
                 path: 'product_categories/view/:slug',
                 component: ProductCategoryDetail,
             },
-
-
+            {
+                path: 'promotions',
+                component: PromotionList,
+            },
         ]
     }
 ]

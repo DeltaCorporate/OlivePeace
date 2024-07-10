@@ -2,11 +2,9 @@
 import {
   Home,
   Box,
-  Tag,
     Menu,
-  Percent,
-  ShoppingCart,
   Users,
+    TicketPercent,
 UserCog,
 } from 'lucide-vue-next';
 import { RouterLink } from 'vue-router';
@@ -33,6 +31,9 @@ const sidebarStore = useSidebarStore();
           </router-link>
           <router-link @click="sidebarStore.closeSidebar" to="/admin/product_categories" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
             <Box class="h-5 w-5 mr-3"/> Catégorie de produit
+          </router-link>
+          <router-link @click="sidebarStore.closeSidebar" to="/admin/promotions" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
+            <TicketPercent class="h-5 w-5 mr-3"/> Catégorie de promotions
           </router-link>
           <router-link @click="sidebarStore.closeSidebar" to="/admin/product_categories" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
             <Users class="h-5 w-5 mr-3"/> Utilisateurs

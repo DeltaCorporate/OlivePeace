@@ -17,26 +17,32 @@ const {
 
 </script>
 <template>
-  <OpTable
-      :data="data"
-      :pagination="pagination"
-      row-key-field="_id"
-      @sort="handleUpdateFilters"
-      @pageChange="handlePageChange"
-      @search="handleUpdateFilters"
-  >
-    <OpTableCol header="Nom" property="name" sortable searchable />
-    <OpTableCol header="Valeur" property="value" sortable searchable />
-    <OpTableCol header="Date d'expiration" property="expirationDate" sortable>
-      <template #default="row">
-        {{ new Date(row.value).toLocaleDateString('fr-FR') }}
-      </template>
-    </OpTableCol>
-    <OpTableCol header="Actions">
-      <template #default="row">
-        <OpTableActions :row="row" :data="data" editRoute="/" viewRoute="/" :deleteMethod="deletePromotion" />
-      </template> 
-    </OpTableCol>
-  </OpTable>
+  <div class="flex justify-center">
+    <div class="min-w-[40%]">
+      <OpTable
+          :data="data"
+          :pagination="pagination"
+          row-key-field="_id"
+          @sort="handleUpdateFilters"
+          @pageChange="handlePageChange"
+          @search="handleUpdateFilters"
+      >
+        <OpTableCol header="Nom" property="name" sortable searchable />
+        <OpTableCol header="Valeur" property="value" sortable />
+        <OpTableCol header="Date d'expiration" property="expirationDate" sortable>
+          <template #default="row">
+            {{ new Date(row.value).toLocaleDateString('fr-FR') }}
+          </template>
+        </OpTableCol>
+        <OpTableCol header="Actions">
+          <template #default="row">
+            <OpTableActions :row="row" :data="data" editRoute="/" viewRoute="/" :deleteMethod="deletePromotion" />
+          </template>
+        </OpTableCol>
+      </OpTable>
+    </div>
+
+  </div>
+
 </template>
 
