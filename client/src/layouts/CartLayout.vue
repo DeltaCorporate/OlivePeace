@@ -29,27 +29,14 @@
       <p class="text-lg font-bold mb-4">Total: {{ formatPrice(orderSummary.total) }}</p>
       <SfButton variant="primary" size="lg" class="w-full" @click="placeOrder">Commander</SfButton>
     </div>
-    <SfModal v-if="isOpen" @close="closeModal = false">
-      <template #overlay>
-        <div class="fixed inset-0 bg-black opacity-50"></div>
-      </template>
-      <template #content>
-        <div class="bg-white rounded-lg p-8 max-w-lg mx-auto">
-          <h2 class="text-xl font-semibold mb-4">Confirmation de la commande</h2>
-          <p class="mb-4">Votre commande a été validée avec succès !</p>
-          <SfButton variant="primary" size="lg" class="w-full" @click="closeModal">OK</SfButton>
-        </div>
-      </template>
-    </SfModal>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import {SfButton, SfInput, useDisclosure} from '@storefront-ui/vue';
+import { SfButton, SfInput } from '@storefront-ui/vue';
 import { fetchCart } from '@/api/cart.api.ts';
 import Return2Back from "@/components/ui/Return2Back.vue";
-import SfModal from "@/components/ui/SfModal.vue";
 
 const orderSummary = ref({
   title: 'Mon Panier',
@@ -59,7 +46,6 @@ const orderSummary = ref({
 });
 const loading = ref(true);
 const error = ref(null);
-const { isOpen, open, close } = useDisclosure({ initialValue: false });
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
@@ -80,11 +66,7 @@ const updateTotal = () => {
 };
 
 const placeOrder = () => {
-  open();
-};
-
-const closeModal = () => {
-  close();
+  alert('Commande validée !');
 };
 
 onMounted(async () => {
