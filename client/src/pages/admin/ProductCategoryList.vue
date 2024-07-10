@@ -1,5 +1,5 @@
 <script setup>
-import ProductCategoryTable from "@/components/admin/ProductCategoryTable.vue";
+import ProductCategoryTable from "@/components/components/ProductCategoryTable.vue";
 import {useAdminLayoutStore} from "@/stores/admin/admin-layout.store.ts";
 import {onMounted} from "vue";
 const adminLayoutStore = useAdminLayoutStore();

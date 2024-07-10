@@ -22,6 +22,13 @@ class PromotionRepository extends AbstractRepository{
         return !(promotion.expirationDate && new Date(promotion.expirationDate) < new Date());
     }
 
+    // tu me select que le nom de la promo pas tout entier soit plus opti
+    static async isNameTaken(name){
+        return await Promotion.findOne({
+            where: { name },
+            attributes: ['name']
+        });
+    }
 }
 
 export default PromotionRepository;

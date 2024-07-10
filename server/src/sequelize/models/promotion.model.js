@@ -1,6 +1,7 @@
 import { Model, DataTypes,NOW } from 'sequelize';
 import db from './index.js';
-
+import {denormalizePromotion} from "#app/src/services/denormalizations/promotion.denormalizer.js";
+import PromotionMongoose from "#app/src/mongoose/models/promotion.model.js";
 class Promotion extends Model {}
 
 Promotion.init({
@@ -20,7 +21,22 @@ Promotion.init({
     }
 }, {
     sequelize: db.sequelize,
-    underscored: true
+    underscored: true,
+    hooks: {
+        afterCreate: async (promotion, options) => {
+            await denormalizePromotion(promotion);
+        },
+        afterUpdate: async (promotion, options) => {
+            await denormalizePromotion(promotion);
+        },
+        afterDestroy: async (promotion, options) => {
+            try {
+                await PromotionMongoose.findByIdAndDelete(promotion.id);
+            } catch (error) {
+                console.error('Failed to delete category in MongoDB:', error);
+            }
+        }
+    }
 });
 
 export default Promotion;

@@ -9,7 +9,7 @@ const ProductCategorySchema = new Schema({
     createdAt: Date,
     updatedAt: Date,
     promotionId: Number
-});
+},{versionKey: false});
 
 const ProductCategory = model('ProductCategory', ProductCategorySchema);
 
