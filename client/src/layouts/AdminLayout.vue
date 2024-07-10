@@ -1,5 +1,5 @@
 <script setup>
-import Sidebar from '@/components/components/Sidebar.vue'
+import Sidebar from '@/components/admin/Sidebar.vue'
 import SfAlert from "@/components/ui/SfAlert.vue";
 import {computed} from "vue";
 import {useAdminLayoutStore} from "@/stores/admin/admin-layout.store.ts";
