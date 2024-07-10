@@ -40,11 +40,9 @@ onMounted( () => {
         <p class="text-base">{{ category.description }}</p>
 
         <div v-if="category.Promotion">
-          <router-link :to="`/admin/promotions/${category.Promotion.id}`">
             <SfButton class="relative !rounded-full mt-10" size="sm" variant="primary">
               Promotion : {{ category.Promotion.name }}
             </SfButton>
-          </router-link>
         </div>
           <p class="text-sm text-right text-neutral-500">{{ formattedCreatedAt }}</p>
       </div>
