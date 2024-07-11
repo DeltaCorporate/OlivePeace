@@ -20,26 +20,11 @@ import { useAlertStore } from '@/stores/alerts.store.ts';
 import {defineProps, defineEmits, reactive} from 'vue';
 
 const props = defineProps({
-  editRoute: {
-    type: String,
-    required: true
-  },
-  editMethod: {
-    type: Function,
-    required: true
-  },
-  viewRoute: {
-    type: String,
-    required: true
-  },
-  viewMethod: {
-    type: Function,
-    required: true
-  },
-  deleteMethod: {
-    type: Function,
-    required: true
-  },
+  editRoute: String,
+  editMethod: Function,
+  viewRoute: String,
+  viewMethod: Function,
+  deleteMethod: Function,
   data: {
     type: Array,
     required: true

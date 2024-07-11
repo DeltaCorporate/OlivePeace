@@ -26,7 +26,6 @@ const props = defineProps({
     default: '',
   },
   icon: {
-    type: Object,
     required: true,
   },
   buttonClass: {

@@ -25,6 +25,7 @@
         :totalPages="props.pagination.totalPages"
         :currentPage="props.pagination.currentPage"
         :pageSize="props.pagination.pageSize"
+        :limit="props.pagination.limit"
         @pageChange="handlePageChange"
     />
   </div>
