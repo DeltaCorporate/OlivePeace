@@ -3,7 +3,21 @@ import db from './index.js';
 import ProductCategory from './product-category.model.js';
 import Promotion from './promotion.model.js';
 
-class Product extends Model {}
+class Product extends Model {
+
+    async getApplicablePromotion () {
+        const promotion = await this.getPromotion();
+        if (promotion) return promotion;
+        const productCategory = await this.getProductCategory({
+           include: [Promotion]
+        });
+
+        if(productCategory.Promotion) return productCategory.Promotion;
+        return null;
+    };
+}
+
+
 
 Product.init({
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
@@ -23,27 +37,22 @@ Product.init({
         allowNull: false,
         defaultValue: NOW
     },
-    productCategoryId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: ProductCategory,
-            key: 'id'
-        }
-    },
-    promotionId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Promotion,
-            key: 'id'
-        }
-    }
 }, {
     sequelize: db.sequelize,
-    underscored: true
-
+    underscored: true,
+    getterMethods: {
+        async discountedPrice() {
+            const promotion = await this.getApplicablePromotion();
+            if (!promotion) return this.price;
+            const discount = this.price * (promotion.value / 100);
+            return this.price - discount;
+        }
+    }
 });
+
 
 Product.belongsTo(ProductCategory);
 Product.belongsTo(Promotion);
+
 
 export default Product;

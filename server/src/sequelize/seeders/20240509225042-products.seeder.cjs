@@ -1,6 +1,6 @@
 'use strict';
 const { faker } = require('@faker-js/faker');
-
+const { generateRandomString } = require('../../utils/string.util.js');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const { mdb_connect } = await import('../../mongoose/index.js');
@@ -24,7 +24,7 @@ module.exports = {
         description: faker.commerce.productDescription(),
         price: parseFloat(faker.commerce.price()),
         stock: faker.number.int({ min: 0, max: 100 }),
-        slug: faker.helpers.slugify(faker.commerce.productName()),
+        slug: faker.helpers.slugify(generateRandomString(15)),
         productCategoryId: faker.helpers.arrayElement(categoryIds),
         promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
       });

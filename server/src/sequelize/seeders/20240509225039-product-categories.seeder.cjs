@@ -1,5 +1,6 @@
 'use strict';
 const { faker } = require('@faker-js/faker');
+const { generateRandomString } = require('../../utils/string.util.js');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -18,7 +19,7 @@ module.exports = {
         name: faker.commerce.department(),
         imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
         description: faker.commerce.productDescription(),
-        slug: faker.helpers.slugify(faker.commerce.department()),
+        slug: faker.helpers.slugify(generateRandomString(15)),
         promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
       });
     }
