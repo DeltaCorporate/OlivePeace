@@ -18,6 +18,7 @@ export const formatJoiErrors = (schema,data) => {
  * @param {Error} error - L'erreur à gérer.
  */
 export const handleError = (res, error) => {
+    console.log(error);
     if (error.isJoi) {
         const errorDetails = formatJoiErrors(error);
         res.error('Erreur de validation', 400, errorDetails);

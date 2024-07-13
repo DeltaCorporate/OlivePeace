@@ -34,10 +34,7 @@ class AbstractFilter {
 
         return criteria.map(item => {
             const [criteriaType, criteriaValue] = item.split(':');
-            if (criteriaType === 'contains' || criteriaType === 'equal') {
-                return [criteriaType, criteriaValue.replace(/(^"|"$)/g, '')];
-            }
-            return [criteriaType, criteriaValue];
+            return [criteriaType, criteriaValue.replace(/(^"|"$)/g, '')];
         });
     }
 
@@ -49,25 +46,22 @@ class AbstractFilter {
                 criteria: this.parseCriteria(value)
             }));
 
-        filters.forEach(({ field }) => {
-            if (this.disallowedAttributes.includes(field) || this.disallowedAttributes.includes(this.convertFieldName(field))) {
-                throw new Error(`Le filtrage par "${field}" n'est pas autorisé`);
-            }
-        });
-
         return filters.reduce((acc, { field, criteria }) => {
-            acc[field] = criteria;
+            acc[field] = {
+                criteria: criteria.filter(([type]) => type !== 'logic'),
+                logic: criteria.find(([type]) => type === 'logic')?.[1] || 'AND'
+            };
             return acc;
         }, {});
     }
 
     convertFieldName(fieldName) {
-        if (this.caseFormat.type === 'snake') {
+        if (this.caseFormat.type === 'snake')
             return fieldName.replace(/([A-Z])/g, "_$1").toLowerCase();
-        }
-        if (this.caseFormat.type === 'camel') {
+
+        if (this.caseFormat.type === 'camel')
             return fieldName.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
-        }
+
         return fieldName;
     }
 
