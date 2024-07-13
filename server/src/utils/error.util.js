@@ -22,6 +22,6 @@ export const handleError = (res, error) => {
         const errorDetails = formatJoiErrors(error);
         res.error('Erreur de validation', 400, errorDetails);
     } else {
-        res.error(error.message, 400, [{ message: error.message }]);
+        res.error(error.message, 400);
     }
 };

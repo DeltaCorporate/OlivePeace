@@ -14,6 +14,7 @@ import {
 } from '#app/src/validations/errors.messages.js';
 import ProductCategory from "#app/src/mongoose/models/product-category.model.js";
 import Promotion from "#app/src/mongoose/models/promotion.model.js";
+import ProductCategoryMongoose from "#app/src/mongoose/models/product-category.model.js";
 
 class ProductController {
     constructor() {}
@@ -28,6 +29,25 @@ class ProductController {
             if (!product) errors.push({ message: ProductMessage.notFound });
             if (errors.length > 0) return res.error(GlobalMessage.validationError, 404, errors);
             res.success(product);
+        } catch (error) {
+            handleError(res, error);
+        }
+    }
+    static async list(req, res) {
+        try {
+            const { page = 1, limit = 10 } = req.query;
+            const { limit: paginationLimit, offset } = getPagination(page, limit);
+
+            const mongooseFilter = new MongooseFilter(req.query);
+            const { filter, sort } = mongooseFilter.applyFilters();
+            const totalItems = await ProductMongoose.countDocuments(filter);
+            const data = await ProductMongoose.find(filter)
+                .sort(sort)
+                .skip(offset)
+                .limit(paginationLimit)
+
+            const products = getPagedData(data, page, paginationLimit, totalItems);
+            res.success(products);
         } catch (error) {
             handleError(res, error);
         }
