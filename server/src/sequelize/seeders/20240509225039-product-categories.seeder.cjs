@@ -1,9 +1,9 @@
 'use strict';
 const { faker } = require('@faker-js/faker');
-const { generateRandomString } = require('../../utils/string.util.js');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    const { generateRandomString } = await import('../../utils/string.util.js');
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
@@ -24,9 +24,9 @@ module.exports = {
       });
     }
 
-    for (const category of bulkCategories) {
+    for (const category of bulkCategories)
       await ProductCategory.create(category);
-    }
+
   },
 
   down: async (queryInterface, Sequelize) => {

@@ -3,6 +3,8 @@ import db from './index.js';
 import ProductCategory from './product-category.model.js';
 import Promotion from './promotion.model.js';
 
+import ProductMongoose from "#app/src/mongoose/models/product.model.js";
+import {denormalizeProduct} from "../../services/denormalizations/product.denormalizer.js";
 class Product extends Model {
 
     async getApplicablePromotion () {
@@ -11,8 +13,8 @@ class Product extends Model {
         const productCategory = await this.getProductCategory({
            include: [Promotion]
         });
-
-        if(productCategory.Promotion) return productCategory.Promotion;
+        if(productCategory.hasOwnProperty('Promotion'))
+            return productCategory.Promotion;
         return null;
     };
 }
@@ -46,6 +48,21 @@ Product.init({
             if (!promotion) return this.price;
             const discount = this.price * (promotion.value / 100);
             return this.price - discount;
+        }
+    },
+    hooks: {
+        afterCreate: async (product, options) => {
+            await denormalizeProduct(product);
+        },
+        afterUpdate: async (product, options) => {
+            await denormalizeProduct(product);
+        },
+        afterDestroy: async (product, options) => {
+            try {
+                await ProductMongoose.findByIdAndDelete(product.id);
+            } catch (error) {
+                console.error('Failed to delete product in MongoDB:', error);
+            }
         }
     }
 });

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
-    "seed": "cd /usr/src/app/src/sequelize && npx sequelize db:migrate && npx sequelize db:seed:all"
+    "seed": "cd /usr/src/app/src/sequelize && npx sequelize db:migrate && npx sequelize db:seed:all && cd /usr/src/app",
+    "migrate:undo": "cd /usr/src/app/src/sequelize && npx sequelize db:migrate:undo:all && cd /usr/src/app"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
