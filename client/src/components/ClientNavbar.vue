@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 import {
   SfButton,
   SfIconShoppingCart,
@@ -7,6 +6,7 @@ import {
   SfInput,
   SfIconSearch,
 } from '@storefront-ui/vue';
+import ProductSearchBar from "@/components/ProductSearchBar.vue";
 
 const actionItems = [
   {
@@ -24,10 +24,8 @@ const actionItems = [
   },
 ];
 
-const inputValue = ref('');
 
-const search = () => {
-};
+
 
 </script>
 
@@ -52,35 +50,7 @@ const search = () => {
       <SfButton class="hidden lg:flex lg:mr-4" type="button" variant="tertiary">
         <span class="hidden lg:flex whitespace-nowrap">Catégories</span>
       </SfButton>
-      <form
-          role="search"
-          class="flex flex-[100%] order-last lg:order-3 mt-2 lg:mt-0 pb-2 lg:pb-0"
-          @submit.prevent="search"
-      >
-        <SfInput
-            v-model="inputValue"
-            type="search"
-            class="[&::-webkit-search-cancel-button]:appearance-none"
-            placeholder="Search"
-            @focusin=""
-            wrapper-class="flex-1 h-10 pr-0"
-            size="base"
-        >
-          <template #suffix>
-            <span class="flex items-center">
-              <SfButton
-                  variant="tertiary"
-                  square
-                  aria-label="search"
-                  type="submit"
-                  class="rounded-l-none hover:bg-transparent active:bg-transparent"
-              >
-                <SfIconSearch />
-              </SfButton>
-            </span>
-          </template>
-        </SfInput>
-      </form>
+      <ProductSearchBar />
       <nav class="flex-1 flex justify-end lg:order-last lg:ml-4">
         <div class="flex flex-row flex-nowrap">
           <SfButton
