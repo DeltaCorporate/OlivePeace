@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col min-h-screen">
     <ClientNavbar />
-    <main class="flex-grow relative">
+    <main class="flex-grow relative p-5">
       <SfAlert/>
       <h1 class="typography-headline-1 my-5">{{ pageTitle }} </h1>
       <router-view />

@@ -6,13 +6,13 @@ import { formatAxiosResponse, formatAxiosError } from "@/utils/response.util.ts"
 
 /**
  * Obtenir toutes les catégories de produits avec des filtres optionnels
- * @param filterInstance - (Optionnel) Instance de la classe Filter pour affiner la requête
+ * @param params
  * @param signal - Signal pour annuler la requête
  * @returns Réponse de la requête avec les catégories de produits ou une erreur formatée
  */
-export const getProductCategories = async (filterInstance?: Filter, signal?: AbortSignal): Promise<ResponseType<ProductCategoryType[]>> => {
+export const getProductCategories = async (params?: string, signal?: AbortSignal): Promise<ResponseType<ProductCategoryType[]>> => {
     try {
-        let queryString = filterInstance ? '?' + filterInstance.toString() : '';
+        let queryString = params ? '?' + params : '';
         const response: AxiosResponse<ResponseType<ProductCategoryType[]>> = await apiClient.get(`/admin/product_categories${queryString}`, { signal });
         return formatAxiosResponse(response);
     } catch (error) {

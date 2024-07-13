@@ -15,6 +15,12 @@ export const formatAxiosError = (error: AxiosError) => {
     };
 };
 export const formatAxiosResponse = <T>(response: AxiosResponse<ResponseType<T>>): ResponseType<T> => {
+    let objet ={
+        ...response.data,
+        ...response.pagination,
+        isSuccess: true,
+        code: response.status,
+    };
     return {
         ...response.data,
         ...response.pagination,
