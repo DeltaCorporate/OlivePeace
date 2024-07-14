@@ -8,29 +8,23 @@ const router = useRouter();
 const route = useRoute();
 const searchStore = useProductSearchStore();
 
-const goToProducts = () => {
+const goToProductsPage = () => {
   const routeName = router.currentRoute.value.name ?? null;
   if (routeName !== 'products') router.push('/products');
-
 };
-
-const search = () => {
-  searchStore.handleSearch();
-};
-
 watch(() => route.meta.disableSearch, (disableSearch) => {
   if (disableSearch) searchStore.disable();
   else searchStore.enable();
 }, { immediate: true });
 </script>
 <template>
-  <form @submit.prevent="search" class="flex flex-[100%] order-last lg:order-3 mt-2 lg:mt-0 pb-2 lg:pb-0">
+  <form class="flex flex-[100%] order-last lg:order-3 mt-2 lg:mt-0 pb-2 lg:pb-0">
     <SfInput
         v-model="searchStore.searchQuery"
         type="search"
         class="[&::-webkit-search-cancel-button]:appearance-none"
         placeholder="Rechercher des produits..."
-        @focusin="goToProducts"
+        @focusin="goToProductsPage"
         wrapper-class="flex-1 h-10 pr-0"
         :disabled="searchStore.isDisabled"
     >

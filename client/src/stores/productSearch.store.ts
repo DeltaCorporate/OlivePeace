@@ -1,36 +1,26 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import {ref, computed, watch, reactive} from 'vue';
 import { useRouter } from 'vue-router';
 import { getProducts } from '@/api/product.api';
 import { debounce } from '@/utils/debounce.utils';
+import FilterBuilder from "@/utils/filter.util.ts";
 
 export const useProductSearchStore = defineStore('productSearch', () => {
     const router = useRouter();
     const searchQuery = ref('');
     const isDisabled = ref(false);
-
-    const handleSearch = debounce(async () => {
-        if (router.currentRoute.value.name !== 'products') {
-            router.push({ name: 'products' });
-        }
-
-        const filterBuilder = new FilterBuilder();
-        if (searchQuery.value.length > 0) {
-            filterBuilder.add('name').contains(searchQuery.value).logic('OR').ord('ASC')
-                .add('description').contains(searchQuery.value).logic('OR');
-        }
-
-        try {
-            const response = await getProducts(filterBuilder.build());
-            } catch (error) {
-            console.error("Impossible de charger les produits", error);
-        }
-    }, 300);
+    const filterBuilder = reactive(new FilterBuilder());
+    watch(() => searchQuery.value, () => {
+        filterBuilder.clear();
+            if (searchQuery.value.length > 0) {
+                filterBuilder.add('name').contains(searchQuery.value).logic('OR').ord('ASC')
+                    .add('description').contains(searchQuery.value).logic('OR');
+            }
+    });
 
     const disable = () => {
         isDisabled.value = true;
     };
-
     const enable = () => {
         isDisabled.value = false;
     };
@@ -38,7 +28,7 @@ export const useProductSearchStore = defineStore('productSearch', () => {
     return {
         searchQuery,
         isDisabled,
-        handleSearch,
+        filterBuilder,
         disable,
         enable,
     };

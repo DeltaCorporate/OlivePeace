@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SfLink, SfButton, SfIconShoppingCart } from '@storefront-ui/vue';
-import {defineProps, ref} from 'vue';
+import {computed, defineProps, ref} from 'vue';
 const props = defineProps({
   product: {
     type: Object,
@@ -9,6 +9,11 @@ const props = defineProps({
 });
 
 const product = ref(props.product);
+
+const discountedPrice = computed(() => {
+  const price = parseFloat(product.value.discountedPrice);
+  return price.toFixed(2);
+});
 </script>
   <template>
     <div class="border border-neutral-200 rounded-md hover:shadow-lg max-w-[200px]">
@@ -22,6 +27,7 @@ const product = ref(props.product);
               height="300"
           />
         </SfLink>
+        <SfButton variant="primary" size="sm" class="bottom-0 right-0 absolute !py-0 !px-1 text-xs rounded-sm opacity-70">{{product.productCategory.name}}</SfButton>
       </div>
       <div class="p-4 border-t border-neutral-200">
         <div class="flex flex-wrap">
@@ -29,7 +35,7 @@ const product = ref(props.product);
           <small>{{product.brand}}</small>
         </div>
 
-        <span class="block pb-2 font-bold typography-text-lg">{{product.price}}</span>
+        <span class="block pb-2 font-bold typography-text-lg">{{discountedPrice}}€</span>
         <SfButton size="sm">
           <template #prefix>
             <SfIconShoppingCart size="sm" />

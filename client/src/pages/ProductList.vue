@@ -8,6 +8,7 @@ import Pagination from '@/components/ui/Pagination.vue';
 import { usePagination } from "@/composables/usePagination.ts";
 import { useAlertStore } from "@/stores/alerts.store.ts";
 import { useProductSearchStore } from '@/stores/productSearch.store';
+import ProductFilter from "@/components/ProductFilter.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -17,12 +18,12 @@ const alertStore = useAlertStore();
 const searchStore = useProductSearchStore();
 const { pagination, setPagination } = usePagination();
 
-let filterBuilder = new FilterBuilder();
+
 
 const fetchProducts = async () => {
-  if (queryString.value.length <= 0) {
-    queryString.value = filterBuilder.build() + `&page=${pagination.currentPage}`;
-  }
+  if (queryString.value.length <= 0)
+    queryString.value = searchStore.filterBuilder.build() + `&page=${pagination.currentPage}`;
+
   try {
     const response = await getProducts(queryString.value);
     products.value = response.data;
@@ -53,16 +54,9 @@ onMounted(() => {
   fetchProducts();
 });
 
-watch(() => route.query, () => {
-  fetchProducts();
-});
 
-watch(() => searchStore.searchQuery, () => {
-  filterBuilder = new FilterBuilder();
-  if (searchStore.searchQuery.length > 0) {
-    filterBuilder.add('name').contains(searchStore.searchQuery).logic('OR').ord('ASC')
-        .add('description').contains(searchStore.searchQuery).logic('OR');
-  }
+
+watch(searchStore.filterBuilder, () => {
   pagination.currentPage = 1;
   queryString.value = '';
   fetchProducts();
@@ -70,24 +64,29 @@ watch(() => searchStore.searchQuery, () => {
 </script>
 
 <template>
-  <div>
-    <div class="flex justify-center">
-      <div v-if="products.length > 0">
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-y-10 gap-x-32">
-          <ProductCard v-for="product in products" :key="product._id" :product="product" />
-        </div>
-        <div class="w-full flex justify-center my-6">
-          <Pagination
-              :totalItems="pagination.totalItems"
-              :totalPages="pagination.totalPages"
-              :currentPage="pagination.currentPage"
-              :pageSize="pagination.pageSize"
-              :limit="pagination.limit"
-              @pageChange="handlePageChange"
-          />
-        </div>
-      </div>
-      <div v-else>Il n'y a pas de produit</div>
+  <div class="flex flex-col md:flex-row gap-10 md:gap-3">
+    <div class="sm:w-full md:w-1/4 md:max-w-[270px]">
+      <ProductFilter :filterBuilder="searchStore.filterBuilder" />
     </div>
+    <div class="sm:w-full md:w-3/4">
+          <div class="flex justify-center">
+            <div v-if="products.length > 0">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-32">
+                <ProductCard v-for="product in products" :key="product._id" :product="product" />
+              </div>
+              <div class="w-full flex justify-center my-6">
+                <Pagination
+                    :totalItems="pagination.totalItems"
+                    :totalPages="pagination.totalPages"
+                    :currentPage="pagination.currentPage"
+                    :pageSize="pagination.pageSize"
+                    :limit="pagination.limit"
+                    @pageChange="handlePageChange"
+                />
+              </div>
+            </div>
+            <div v-else>Il n'y a pas de produit</div>
+          </div>
+      </div>
   </div>
 </template>
