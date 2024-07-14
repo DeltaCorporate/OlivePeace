@@ -33,20 +33,17 @@ const actionItems = [
 <template>
   <header class="flex justify-center w-full py-2 px-4 lg:py-5 lg:px-6 bg-white border-b border-neutral-200">
     <div class="flex flex-wrap lg:flex-nowrap items-center flex-row justify-start h-full max-w-[1536px] w-full">
-      <a
-          href="#"
-          aria-label="SF Homepage"
-          class="inline-block mr-4 focus-visible:outline focus-visible:outline-offset focus-visible:rounded-sm shrink-0"
-      >
+
+      <router-link to="/" class="inline-block mr-4 focus-visible:outline focus-visible:outline-offset focus-visible:rounded-sm shrink-0">
         <picture>
-          <source srcset="https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/vsf_logo.svg" media="(min-width: 768px)" />
+          <source srcset="/public/logo-full.svg" cmass media="(min-width: 768px)" />
           <img
-              src="https://storage.googleapis.com/sfui_docs_artifacts_bucket_public/production/vsf_logo_sign.svg"
+              src="/public/logo-simple.svg"
               alt="Sf Logo"
               class="w-8 h-8 md:h-6 md:w-[176px] lg:w-[12.5rem] lg:h-[1.75rem]"
           />
         </picture>
-      </a>
+      </router-link>
       <SfButton class="hidden lg:flex lg:mr-4" type="button" variant="tertiary">
         <span class="hidden lg:flex whitespace-nowrap">Catégories</span>
       </SfButton>
