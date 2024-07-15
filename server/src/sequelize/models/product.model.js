@@ -29,6 +29,7 @@ Product.init({
     price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     stock: { type: DataTypes.INTEGER, allowNull: false },
     slug: { type: DataTypes.STRING(200), allowNull: false },
+    imageName: { type: DataTypes.STRING(200), allowNull: false },
     createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

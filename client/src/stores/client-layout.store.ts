@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useClientLayout = defineStore('clientLayout', {
+export const useClientLayoutStore = defineStore('clientLayout', {
     state: () => ({
         pageTitle: ''
     }),

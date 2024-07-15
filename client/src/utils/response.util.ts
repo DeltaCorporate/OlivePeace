@@ -5,7 +5,7 @@ export const formatAxiosError = (error: AxiosError) => {
         return {
             code: error.response.status,
             isSuccess: false,
-            errors: error.response.data.errors || [],
+            errors: error.response.data || [],
         };
     }
     return {
@@ -15,16 +15,14 @@ export const formatAxiosError = (error: AxiosError) => {
     };
 };
 export const formatAxiosResponse = <T>(response: AxiosResponse<ResponseType<T>>): ResponseType<T> => {
-    let objet ={
-        ...response.data,
-        ...response.pagination,
-        isSuccess: true,
-        code: response.status,
-    };
-    return {
-        ...response.data,
-        ...response.pagination,
-        isSuccess: true,
-        code: response.status,
-    };
+        const data = response.data.data ? [...response.data.data] : {...response.data};
+
+        const result = {
+            data,
+            isSuccess: true,
+            code: response.status,
+        };
+        if(response.data.pagination)
+            result.pagination = {...response.data.pagination};
+        return result;
 };

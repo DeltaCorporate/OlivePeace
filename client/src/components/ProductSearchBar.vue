@@ -10,7 +10,11 @@ const searchStore = useProductSearchStore();
 
 const goToProductsPage = () => {
   const routeName = router.currentRoute.value.name ?? null;
-  if (routeName !== 'products') router.push('/products');
+
+  if (routeName !== 'products' && routeName !== 'product_categories_products'){
+    router.push('/products');
+  }
+
 };
 watch(() => route.meta.disableSearch, (disableSearch) => {
   if (disableSearch) searchStore.disable();

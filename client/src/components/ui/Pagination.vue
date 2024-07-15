@@ -35,7 +35,7 @@ function prevPage() {
 </script>
 
 <template>
-  <div class="flex items-center justify-end gap-2 mt-4">
+  <div class="flex items-center justify-end gap-2 mt-4" v-if="props.totalPages > 1">
     <SfButton size="sm" class="!bg-primary-600 !text-neutral-50" @click="prevPage" v-if="props.currentPage > 1">
       <
     </SfButton>

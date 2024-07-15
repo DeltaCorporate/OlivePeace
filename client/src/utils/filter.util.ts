@@ -11,6 +11,11 @@ class FilterBuilder {
         if (field) this.filters[field].push(`contains:${value}`);
         return this;
     }
+    equal(value: string): this {
+        const field = Object.keys(this.filters).pop();
+        if (field) this.filters[field].push(`equal:${value}`);
+        return this;
+    }
 
     logic(value: 'AND' | 'OR'): this {
         const field = Object.keys(this.filters).pop();

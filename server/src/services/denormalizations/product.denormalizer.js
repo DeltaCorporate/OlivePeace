@@ -5,7 +5,7 @@ export const denormalizeProduct = async (product) => {
         // get product data
         const productData = product.toJSON();
 
-        if(promotion && product.id > 4){
+        if(promotion){
             productData.promotion = {
                 name: promotion.name,
                 value: promotion.value

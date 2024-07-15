@@ -23,6 +23,7 @@ module.exports = {
         description: faker.commerce.productDescription(),
         price: parseFloat(faker.commerce.price()),
         stock: faker.number.int({ min: 0, max: 100 }),
+        imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
         slug: faker.helpers.slugify(generateRandomString(15)),
         ProductCategoryId: faker.helpers.arrayElement(categoryIds),
         PromotionId: faker.helpers.arrayElement(promotionIds)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import {ref, onMounted, watch, reactive} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getProducts } from '@/api/product.api';
 import FilterBuilder from '@/utils/filter.util';
@@ -9,23 +9,42 @@ import { usePagination } from "@/composables/usePagination.ts";
 import { useAlertStore } from "@/stores/alerts.store.ts";
 import { useProductSearchStore } from '@/stores/productSearch.store';
 import ProductFilter from "@/components/ProductFilter.vue";
+import {ProductCategoryType} from "@/types/product-category.type.ts";
+import {getProductCategory, getProductsByCategory} from "@/api/product-category.api.ts";
+import {useClientLayoutStore} from "@/stores/client-layout.store.ts";
+import {isEmpty} from "@/utils/divers.util.ts";
+import {UPLOAD_PATH} from "../../config/global.ts";
+import {errorImage} from "@/utils/image.util.ts";
 
 const router = useRouter();
 const route = useRoute();
 const products = ref([]);
 const queryString = ref('');
+const productCategory = reactive<ProductCategoryType>({});
 const alertStore = useAlertStore();
 const searchStore = useProductSearchStore();
+const clientLayoutStore = useClientLayoutStore();
 const { pagination, setPagination } = usePagination();
 
 
 
 const fetchProducts = async () => {
+  const filterBuilder = new FilterBuilder();
+  filterBuilder.filters = {...searchStore.filterBuilder.filters};
+
   if (queryString.value.length <= 0)
-    queryString.value = searchStore.filterBuilder.build() + `&page=${pagination.currentPage}`;
+    queryString.value = filterBuilder.build() + `&page=${pagination.currentPage}`;
 
   try {
-    const response = await getProducts(queryString.value);
+    let response;
+    if(route.name === 'product_categories_products'){
+      response = await getProductsByCategory({
+        params: queryString.value,
+        slugOrId: route.params.slug as string
+      });
+    }else
+      response = await getProducts(queryString.value);
+
     products.value = response.data;
     setPagination(response.pagination);
   } catch (error) {
@@ -45,15 +64,28 @@ const updateUrlParams = (query: string) => {
   router.replace({ query: Object.fromEntries(params.entries()) });
 };
 
-onMounted(() => {
+const fetchProductCategory = async (slug: string) => {
+  const response = await getProductCategory(slug);
+  if (!response.isSuccess) {
+    alertStore.showAlert("Impossible de charger la catégorie de produit", "negative");
+    return;
+  }
+  Object.assign(productCategory, response.data);
+};
+
+onMounted(async () => {
   if (route.query) {
     const params = new URLSearchParams(route.query as Record<string, string>);
     queryString.value = params.toString();
     pagination.currentPage = Number(params.get('page')) || 1;
-  }
-  fetchProducts();
-});
 
+    if(route.name === 'product_categories_products')
+      await fetchProductCategory(route.params.slug as string);
+
+    clientLayoutStore.setPageTitle('Liste des produits');
+  }
+  await fetchProducts();
+});
 
 
 watch(searchStore.filterBuilder, () => {
@@ -64,6 +96,21 @@ watch(searchStore.filterBuilder, () => {
 </script>
 
 <template>
+  <div class="flex justify-center mb-10" v-if="!isEmpty(productCategory)">
+    <div class="bg-neutral-100 rounded-md w-full p-5 flex flex-col items-center">
+      <h2 class="typography-headline-2 font-semibold">{{productCategory.name}}</h2>
+      <img
+          :src="UPLOAD_PATH + '/' + productCategory.imageName"
+          @error="errorImage"
+          class="block object-cover h-auto rounded-full aspect-square"
+          width="150"
+          height="150"
+      />
+      <p>
+        {{productCategory.description}}
+      </p>
+    </div>
+  </div>
   <div class="flex flex-col md:flex-row gap-10 md:gap-3">
     <div class="sm:w-full md:w-1/4 md:max-w-[270px]">
       <ProductFilter :filterBuilder="searchStore.filterBuilder" />

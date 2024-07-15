@@ -36,17 +36,19 @@ const actionItems = [
 
       <router-link to="/" class="inline-block mr-4 focus-visible:outline focus-visible:outline-offset focus-visible:rounded-sm shrink-0">
         <picture>
-          <source srcset="/public/logo-full.svg" cmass media="(min-width: 768px)" />
+          <source srcset="/logo-full.svg" media="(min-width: 768px)" />
           <img
-              src="/public/logo-simple.svg"
+              src="/logo-simple.svg"
               alt="Sf Logo"
               class="w-8 h-8 md:h-6 md:w-[176px] lg:w-[12.5rem] lg:h-[1.75rem]"
           />
         </picture>
       </router-link>
+      <router-link to="/product_categories">
       <SfButton class="hidden lg:flex lg:mr-4" type="button" variant="tertiary">
         <span class="hidden lg:flex whitespace-nowrap">Catégories</span>
       </SfButton>
+      </router-link>
       <ProductSearchBar />
       <nav class="flex-1 flex justify-end lg:order-last lg:ml-4">
         <div class="flex flex-row flex-nowrap">

@@ -5,7 +5,7 @@ export const useAlertStore = defineStore('alert', {
         message: '',
         type: '', // 'positive', 'negative', 'info', 'warning'
         visible: false,
-        timeout: 1000 // Valeur par défaut de 1 seconde
+        timeout: 2000 // Valeur par défaut de 1 seconde
     }),
     actions: {
         showAlert(message, type, timeout = this.timeout) {
