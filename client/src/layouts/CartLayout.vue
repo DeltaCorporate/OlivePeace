@@ -1,46 +1,59 @@
 <template>
-  <div class="cart mx-auto p-4">
-    <Return2Back class="bottom-5 left-5 absolute rtn-btn"/>
-    <div class="cart-header mb-4">
-      <h1 class="text-2xl font-bold">{{ orderSummary.title }}</h1>
-      <p class="text-lg text-gray-600">{{ orderSummary.subTitle }}</p>
-    </div>
-    <div v-if="loading" class="text-center">Loading...</div>
-    <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
-    <div class="cart-items grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <div v-for="item in orderSummary.items" :key="item._id" class="cart-item bg-white shadow-md rounded-lg p-4">
-        <img :src="item.image" :alt="item.title" class="cart-item-image rounded-lg mb-4 mx-auto" />
-        <div class="cart-item-details">
-          <h2 class="text-xl font-semibold mb-2 truncate">{{ item.title }}</h2>
-          <p class="text-lg text-gray-800 mb-2">{{ formatPrice(item.price) }}</p>
-          <p class="text-md text-gray-600 mb-4">Quantity: {{ item.qty }}</p>
-          <SfInput
-              v-model="item.qty"
-              type="number"
-              min="1"
-              class="w-full mb-2"
-              @change="updateQuantity(item)"
-          />
-          <SfButton variant="secondary" class="w-full" @click="removeItem(item._id)">Retirer</SfButton>
+
+  <div class="flex flex-col min-h-screen">
+    <ClientNavbar />
+    <main class="flex-grow relative p-5">
+
+      <h1 class="typography-headline-1 mt-5 mb-8 w-full text-center">{{ cartLayoutStore.pageTitle }} </h1>
+
+      <SfAlert/>
+      <router-view />
+
+      <div class="cart mx-auto p-4">
+        <Return2Back class="bottom-5 left-5 absolute rtn-btn"/>
+        <div class="cart-header mb-4">
+          <h1 class="text-2xl font-bold">{{ orderSummary.title }}</h1>
+          <p class="text-lg text-gray-600">{{ orderSummary.subTitle }}</p>
         </div>
-      </div>
-    </div>
-    <div class="cart-summary mt-8 p-4 bg-gray-100 rounded-lg text-right">
-      <p class="text-lg font-bold mb-4">Total: {{ formatPrice(orderSummary.total) }}</p>
-        <SfButton variant="primary" size="lg" class="w-full" @click="open">Commander</SfButton>
-    </div>
-    <SfModal v-if="isOpen" class="z-10 absolute animate-fade md:max-w-[60%]" v-model="isOpen">
-      <div class="p-4">
-        <div class="p-4 text-center">
-          <h2 class="text-2xl font-bold mb-4">Confirmer la Commande</h2>
-          <p class="mb-4">Voulez-vous vraiment passer la commande ?</p>
-          <router-link to="/" class="router-link-button">
-            <SfButton variant="primary" size="lg" class="w-full mb-2" @click="placeOrder">Valider la Commande</SfButton>
-          </router-link>
-          <SfButton variant="secondary" size="lg" class="w-full" @click="close">Annuler</SfButton>
+        <div v-if="loading" class="text-center">Loading...</div>
+        <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
+        <div class="cart-items grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div v-for="item in orderSummary.items" :key="item._id" class="cart-item bg-white shadow-md rounded-lg p-4">
+            <img :src="item.image" :alt="item.title" class="cart-item-image rounded-lg mb-4 mx-auto" />
+            <div class="cart-item-details">
+              <h2 class="text-xl font-semibold mb-2 truncate">{{ item.title }}</h2>
+              <p class="text-lg text-gray-800 mb-2">{{ formatPrice(item.price) }}</p>
+              <p class="text-md text-gray-600 mb-4">Quantity: {{ item.qty }}</p>
+              <SfInput
+                  v-model="item.qty"
+                  type="number"
+                  min="1"
+                  class="w-full mb-2"
+                  @change="updateQuantity(item)"
+              />
+              <SfButton variant="secondary" class="w-full" @click="removeItem(item._id)">Retirer</SfButton>
+            </div>
+          </div>
         </div>
+        <div class="cart-summary mt-8 p-4 bg-gray-100 rounded-lg text-right">
+          <p class="text-lg font-bold mb-4">Total: {{ formatPrice(orderSummary.total) }}</p>
+            <SfButton variant="primary" size="lg" class="w-full" @click="open">Commander</SfButton>
+        </div>
+        <SfModal v-if="isOpen" class="z-10 absolute animate-fade md:max-w-[60%]" v-model="isOpen">
+          <div class="p-4">
+            <div class="p-4 text-center">
+              <h2 class="text-2xl font-bold mb-4">Confirmer la Commande</h2>
+              <p class="mb-4">Voulez-vous vraiment passer la commande ?</p>
+              <router-link to="/" class="router-link-button">
+                <SfButton variant="primary" size="lg" class="w-full mb-2" @click="placeOrder">Valider la Commande</SfButton>
+              </router-link>
+              <SfButton variant="secondary" size="lg" class="w-full" @click="close">Annuler</SfButton>
+            </div>
+          </div>
+        </SfModal>
       </div>
-    </SfModal>
+    </main>
+    <ClientFooter />
   </div>
 </template>
 
@@ -49,11 +62,19 @@ import { ref, onMounted } from 'vue';
 import { SfButton, SfInput, SfModal, useDisclosure } from '@storefront-ui/vue';
 import { fetchCart } from '@/api/cart.api.ts';
 import Return2Back from "@/components/ui/Return2Back.vue";
+import {useCartLayoutStore} from "@/stores/cart.store.ts";
+import ClientNavbar from "@/components/ClientNavbar.vue";
+import ClientFooter from "@/components/ClientFooter.vue";
+import SfAlert from "@/components/ui/SfAlert.vue";
+
+const cartLayoutStore = useCartLayoutStore();
+cartLayoutStore.pageTitle = 'Panier'
+
 const { isOpen, open, close } = useDisclosure({ initialValue: false });
 
 
 const orderSummary = ref({
-  title: 'Mon Panier',
+  title: 'Votre panier',
   subTitle: 'Produits sélectionnés',
   total: 0,
   items: [],

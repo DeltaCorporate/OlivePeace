@@ -52,21 +52,31 @@ const actionItems = [
       <ProductSearchBar />
       <nav class="flex-1 flex justify-end lg:order-last lg:ml-4">
         <div class="flex flex-row flex-nowrap">
-          <SfButton
-              v-for="actionItem in actionItems"
-              :key="actionItem.ariaLabel"
-              class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
-              :aria-label="actionItem.ariaLabel"
-              variant="tertiary"
-              square
-          >
-            <template #prefix>
-              <Component :is="actionItem.icon" />
-            </template>
-            <span v-if="actionItem.role === 'login'" class="hidden xl:inline-flex whitespace-nowrap">{{
-                actionItem.label
-              }}</span>
-          </SfButton>
+          <router-link to="/cart">
+            <SfButton
+                class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
+                aria-label="Cart"
+                variant="tertiary"
+                square
+            >
+              <template #prefix>
+                <SfIconShoppingCart />
+              </template>
+            </SfButton>
+          </router-link>
+          <router-link to="/">
+            <SfButton
+                class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
+                aria-label="Log in"
+                variant="tertiary"
+                square
+            >
+              <template #prefix>
+                <SfIconPerson />
+              </template>
+              <span class="hidden xl:inline-flex whitespace-nowrap">Connexion</span>
+            </SfButton>
+          </router-link>
         </div>
       </nav>
     </div>
