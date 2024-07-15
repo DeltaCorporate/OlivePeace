@@ -17,11 +17,8 @@ import adminPromotionRouter from './routes/admin/promotion.route.js';
 import productRouter from './routes/product.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
-
 const app = express();
-
 await mdb_connect();
-
 try {
     await db.sequelize.authenticate();
     console.log('Connection has been established successfully.');

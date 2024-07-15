@@ -28,7 +28,11 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
-
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
   vuejs:
     image: node:20-alpine
     working_dir: /app
