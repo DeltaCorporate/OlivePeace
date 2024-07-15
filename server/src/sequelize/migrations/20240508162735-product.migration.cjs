@@ -14,7 +14,11 @@ module.exports = {
       },
       brand: {
         type: Sequelize.STRING(255),
-        allowNull: false
+        allowNull: true
+      },
+      imageName: {
+        type: Sequelize.STRING(255),
+        allowNull: true
       },
       description: {
         type: Sequelize.TEXT
