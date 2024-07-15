@@ -1,6 +1,9 @@
 export const ProductCategoryMessage = {
     notFound: 'Catégorie de produit non trouvée',
 }
+export const ProductMessage = {
+    notFound: 'Produit non trouvé',
+}
 
 export const ImageMessage = {
     uploadError: 'Erreur lors du téléchargement de l\'image'

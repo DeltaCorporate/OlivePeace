@@ -3,42 +3,63 @@ import AbstractFilter from './abstract.filter.js';
 class MongooseFilter extends AbstractFilter {
     constructor(queryParams) {
         super(queryParams);
-        this.filters = {};
+        this.searchQueries = [];
+        this.otherFilters = [];
         this.sort = {};
     }
 
     formatFilters(parsedFilters) {
-        for (const [field, criteriaList] of Object.entries(parsedFilters)) {
-            const convertedField = this.convertFieldName(field);
-            criteriaList.forEach(([criteria, criteriaValue]) => {
-                this[criteria](convertedField, criteriaValue);
-            });
+        for (const [field, { criteria, logic }] of Object.entries(parsedFilters)) {
+            let fieldFilters = [];
+
+            for (const [criteriaType, value] of criteria) {
+                if (criteriaType === 'ord') {
+                    this.sort[field] = value.toUpperCase() === 'ASC' ? 1 : -1;
+                } else if (criteriaType === 'contains') {
+                    this.searchQueries.push({ [field]: { $regex: value, $options: 'i' } });
+                } else {
+                    const filter = this[criteriaType](field, value);
+                    if (filter) fieldFilters.push(filter);
+                }
+            }
+
+            if (fieldFilters.length > 0) {
+                if (logic === 'OR') {
+                    this.otherFilters.push({ $or: fieldFilters });
+                } else {
+                    this.otherFilters.push(fieldFilters.length > 1 ? { $and: fieldFilters } : fieldFilters[0]);
+                }
+            }
         }
-        return { filter: this.filters, sort: this.sort };
-    }
 
-    ord(field, direction) {
-        this.sort[field] = direction === 'ASC' ? 1 : -1;
-    }
+        let finalFilter = {};
 
-    min(field, value) {
-        if (!this.filters[field]) this.filters[field] = {};
-        this.filters[field].$gte = value;
-    }
+        if (this.searchQueries.length > 0) {
+            finalFilter.$and = [{ $or: this.searchQueries }];
+            if (this.otherFilters.length > 0) {
+                finalFilter.$and.push({ $and: this.otherFilters });
+            }
+        } else if (this.otherFilters.length > 0) {
+            finalFilter = { $and: this.otherFilters };
+        }
 
-    max(field, value) {
-        if (!this.filters[field]) this.filters[field] = {};
-        this.filters[field].$lte = value;
-    }
-    equal(field, value) {
-        if (!this.filters[field]) this.filters[field] = {};
-        this.filters[field] = value;
+        return { filter: finalFilter, sort: this.sort };
     }
 
     contains(field, value) {
-        if (!this.filters[field]) this.filters[field] = {};
-        this.filters[field].$regex = value;
-        this.filters[field].$options = 'i';
+        return { [field]: { $regex: value, $options: 'i' } };
+    }
+
+    equal(field, value) {
+        return { [field]: value };
+    }
+
+    min(field, value) {
+        return { [field]: { $gte: parseFloat(value) } };
+    }
+
+    max(field, value) {
+        return { [field]: { $lte: parseFloat(value) } };
     }
 }
 

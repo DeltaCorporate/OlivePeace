@@ -5,7 +5,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
-
+      const { generateRandomString } = await import('../../utils/string.util.js');
     const ProductCategory = (await import('../models/product-category.model.js')).default;
     const Promotion = (await import('../models/promotion.model.js')).default;
     const Product = (await import('../models/product.model.js')).default;
@@ -15,7 +15,6 @@ module.exports = {
 
     const promotions = await Promotion.findAll({ attributes: ['id'] });
     const promotionIds = promotions.map(promo => promo.id);
-
     const bulkProducts = [];
     for (let i = 1; i <= 20; i++) {
       bulkProducts.push({
@@ -24,9 +23,10 @@ module.exports = {
         description: faker.commerce.productDescription(),
         price: parseFloat(faker.commerce.price()),
         stock: faker.number.int({ min: 0, max: 100 }),
-        slug: faker.helpers.slugify(faker.commerce.productName()),
-        productCategoryId: faker.helpers.arrayElement(categoryIds),
-        promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
+        imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
+        slug: faker.helpers.slugify(generateRandomString(15)),
+        ProductCategoryId: faker.helpers.arrayElement(categoryIds),
+        PromotionId: faker.helpers.arrayElement(promotionIds)
       });
     }
 

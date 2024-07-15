@@ -4,9 +4,9 @@ import { PromotionType, ResponseType } from '@/types/promotion.type.ts';
 import Filter from "@/utils/filter.util.ts";
 import { formatAxiosResponse, formatAxiosError } from "@/utils/response.util.ts";
 
-export const getPromotions = async (filterInstance?: Filter, signal?: AbortSignal): Promise<ResponseType<PromotionType[]>> => {
+export const getPromotions = async (params?: string, signal?: AbortSignal): Promise<ResponseType<PromotionType[]>> => {
     try {
-        let queryString = filterInstance ? '?' + filterInstance.toString() : '';
+        let queryString = params ? '?' + params : '';
         const response: AxiosResponse = await apiClient.get(`/admin/promotions${queryString}`, { signal });
         return formatAxiosResponse(response);
     } catch (error) {

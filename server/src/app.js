@@ -11,8 +11,10 @@ import {mdb_connect} from "./mongoose/index.js";
 import morganMiddleware from './middlewares/morgan.middleware.js';
 import indexRouter from './routes/index.route.js';
 import usersRouter from './routes/users.route.js';
-import productCategoriesRouter from './routes/admin/product-categories.route.js';
-import promotionRouter from './routes/admin/promotion.route.js';
+import adminProductCategoriesRouter from './routes/admin/product-categories.route.js';
+import productCategoriesRouter from './routes/product-categories.route.js';
+import adminPromotionRouter from './routes/admin/promotion.route.js';
+import productRouter from './routes/product.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
 
@@ -45,8 +47,10 @@ app.use(responseHandler);
 app.use('/uploads', express.static(__root+'/src/uploads'));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/admin/product_categories', productCategoriesRouter);
-app.use('/admin/promotions', promotionRouter);
+app.use('/products', productRouter);
+app.use('/product_categories', productCategoriesRouter);
+app.use('/admin/product_categories', adminProductCategoriesRouter);
+app.use('/admin/promotions', adminPromotionRouter);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")

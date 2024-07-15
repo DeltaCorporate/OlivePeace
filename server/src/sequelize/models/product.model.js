@@ -3,7 +3,23 @@ import db from './index.js';
 import ProductCategory from './product-category.model.js';
 import Promotion from './promotion.model.js';
 
-class Product extends Model {}
+import ProductMongoose from "#app/src/mongoose/models/product.model.js";
+import {denormalizeProduct} from "../../services/denormalizations/product.denormalizer.js";
+class Product extends Model {
+
+    async getApplicablePromotion () {
+        const promotion = await this.getPromotion();
+        if (promotion) return promotion;
+        const productCategory = await this.getProductCategory({
+           include: [Promotion]
+        });
+        if(productCategory.hasOwnProperty('Promotion'))
+            return productCategory.Promotion;
+        return null;
+    };
+}
+
+
 
 Product.init({
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
@@ -13,6 +29,7 @@ Product.init({
     price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     stock: { type: DataTypes.INTEGER, allowNull: false },
     slug: { type: DataTypes.STRING(200), allowNull: false },
+    imageName: { type: DataTypes.STRING(200), allowNull: false },
     createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -23,27 +40,37 @@ Product.init({
         allowNull: false,
         defaultValue: NOW
     },
-    productCategoryId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: ProductCategory,
-            key: 'id'
-        }
-    },
-    promotionId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Promotion,
-            key: 'id'
-        }
-    }
 }, {
     sequelize: db.sequelize,
-    underscored: true
-
+    underscored: true,
+    getterMethods: {
+        async discountedPrice() {
+            const promotion = await this.getApplicablePromotion();
+            if (!promotion) return this.price;
+            const discount = this.price * (promotion.value / 100);
+            return this.price - discount;
+        }
+    },
+    hooks: {
+        afterCreate: async (product, options) => {
+            await denormalizeProduct(product);
+        },
+        afterUpdate: async (product, options) => {
+            await denormalizeProduct(product);
+        },
+        afterDestroy: async (product, options) => {
+            try {
+                await ProductMongoose.findByIdAndDelete(product.id);
+            } catch (error) {
+                console.error('Failed to delete product in MongoDB:', error);
+            }
+        }
+    }
 });
+
 
 Product.belongsTo(ProductCategory);
 Product.belongsTo(Promotion);
+
 
 export default Product;

@@ -19,8 +19,8 @@ export function useTable({ fetchData }: UseTableOptions) {
         abortController.abort();
         abortController = new AbortController();
         const result = await fetchData(buildQueryParams(), abortController.signal);
-        data.splice(0, data.length, ...result.data.data);
-        setPagination(result.data.pagination);
+        data.splice(0, data.length, ...result.data);
+        setPagination(result.pagination);
     }
 
     function buildQueryParams() {

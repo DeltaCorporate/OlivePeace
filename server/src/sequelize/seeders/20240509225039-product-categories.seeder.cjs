@@ -3,6 +3,7 @@ const { faker } = require('@faker-js/faker');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    const { generateRandomString } = await import('../../utils/string.util.js');
     const { mdb_connect } = await import('../../mongoose/index.js');
     await mdb_connect();
 
@@ -18,14 +19,14 @@ module.exports = {
         name: faker.commerce.department(),
         imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
         description: faker.commerce.productDescription(),
-        slug: faker.helpers.slugify(faker.commerce.department()),
+        slug: faker.helpers.slugify(generateRandomString(15)),
         promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,
       });
     }
 
-    for (const category of bulkCategories) {
+    for (const category of bulkCategories)
       await ProductCategory.create(category);
-    }
+
   },
 
   down: async (queryInterface, Sequelize) => {

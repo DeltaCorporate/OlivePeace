@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import OpTable from '@/components/ui/OpTable.vue';
 import OpTableCol from '@/components/ui/OpTableCol.vue';
-import { getProductCategories, deleteProductCategory } from '@/api/admin/product-category.api';
+import {deleteProductCategory } from '@/api/admin/product-category.api';
+import {getProductCategories } from '@/api/product-category.api';
 import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
 import { UPLOAD_PATH } from "@/../config/global.ts";

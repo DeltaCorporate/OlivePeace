@@ -12,7 +12,7 @@ module.exports = {
     for (let i = 1; i <= 20; i++) {
       bulkPromotions.push({
         name: faker.lorem.word(),
-        value: faker.number.int({ min: 5, max: 30 }),
+        value: faker.number.int({ min: 5, max: 100 }),
         expirationDate: faker.date.future(),
       });
     }

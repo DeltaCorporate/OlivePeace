@@ -3,7 +3,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue';
 import {RouterLink, useRoute} from 'vue-router';
-import {getProductCategory} from '@/api/admin/product-category.api';
+import {getProductCategory} from '@/api/product-category.api';
 import {toFrenchDate} from '@/utils/date.util';
 import {UPLOAD_PATH} from "@/../config/global.ts";
 import {useAdminLayoutStore} from '@/stores/admin/admin-layout.store.ts';
