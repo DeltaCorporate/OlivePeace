@@ -4,7 +4,7 @@ import AdminLayout from '@/layouts/AdminLayout.vue'
 import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryList from "@/pages/ProductCategoryList.vue";
 import CartLayout from "@/layouts/CartLayout.vue";
-import ProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
+import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryDetail from "@/pages/admin/ProductCategoryDetail.vue";
 import PromotionList from "@/pages/admin/PromotionList.vue";
 import BaseLayout from '@/layouts/BaseLayout.vue';

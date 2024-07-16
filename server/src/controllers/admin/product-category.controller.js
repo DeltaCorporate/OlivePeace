@@ -46,10 +46,9 @@ class ProductCategoryController {
             try {
                 const { id } = req.params;
                 const data = req.body;
-
-                if (data.promotionId) {
-                    const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.promotionId);
-                    if (!isPromotionExistAndNotExpired) errors.push({ field: 'promotionId', message: PromotionMessage.notAvailable });
+                if (data.PromotionId) {
+                    const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.PromotionId);
+                    if (!isPromotionExistAndNotExpired) errors.push({ field: 'PromotionId', message: PromotionMessage.notAvailable });
                 }
                 errors = errors.concat(formatJoiErrors(productCategorySchemaUpdate,data))
                 const category = await ProductCategory.findByPk(id);

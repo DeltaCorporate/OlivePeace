@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@frsource/autoresize-textarea": "^2.0.85",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -20,7 +21,8 @@
     "tailwindcss-animated": "^1.1.2",
     "vue": "^3.4.21",
     "vue-multiselect": "^3.0.0",
-    "vue-router": "^4.3.3"
+    "vue-router": "^4.3.3",
+    "vue3-datepicker": "^0.4.0"
   },
   "devDependencies": {
     "@storefront-ui/typography": "^2.6.1",

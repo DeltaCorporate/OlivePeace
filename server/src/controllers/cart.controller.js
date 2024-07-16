@@ -1,9 +1,9 @@
 // controllers/CartController.js
 
-import { updateCartWithVersioning, performTransactionalOperation } from '../utils/cartUtils.js';
+import { updateCartWithVersioning, performTransactionalOperation } from '../utils/cart.util.js';
 import Cart from '../mongoose/models/cart.model.js';
 import Product from '../sequelize/models/product.model.js';
-import customJoi from '../config/joi.config.js';
+import customJoi from '#shared/config/joi.config.js';
 import { getPagedData } from '../utils/pagination.util.js';
 import mongoose from 'mongoose';
 

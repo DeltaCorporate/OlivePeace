@@ -19,7 +19,7 @@ import cartRouter from './routes/cart.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
 import authRoute from "#app/src/routes/auth.route.js";
-import scheduler from '/scheduler';
+import './scheduler.js';
 const app = express();
 await mdb_connect();
 try {

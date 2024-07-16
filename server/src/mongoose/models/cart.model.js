@@ -1,4 +1,3 @@
-import Product from '/server/src/sequelize/models/product.model';
 import mongoose from "mongoose";
 
 const { Schema } = mongoose;
