@@ -15,17 +15,13 @@ import adminProductCategoriesRouter from './routes/admin/product-categories.rout
 import productCategoriesRouter from './routes/product-categories.route.js';
 import adminPromotionRouter from './routes/admin/promotion.route.js';
 import productRouter from './routes/product.route.js';
-import productCategoriesRouter from './routes/admin/product-categories.route.js';
-import promotionRouter from './routes/admin/promotion.route.js';
 import cartRouter from './routes/cart.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
+import authRoute from "#app/src/routes/auth.route.js";
 import scheduler from '/scheduler';
-
 const app = express();
-
 await mdb_connect();
-
 try {
     await db.sequelize.authenticate();
     console.log('Connection has been established successfully.');
@@ -50,7 +46,7 @@ app.use(morganMiddleware);
 app.use(responseHandler);
 app.use('/uploads', express.static(__root+'/src/uploads'));
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/auth', authRoute);
 app.use('/products', productRouter);
 app.use('/product_categories', productCategoriesRouter);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
