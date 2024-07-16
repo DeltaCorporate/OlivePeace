@@ -17,3 +17,7 @@ export const PromotionMessage = {
 export const GlobalMessage = {
     validationError: 'Erreur de validation'
 }
+
+export const StockMessage = {
+    notFound: 'Erreur lors du chargement des stocks',
+}

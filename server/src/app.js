@@ -13,6 +13,8 @@ import indexRouter from './routes/index.route.js';
 import usersRouter from './routes/users.route.js';
 import adminProductCategoriesRouter from './routes/admin/product-categories.route.js';
 import productCategoriesRouter from './routes/product-categories.route.js';
+import adminStockRouter from './routes/admin/stock.route.js';
+import stockRouter from './routes/stock.route.js';
 import adminPromotionRouter from './routes/admin/promotion.route.js';
 import productRouter from './routes/product.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
@@ -49,8 +51,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/products', productRouter);
 app.use('/product_categories', productCategoriesRouter);
+app.use('/stock', stockRouter);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
+app.use('/admin/stocks', adminStockRouter);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")

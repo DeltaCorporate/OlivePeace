@@ -3,6 +3,8 @@ import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryList from "@/pages/ProductCategoryList.vue";
+import AdminStockList from "@/pages/admin/StockList.vue";
+import StockList from "@/pages/StockList.vue";
 import ProductCategoryDetail from "@/pages/admin/ProductCategoryDetail.vue";
 import PromotionList from "@/pages/admin/PromotionList.vue";
 import BaseLayout from '@/layouts/BaseLayout.vue';
@@ -30,6 +32,12 @@ const routes = [
                 name: "product_categories_products",
                 path: 'product_categories/:slug/products',
                 component: ProductList,
+            },
+            {
+
+                name: "stock",
+                path: 'stock',
+                component: StockList,
             }
         ]
     },
@@ -48,6 +56,10 @@ const routes = [
             {
                 path: 'promotions',
                 component: PromotionList,
+            },
+            {
+                path: 'stock',
+                component: StockList,
             },
         ]
     }
