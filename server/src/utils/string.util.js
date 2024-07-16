@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 export function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -8,3 +10,6 @@ export function generateRandomString(length) {
     return result;
 }
 
+export function generateToken(size = 20){
+    return crypto.randomBytes(20).toString('hex');
+}

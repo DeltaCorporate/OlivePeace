@@ -1,0 +1,1 @@
+export const ROLES_ENUM = ['ROLE_USER', 'ROLE_STORE_KEEPER', 'ROLE_ADMIN'];

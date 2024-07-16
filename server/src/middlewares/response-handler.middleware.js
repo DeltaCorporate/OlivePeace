@@ -1,6 +1,6 @@
 // middleware/responseHandler.js
 export function responseHandler(req, res, next) {
-    res.success = function (data, message = '') {
+    res.success = function (data = {}, message = '') {
         res.status(200).json(
             data
         );

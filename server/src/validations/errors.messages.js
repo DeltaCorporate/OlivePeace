@@ -17,3 +17,17 @@ export const PromotionMessage = {
 export const GlobalMessage = {
     validationError: 'Erreur de validation'
 }
+export const UserMessage = {
+    emailTaken: "Cet email est déjà utilisé",
+    registrationSuccess: "Inscription réussie. Veuillez vérifier votre email pour confirmer votre compte.",
+    invalidConfirmationToken: "Token de confirmation invalide ou expiré, si il est expiré un mail vous a été envoyé",
+    emailConfirmed: "Email confirmé avec succès. Vous pouvez maintenant vous connecter.",
+    invalidCredentials: "Email ou mot de passe incorrect",
+    unconfirmedEmail: "Veuillez confirmer votre email avant de vous connecter",
+    accountLocked: "Compte temporairement verrouillé. Veuillez réessayer plus tard.",
+    userNotFound: "Utilisateur non trouvé",
+    resetPasswordEmailSent: "Un email de réinitialisation de mot de passe a été envoyé",
+    invalidResetToken: "Token de réinitialisation invalide ou expiré veuillez renouveler votre demande",
+    passwordResetSuccess: "Mot de passe réinitialisé avec succès",
+    accountDeleted: "Compte supprimé avec succès"
+};
