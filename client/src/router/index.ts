@@ -1,8 +1,9 @@
 import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router'
 
 import AdminLayout from '@/layouts/AdminLayout.vue'
-import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryList from "@/pages/ProductCategoryList.vue";
+import AdminStockList from "@/pages/admin/StockList.vue";
+import StockList from "@/pages/StockList.vue";
 import CartLayout from "@/layouts/CartLayout.vue";
 import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryDetail from "@/pages/admin/ProductCategoryDetail.vue";
@@ -20,6 +21,10 @@ const routes = [
                 component: Home
             },
             {
+                path: 'cart',
+                component: CartLayout
+            },
+            {
                 path: 'products',
                 component: ProductList,
             },
@@ -28,16 +33,16 @@ const routes = [
                 component: ProductCategoryList,
             },
             {
-
                 name: "product_categories_products",
                 path: 'product_categories/:slug/products',
                 component: ProductList,
+            },
+            {
+                name: "stock",
+                path: 'stock',
+                component: StockList,
             }
         ]
-    },
-    {
-        path: '/cart',
-        component: CartLayout
     },
     {
         path:  '/admin',
@@ -54,6 +59,10 @@ const routes = [
             {
                 path: 'promotions',
                 component: PromotionList,
+            },
+            {
+                path: 'stock',
+                component: AdminStockList,
             },
         ]
     }

@@ -31,3 +31,7 @@ export const UserMessage = {
     passwordResetSuccess: "Mot de passe réinitialisé avec succès",
     accountDeleted: "Compte supprimé avec succès"
 };
+
+export const StockMessage = {
+    notFound: 'Erreur lors du chargement des stocks',
+}
