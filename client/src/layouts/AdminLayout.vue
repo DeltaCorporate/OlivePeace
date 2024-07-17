@@ -3,10 +3,11 @@ import Sidebar from '@/components/admin/Sidebar.vue'
 import SfAlert from "@/components/ui/SfAlert.vue";
 import {computed} from "vue";
 import {useAdminLayoutStore} from "@/stores/admin/admin-layout.store.ts";
+import {useTokenExpirationChecker} from "@/composables/useTokenExpirationChecker.ts";
 const adminLayoutStore = useAdminLayoutStore();
 
 const pageTitle = computed(() => adminLayoutStore.pageTitle);
-
+useTokenExpirationChecker();
 </script>
 <template>
   <div class="flex flex-row w-full h-screen">

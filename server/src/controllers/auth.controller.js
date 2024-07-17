@@ -153,6 +153,12 @@ class AuthController {
             handleError(res, error);
         }
     }
+
+    static async isExpired(req, res) {
+        res.success();
+    }
+
+
 }
 
 export default AuthController;

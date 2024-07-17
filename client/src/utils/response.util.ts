@@ -26,3 +26,15 @@ export const formatAxiosResponse = <T>(response: AxiosResponse<ResponseType<T>>)
             result.pagination = {...response.data.pagination};
         return result;
 };
+
+export const pickError = (errors: ErrorObject[], field?: string): { field?: string; message: string } | null => {
+    if (!Array.isArray(errors) || errors.length === 0) return null;
+    if (field) {
+        const errorWithField = errors.find(error => error.field === field);
+        if (errorWithField) return errorWithField;
+    } else {
+        for (let i = errors.length - 1; i >= 0; i--)
+            if (!errors[i].field) return { message: errors[i].message };
+    }
+    return {field: null, message:null};
+};
