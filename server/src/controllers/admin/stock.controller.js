@@ -1,4 +1,4 @@
-import StockRepository from '../../sequelize/repositories/stock.repository';
+import StockRepository from "#app/src/sequelize/repositories/stock.repository.js";
 import { formatJoiErrors, handleError } from '../../utils/error.util.js';
 import { stockSchemaCreate, stockSchemaUpdate } from '#shared/validations/schema/stock.validation-schema.js';
 import { StockMessage, GlobalMessage } from '#app/src/validations/errors.messages.js';
@@ -12,7 +12,6 @@ class StockAdminController {
             const data = req.body;
             let errors = formatJoiErrors(stockSchemaCreate, data);
             if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);
-
             const stock = await StockRepository.create(data);
             return res.created(stock);
         } catch (error) {
