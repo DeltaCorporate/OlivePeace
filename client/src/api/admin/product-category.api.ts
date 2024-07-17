@@ -1,7 +1,8 @@
 import apiClient from '@/../config/axios.ts';
-import { AxiosResponse, AxiosError } from 'axios';
+import {AxiosResponse, AxiosError} from 'axios';
 import { ProductCategoryType, ResponseType } from '@/types/product-category.type.ts';
 import { formatAxiosResponse, formatAxiosError } from "@/utils/response.util.ts";
+import {toFormData} from "@/utils/divers.util.ts";
 
 
 /**
@@ -12,7 +13,10 @@ import { formatAxiosResponse, formatAxiosError } from "@/utils/response.util.ts"
  */
 export const createProductCategory = async (category: ProductCategoryType, signal?: AbortSignal): Promise<ResponseType<ProductCategoryType>> => {
     try {
-        const response: AxiosResponse<ResponseType<ProductCategoryType>> = await apiClient.post('/admin/product_categories', category, { signal });
+        const response: AxiosResponse<ResponseType<ProductCategoryType>> = await apiClient.post('/admin/product_categories', category, {
+            signal,
+            headers: {'Content-Type': 'multipart/form-data'}
+        });
         return formatAxiosResponse(response);
     } catch (error) {
         return formatAxiosError(error as AxiosError);
@@ -28,7 +32,10 @@ export const createProductCategory = async (category: ProductCategoryType, signa
  */
 export const updateProductCategory = async (id: number, category: ProductCategoryType, signal?: AbortSignal): Promise<ResponseType<ProductCategoryType>> => {
     try {
-        const response: AxiosResponse<ResponseType<ProductCategoryType>> = await apiClient.patch(`/admin/product_categories/${id}`, category, { signal });
+        const response: AxiosResponse<ResponseType<ProductCategoryType>> = await apiClient.patch(`/admin/product_categories/${id}`, category, {
+            signal,
+            headers: {'Content-Type': 'multipart/form-data'}
+        });
         return formatAxiosResponse(response);
     } catch (error) {
         return formatAxiosError(error as AxiosError);

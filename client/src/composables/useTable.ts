@@ -48,5 +48,6 @@ export function useTable({ fetchData }: UseTableOptions) {
         pagination,
         handlePageChange,
         handleUpdateFilters,
+        fetchTableData
     };
 }

@@ -13,3 +13,9 @@ export function generateRandomString(length) {
 export function generateToken(size = 20){
     return crypto.randomBytes(20).toString('hex');
 }
+
+export function isEmpty(value){
+    if(typeof value === 'string')
+        return value.length === 0;
+    return value == null || value == 'undefined';
+}

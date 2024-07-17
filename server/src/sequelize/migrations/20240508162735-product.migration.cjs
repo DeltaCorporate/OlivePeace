@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: true
       },
-      imageName: {
+      image_name: {
         type: Sequelize.STRING(255),
         allowNull: true
       },

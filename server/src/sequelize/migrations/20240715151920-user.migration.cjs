@@ -1,4 +1,5 @@
 'use strict';
+const {DataTypes} = require("sequelize");
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
@@ -25,8 +26,8 @@ module.exports = {
         allowNull: false,
       },
       roles: {
-        type: Sequelize.ENUM('ROLE_USER', 'ROLE_STORE_KEEPER', 'ROLE_ADMIN'),
-        defaultValue: ['ROLE_USER'],
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: ['ROLE_USER']
       },
       confirmation_token: {
         type: Sequelize.STRING,

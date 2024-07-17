@@ -15,9 +15,11 @@ import adminProductCategoriesRouter from './routes/admin/product-categories.rout
 import productCategoriesRouter from './routes/product-categories.route.js';
 import adminPromotionRouter from './routes/admin/promotion.route.js';
 import productRouter from './routes/product.route.js';
+import cartRouter from './routes/cart.route.js';
 import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
 import authRoute from "#app/src/routes/auth.route.js";
+import './scheduler.js';
 const app = express();
 await mdb_connect();
 try {
@@ -49,6 +51,7 @@ app.use('/products', productRouter);
 app.use('/product_categories', productCategoriesRouter);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
+app.use('cart', cartRouter);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")

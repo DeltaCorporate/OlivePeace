@@ -11,6 +11,9 @@ export default defineConfig({
       plugins: [tailwind(), autoprefixer()],
     },
   },
+  optimizeDeps: {
+    include: ["url"]
+  },
   plugins: [vue()],
   resolve: {
     alias: {

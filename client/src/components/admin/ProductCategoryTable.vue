@@ -18,6 +18,7 @@ const {
   pagination,
   handlePageChange,
   handleUpdateFilters,
+    fetchTableData
 } = useTable({
   fetchData: getProductCategories,
 
@@ -31,11 +32,12 @@ const openProductCategoryFormModal = (id: number) => {
 </script>
 
 <template>
-  <SfModal class="z-10 absolute  animate-fade md:max-w-[60%]" v-model="isOpen">
+  <SfButton @click="openProductCategoryFormModal(null)" class="mb-4" variant="primary">Ajouter une catégorie de produit</SfButton>
+  <SfModal class="z-10 fixed flex justify-center w-10/12 md:w-4/12 animate-fade" v-model="isOpen">
     <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
       <SfIconClose />
     </SfButton>
-      <ProductCategoryForm />
+    <ProductCategoryForm @success="fetchTableData" :id="productCategoryFormModalId"/>
   </SfModal>
   <div class="w-full overflow-auto">
     <OpTable
@@ -50,7 +52,6 @@ const openProductCategoryFormModal = (id: number) => {
         <template #default="row">
           <div class="w-16 object-cover aspect-square">
             <img @error="errorImage" :src="UPLOAD_PATH + '/' + row.value.imageName" class="w-16 object-cover aspect-square rounded-full" />
-
           </div>
         </template>
       </OpTableCol>

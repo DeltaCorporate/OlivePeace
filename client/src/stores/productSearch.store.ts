@@ -12,7 +12,7 @@ export const useProductSearchStore = defineStore('productSearch', () => {
     const filterBuilder = reactive(new FilterBuilder());
     watch(() => searchQuery.value, () => {
         filterBuilder.clear();
-            if (searchQuery.value.length > 0) {
+        if (searchQuery.value.length > 0) {
                 filterBuilder.add('name').contains(searchQuery.value).logic('OR').ord('ASC')
                     .add('description').contains(searchQuery.value).logic('OR');
             }

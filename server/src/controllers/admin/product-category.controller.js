@@ -14,6 +14,7 @@ import {
     GlobalMessage
 } from '#app/src/validations/errors.messages.js';
 import Promotion from "#app/src/sequelize/models/promotion.model.js";
+import {isEmpty} from "#app/src/utils/string.util.js";
 
 class ProductCategoryController {
     constructor() {}
@@ -24,6 +25,10 @@ class ProductCategoryController {
             if (err) errors.push({ field: 'image', message: ImageMessage.uploadError });
             try {
                 const data = req.body;
+                if (!isEmpty(data.PromotionId)) {
+                    const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.PromotionId);
+                    if (!isPromotionExistAndNotExpired) errors.push({ field: 'PromotionId', message: PromotionMessage.notAvailable });
+                }
                 errors = errors.concat(formatJoiErrors(productCategorySchemaCreate,data))
                 if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);
                 if (req.file) {
@@ -46,10 +51,9 @@ class ProductCategoryController {
             try {
                 const { id } = req.params;
                 const data = req.body;
-
-                if (data.promotionId) {
-                    const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.promotionId);
-                    if (!isPromotionExistAndNotExpired) errors.push({ field: 'promotionId', message: PromotionMessage.notAvailable });
+                if (!isEmpty(data.PromotionId)) {
+                    const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.PromotionId);
+                    if (!isPromotionExistAndNotExpired) errors.push({ field: 'PromotionId', message: PromotionMessage.notAvailable });
                 }
                 errors = errors.concat(formatJoiErrors(productCategorySchemaUpdate,data))
                 const category = await ProductCategory.findByPk(id);

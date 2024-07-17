@@ -92,7 +92,7 @@ User.init({
         allowNull: false,
     },
     roles: {
-        type: DataTypes.ARRAY(DataTypes.ENUM('ROLE_USER', 'ROLE_STORE_KEEPER', 'ROLE_ADMIN')),
+        type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: ['ROLE_USER'],
     },
     confirmationToken: {
