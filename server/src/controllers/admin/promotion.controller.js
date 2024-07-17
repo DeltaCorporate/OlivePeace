@@ -39,9 +39,7 @@ class PromotionController {
             if(isNameTaken) errors.push({ field:"name", message: PromotionMessage.nameIsTaken });
 
             if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);
-
-            Object.assign(promotion, data);
-            await promotion.save();
+            await promotion.update(data);
             return res.success(promotion);
         } catch (error) {
             handleError(res, error);
@@ -68,6 +66,18 @@ class PromotionController {
             if (!promotion) return res.error(PromotionMessage.notFound, 404);
 
             return res.success(promotion);
+        } catch (error) {
+            handleError(res, error);
+        }
+    }
+
+    static async findAll(req, res) {
+        try {
+            const mongooseFilter = new MongooseFilter(req.query);
+            const { filter, sort } = mongooseFilter.applyFilters();
+            const promotions = await PromotionMongoose.find(filter).sort(sort)
+
+            return res.success(promotions);
         } catch (error) {
             handleError(res, error);
         }

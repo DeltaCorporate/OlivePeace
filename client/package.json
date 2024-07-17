@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@frsource/autoresize-textarea": "^2.0.85",
+    "@vuepic/vue-datepicker": "^9.0.0",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

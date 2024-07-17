@@ -14,6 +14,7 @@ const {
   pagination,
   handlePageChange,
   handleUpdateFilters,
+    fetchTableData,
 } = useTable({
   fetchData: getPromotions,
 });
@@ -26,12 +27,18 @@ const openPromotionFormModal = (id: number) => {
 
 </script>
 <template class="relative">
+  <SfButton @click="openPromotionFormModal(null)" class="mb-4" variant="primary">
+    Ajouter une promotion
+  </SfButton>
   <div v-if="isOpen" class="fixed inset-0 z-10 bg-neutral-700 bg-opacity-50" />
   <SfModal class="z-10 absolute  animate-fade md:max-w-[60%]" v-model="isOpen">
       <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
         <SfIconClose />
       </SfButton>
-      <PromotionForm :id="promotionFormModalId"/>
+    <PromotionForm
+        @success="fetchTableData"
+        :id="promotionFormModalId"
+    />
     </SfModal>
   <div class="flex justify-center">
     <div class="min-w-[40%]">
