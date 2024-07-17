@@ -10,6 +10,7 @@ import { useAlertStore } from '@/stores/alerts.store';
 import { ProductCategoryType } from '@/types/product-category.type';
 import { SfInput, SfTextarea } from '@storefront-ui/vue';
 import { autoResize } from "@/utils/divers.util.ts";
+import router from "@/router";
 
 const props = defineProps<{
   id?: number;
@@ -43,10 +44,14 @@ const {
         `Catégorie de produit ${props.id ? 'mise à jour' : 'créée'} avec succès`,
         'positive'
     );
+    if(!props.id){
+      setTimeout(() => {
+        router.push(`/admin/product_categories/view/${formData.id}`);
+      }, 1000);
+    }
     emits('success');
   },
   onError: (error) => {
-    console.error('Erreur lors de la soumission du formulaire:', error);
     alertStore.showAlert('Une erreur est survenue', 'negative');
   }
 });
@@ -83,7 +88,9 @@ onMounted(async () => {
           class="w-full resize-none max-h-42"
       />
     </Field>
-    <input type="file" name="image" @change="handleFileChange" class="w-full" />
+    <Field label="Image" :error="errors.image">
+      <input type="file" name="image" @change="handleFileChange" class="w-full" />
+    </Field>
     <Field label="Slug" id="slug" :error="errors.slug">
       <SfInput
           v-model="formData.slug"

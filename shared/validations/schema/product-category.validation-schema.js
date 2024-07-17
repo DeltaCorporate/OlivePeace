@@ -5,5 +5,6 @@ export const productCategorySchemaCreate = customJoi.object({
     description: customJoi.string().allow(null, ''),
     slug: customJoi.slug().min(1).max(200).required(),
     PromotionId: customJoi.any().optional(),
+    image: customJoi.any().optional()
 });
 export const productCategorySchemaUpdate = productCategorySchemaCreate;

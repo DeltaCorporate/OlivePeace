@@ -32,6 +32,7 @@ const openProductCategoryFormModal = (id: number) => {
 </script>
 
 <template>
+  <SfButton @click="openProductCategoryFormModal(null)" class="mb-4" variant="primary">Ajouter une catégorie de produit</SfButton>
   <SfModal class="z-10 fixed flex justify-center w-10/12 md:w-4/12 animate-fade" v-model="isOpen">
     <SfButton square variant="tertiary" class="absolute right-2 top-2" @click="close">
       <SfIconClose />
