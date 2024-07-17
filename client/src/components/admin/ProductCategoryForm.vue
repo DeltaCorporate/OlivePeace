@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
 import { useForm } from '@/composables/useForm';
 import { productCategorySchemaCreate, productCategorySchemaUpdate } from '#shared/validations/schema/product-category.validation-schema';
 import { getProductCategory } from "@/api/product-category.api";
@@ -8,31 +8,35 @@ import Field from '@/components/ui/Field.vue';
 import Button from '@/components/ui/Button.vue';
 import { useAlertStore } from '@/stores/alerts.store';
 import { ProductCategoryType } from '@/types/product-category.type';
-import { SfInput, SfTextarea } from '@storefront-ui/vue';
-import { autoResize } from "@/utils/divers.util.ts";
+import {SfInput, SfSelect, SfTextarea} from '@storefront-ui/vue';
+import {autoResize, slugify} from "@/utils/divers.util.ts";
 import router from "@/router";
+import {getAllPromotions} from "@/api/admin/promotion.api.ts";
+import {PromotionType} from "@/types/promotion.type.ts";
 
 const props = defineProps<{
   id?: number;
 }>();
 
 const alertStore = useAlertStore();
+const promotions = ref<PromotionType[] | null>(null);
 
-const slugTransformer = (value: string) => value.toLowerCase().replace(/\s+/g, '-');
 const emits = defineEmits(['success']);
 const {
   formData,
   errors,
   serverError,
   isSubmitting,
-  isDirty,
   initFormData,
     handleFileChange,
   handleSubmit,
 } = useForm<ProductCategoryType, ProductCategoryType>({
   validationSchema: props.id ? productCategorySchemaUpdate : productCategorySchemaCreate,
   transformers: {
-    slug: slugTransformer
+    name: (value) => {
+      formData.slug = slugify(value);
+      return value;
+    }
   },
   submitQuery: async (values) => {
     return props.id
@@ -57,6 +61,11 @@ const {
 });
 
 onMounted(async () => {
+  const fetchPromotions = await getAllPromotions('f_name=ord:ASC');
+   initFormData({});
+  if(fetchPromotions.isSuccess)
+    promotions.value = fetchPromotions.data;
+
   if (props.id) {
     try {
       const response = await getProductCategory(props.id);
@@ -88,31 +97,41 @@ onMounted(async () => {
           class="w-full resize-none max-h-42"
       />
     </Field>
-    <Field label="Image" :error="errors.image">
+    <Field id="image" label="Image" :error="errors.image">
       <input type="file" name="image" @change="handleFileChange" class="w-full" />
     </Field>
     <Field label="Slug" id="slug" :error="errors.slug">
       <SfInput
           v-model="formData.slug"
           name="slug"
+          readonly
           required
-          class="w-full"
+          class="w-full aria-readonly:bg-gray-100"
       />
     </Field>
 
-    <Field label="ID de promotion" id="promotionId" :error="errors.PromotionId">
-      <SfInput
+    <Field  label="Appliquer une promotion ?" id="promotionId" :error="errors.PromotionId">
+      <SfInput v-if="!promotions"
           v-model="formData.PromotionId"
           name="promotionId"
           type="number"
           class="w-full"
       />
+      <SfSelect v-else
+          v-model="formData.PromotionId"
+          name="promotionId"
+          class="w-full">
+        <option
+            v-for="promotion in promotions"
+            :key="promotion._id"
+            :value="promotion._id">{{promotion.name}} (-{{promotion.value}}%)</option>
+      </SfSelect>
     </Field>
 
 
     <Button
         :loading="isSubmitting"
-        :disabled="isSubmitting || !isDirty"
+        :disabled="isSubmitting"
         type="submit"
         icon="Save"
         :label="id ? 'Mettre à jour' : 'Créer'"

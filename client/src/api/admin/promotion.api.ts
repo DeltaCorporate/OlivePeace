@@ -1,5 +1,5 @@
 import apiClient from '@/../config/axios.ts';
-import { AxiosResponse, AxiosError } from 'axios';
+import {AxiosResponse, AxiosError, toFormData} from 'axios';
 import { PromotionType, ResponseType } from '@/types/promotion.type.ts';
 import Filter from "@/utils/filter.util.ts";
 import { formatAxiosResponse, formatAxiosError } from "@/utils/response.util.ts";
@@ -13,7 +13,15 @@ export const getPromotions = async (params?: string, signal?: AbortSignal): Prom
         return formatAxiosError(error as AxiosError);
     }
 };
-
+export const getAllPromotions = async (params?: string, signal?: AbortSignal): Promise<ResponseType<PromotionType[]>> => {
+    try {
+        let queryString = params ? '?' + params : '';
+        const response: AxiosResponse = await apiClient.get(`/admin/promotions/all${queryString}`, { signal });
+        return formatAxiosResponse(response);
+    } catch (error) {
+        return formatAxiosError(error as AxiosError);
+    }
+};
 export const getPromotion = async (id: string, signal: AbortSignal): Promise<ResponseType<PromotionType>> => {
     try {
         const response: AxiosResponse<ResponseType<PromotionType>> = await apiClient.get(`/admin/promotions/${id}`, { signal });

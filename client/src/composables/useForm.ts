@@ -22,11 +22,6 @@ export function useForm<T extends Record<string, any>, R>({
     const serverError = ref<string | null>(null);
     const isSubmitting = ref(false);
     let abortController = ref(new AbortController());
-    let previousFormData = { ...formData };
-
-    const isDirty = computed(() =>
-        Object.keys(formData).some(key => formData[key] !== previousFormData[key])
-    );
 
     const validateField = (field: keyof T) => {
         if (!isFieldInSchema(field)) return;
@@ -64,7 +59,6 @@ export function useForm<T extends Record<string, any>, R>({
     };
 
     const updateFormData = (newData: Partial<T>) => {
-        previousFormData = { ...formData };
         Object.keys(newData).forEach(key => {
             const typedKey = key as keyof T;
             if (transformers[typedKey])
@@ -78,7 +72,7 @@ export function useForm<T extends Record<string, any>, R>({
     const initFormData = (newData: object) => {
         updateFormData(newData);
         watch(() => formData,
-            () => validateForm(), { deep: true });
+            (value,oldValue) => { updateFormData(value)}, { deep: true });
     }
 
     const handleSubmit = async () => {
@@ -131,7 +125,6 @@ export function useForm<T extends Record<string, any>, R>({
         errors,
         serverError,
         isSubmitting,
-        isDirty,
         initFormData,
         updateFormData,
         handleSubmit,
