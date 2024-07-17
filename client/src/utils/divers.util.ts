@@ -7,3 +7,12 @@ export const autoResize = (event) => {
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
 }
+
+export const slugify = (text: string): string => {
+    return text.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/ /g, '-')
+        .replace(/^-+|-+$/g, '');
+}

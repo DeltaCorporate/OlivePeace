@@ -9,7 +9,7 @@ import Button from '@/components/ui/Button.vue';
 import { useAlertStore } from '@/stores/alerts.store';
 import { ProductCategoryType } from '@/types/product-category.type';
 import {SfInput, SfSelect, SfTextarea} from '@storefront-ui/vue';
-import { autoResize } from "@/utils/divers.util.ts";
+import {autoResize, slugify} from "@/utils/divers.util.ts";
 import router from "@/router";
 import {getAllPromotions} from "@/api/admin/promotion.api.ts";
 import {PromotionType} from "@/types/promotion.type.ts";
@@ -20,7 +20,7 @@ const props = defineProps<{
 
 const alertStore = useAlertStore();
 const promotions = ref<PromotionType[] | null>(null);
-const slugTransformer = (value: string) => value.toLowerCase().replace(/\s+/g, '-');
+
 const emits = defineEmits(['success']);
 const {
   formData,
@@ -33,8 +33,10 @@ const {
 } = useForm<ProductCategoryType, ProductCategoryType>({
   validationSchema: props.id ? productCategorySchemaUpdate : productCategorySchemaCreate,
   transformers: {
-    slug: (value) => slugTransformer(value),
-    name: (value) => value.toLowerCase()
+    name: (value) => {
+      formData.slug = slugify(value);
+      return value;
+    }
   },
   submitQuery: async (values) => {
     return props.id
@@ -102,8 +104,9 @@ onMounted(async () => {
       <SfInput
           v-model="formData.slug"
           name="slug"
+          readonly
           required
-          class="w-full"
+          class="w-full aria-readonly:bg-gray-100"
       />
     </Field>
 
