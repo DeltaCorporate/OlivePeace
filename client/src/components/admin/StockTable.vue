@@ -7,8 +7,7 @@ import { useTable } from '@/composables/useTable';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
 import { UPLOAD_PATH } from "@/../config/global.ts";
 import { errorImage } from "@/utils/image.util.ts";
-import { ref } from "vue";
-
+import {onMounted, ref} from "vue";
 import StockForm from "@/components/admin/StockForm.vue";
 import { SfButton, SfIconClose, SfModal, useDisclosure } from "@storefront-ui/vue";
 
@@ -30,7 +29,7 @@ const openStockFormModal = (id: number) => {
 }
 
 onMounted(() => {
-  handleUpdateFilters(); // Assurez-vous que les données sont récupérées au montage du composant
+  handleUpdateFilters();
 });
 </script>
 
