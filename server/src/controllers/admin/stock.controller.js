@@ -3,6 +3,7 @@ import { formatJoiErrors, handleError } from '../../utils/error.util.js';
 import { stockSchemaCreate, stockSchemaUpdate } from '#shared/validations/schema/stock.validation-schema.js';
 import { StockMessage, GlobalMessage } from '#app/src/validations/errors.messages.js';
 import {getPagedData, getPagination} from "#app/src/utils/pagination.util.js";
+import MongooseFilter from "#app/src/services/filters/mongoose.filter.js";
 
 class StockAdminController {
     constructor() {}
@@ -68,15 +69,21 @@ class StockAdminController {
             const { page = 1, limit = 10 } = req.query;
             const { limit: paginationLimit, offset } = getPagination(page, limit);
 
-            const filter = {};
-            const sort = [];
+            const mongooseFilter = new MongooseFilter(req.query);
+            const { filter, sort } = mongooseFilter.applyFilters();
+            const totalItems = await StockRepository.countDocuments(filter);
+            const data = await StockRepository.find(filter)
+                .sort(sort)
+                .skip(offset)
+                .limit(paginationLimit);
 
-            const data = await StockRepository.findAll({ page, limit: paginationLimit, filter, sort });
-            res.success(getPagedData(data, page, paginationLimit, data.totalItems));
+            const stocks = getPagedData(data, page, paginationLimit, totalItems);
+            res.success(stocks);
         } catch (error) {
             handleError(res, error);
         }
     }
+
 }
 
 export default StockAdminController;
