@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useTokenExpirationChecker } from '@/composables/useTokenExpirationChecker';
 import ClientNavbar from '@/components/ClientNavbar.vue';
 import ClientFooter from '@/components/ClientFooter.vue';
 import SfAlert from "@/components/ui/SfAlert.vue";
@@ -7,7 +6,7 @@ import {useClientLayoutStore} from "@/stores/client-layout.store.ts";
 
 const clientLayoutStore = useClientLayoutStore();
 clientLayoutStore.pageTitle = 'Liste des produits'
-useTokenExpirationChecker();
+
 
 
 </script>

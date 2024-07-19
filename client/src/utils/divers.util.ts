@@ -16,3 +16,8 @@ export const slugify = (text: string): string => {
         .replace(/ /g, '-')
         .replace(/^-+|-+$/g, '');
 }
+
+export const isNullUndefined = (value: any): boolean => {
+    return value == 'undefined' || value === null;
+}
+

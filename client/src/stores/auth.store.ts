@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import {UserInfo} from "@/types/user.type.ts";
 import {useAlertStore} from "@/stores/alerts.store.ts";
+import {isNullUndefined} from "@/utils/divers.util.ts";
 
 
 
@@ -22,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     function setAuth(newToken: string, userInfo: UserInfo) {
         token.value = newToken;
-        user.value = userInfo;
+        user.value = {...userInfo};
         localStorage.setItem('token', newToken);
         localStorage.setItem('user', JSON.stringify(userInfo));
     }
@@ -35,14 +36,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     function logout() {
-        alertStore.showAlert('Vous avez bien été deconnecté', 'success');
-        this.router.push('/');
         clearAuth();
+        alertStore.showAlert('Vous avez bien été deconnecté', 'positive');
+        this.router.push('/');
     }
     // Initialize auth state from localStorage
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
-    if (storedToken && storedUser) {
+    if (!isNullUndefined(storedToken) && !isNullUndefined(storedUser)) {
         token.value = storedToken;
         user.value = JSON.parse(storedUser);
     }
@@ -52,6 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
         user,
         isAuthenticated,
         fullName,
+        logout,
         setAuth,
         clearAuth
     };

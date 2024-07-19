@@ -65,21 +65,10 @@ const authStore = useAuthStore();
               </template>
             </SfButton>
           </router-link>
-          <router-link v-if="!authStore.isAuthenticated" to="/auth/login">
+
             <SfButton
-                class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
-                aria-label="Log in"
-                variant="tertiary"
-                square
-            >
-              <template #prefix>
-                <SfIconPerson />
-              </template>
-              <span class="hidden xl:inline-flex whitespace-nowrap">Connexion</span>
-            </SfButton>
-          </router-link>
-          <router-link v-if="authStore.isAuthenticated" to="/auth/logout">
-            <SfButton
+                @click="authStore.logout()"
+                v-if="authStore.isAuthenticated"
                 class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
                 aria-label="Log out"
                 variant="tertiary"
@@ -90,8 +79,7 @@ const authStore = useAuthStore();
               </template>
               <span class="hidden xl:inline-flex whitespace-nowrap">Déconnexion</span>
             </SfButton>
-          </router-link>
-          <router-link v-else to="/auth/login">
+          <router-link v-if="!authStore.isAuthenticated" to="/auth/login">
             <SfButton
                 class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
                 aria-label="Log in"

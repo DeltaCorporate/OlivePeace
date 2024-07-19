@@ -27,7 +27,7 @@ const {
   submitQuery: login,
   onSuccess: (response) => {
     alertStore.showAlert("Connexion réussie.", 'positive');
-    authStore.setAuth(response.data.token, response.data.user);
+    authStore.setAuth(response.data.token, response.data);
     router.push('/');
   },
   onError: (error) => {

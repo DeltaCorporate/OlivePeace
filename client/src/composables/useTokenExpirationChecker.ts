@@ -12,7 +12,6 @@ export function useTokenExpirationChecker() {
     const checkExpiration = async () => {
         if (!authStore.isAuthenticated || isChecking.value)
             return;
-
         isChecking.value = true;
         try {
             const response = await checkTokenExpiration();
@@ -27,7 +26,12 @@ export function useTokenExpirationChecker() {
             isChecking.value = false;
         }
     };
+
+    function checkExpirationEvery(seconds: number) {
+        setInterval(checkExpiration, seconds * 1000);
+    }
     return {
+        checkExpirationEvery,
         checkExpiration
     };
 }
