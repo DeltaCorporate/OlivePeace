@@ -9,6 +9,10 @@ export const ImageMessage = {
     uploadError: 'Erreur lors du téléchargement de l\'image'
 }
 
+export const CommandeMessage = {
+    notFound: 'Commande non trouvée',
+}
+
 export const PromotionMessage = {
     notAvailable: "La promotion n'est pas valide",
     notFound: "Promotion non trouvée",

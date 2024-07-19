@@ -10,6 +10,8 @@ import PromotionList from "@/pages/admin/PromotionList.vue";
 import BaseLayout from '@/layouts/BaseLayout.vue';
 import Home from '@/pages/Home.vue';
 import ProductList from "@/pages/ProductList.vue";
+import AdminCommandList from "@/pages/admin/CommandList.vue";
+import CommandList from "@/pages/CommandList.vue";
 const routes = [
     {
         path:  '/',
@@ -32,6 +34,10 @@ const routes = [
                 name: "product_categories_products",
                 path: 'product_categories/:slug/products',
                 component: ProductList,
+            },
+            {
+                path: 'commands',
+                component: CommandList,
             }
         ]
     },
@@ -55,6 +61,11 @@ const routes = [
                 path: 'promotions',
                 component: PromotionList,
             },
+            {
+                name: "commands",
+                path: 'commands',
+                component: AdminCommandList,
+            }
         ]
     }
 ]
