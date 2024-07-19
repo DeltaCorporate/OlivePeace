@@ -1,7 +1,6 @@
 import apiClient from '@/../config/axios.ts';
 import { AxiosResponse, AxiosError } from 'axios';
-import { StockType } from '@/types/stock.type.ts';
-import { ResponseType } from '@/types/response.type';
+import { StockType, ResponseType } from '@/types/stock.type.ts';
 import { formatAxiosResponse, formatAxiosError } from "@/utils/response.util.ts";
 
 /**
