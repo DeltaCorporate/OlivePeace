@@ -10,6 +10,13 @@ import PromotionList from "@/pages/admin/PromotionList.vue";
 import BaseLayout from '@/layouts/BaseLayout.vue';
 import Home from '@/pages/Home.vue';
 import ProductList from "@/pages/ProductList.vue";
+import Register from "@/pages/Register.vue";
+import ConfirmEmail from "@/pages/ConfirmEmail.vue";
+import Login from "@/pages/Login.vue";
+import ResetPassword from "@/pages/ResetPassword.vue";
+import ForgotPassword from "@/pages/ForgotPassword.vue";
+import {useAuthStore} from "@/stores/auth.store.ts";
+import {useTokenExpirationChecker} from "@/composables/useTokenExpirationChecker.ts";
 const routes = [
     {
         path:  '/',
@@ -32,7 +39,27 @@ const routes = [
                 name: "product_categories_products",
                 path: 'product_categories/:slug/products',
                 component: ProductList,
-            }
+            },
+            {
+                path: '/auth/register',
+                component: Register
+            },
+            {
+                path: '/auth/confirm-email/:token',
+                component: ConfirmEmail
+            },
+            {
+                path: '/auth/login',
+                component: Login
+            },
+            {
+                path: '/auth/forgot-password',
+                component: ForgotPassword
+            },
+            {
+                path: '/auth/reset-password/:token',
+                component: ResetPassword
+            },
         ]
     },
     {

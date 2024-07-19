@@ -7,6 +7,7 @@ import {
   SfIconSearch,
 } from '@storefront-ui/vue';
 import ProductSearchBar from "@/components/ProductSearchBar.vue";
+import {useAuthStore} from "@/stores/auth.store.ts";
 
 const actionItems = [
   {
@@ -24,7 +25,7 @@ const actionItems = [
   },
 ];
 
-
+const authStore = useAuthStore();
 
 
 </script>
@@ -64,7 +65,21 @@ const actionItems = [
               </template>
             </SfButton>
           </router-link>
-          <router-link to="/">
+
+            <SfButton
+                @click="authStore.logout()"
+                v-if="authStore.isAuthenticated"
+                class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
+                aria-label="Log out"
+                variant="tertiary"
+                square
+            >
+              <template #prefix>
+                <SfIconPerson />
+              </template>
+              <span class="hidden xl:inline-flex whitespace-nowrap">Déconnexion</span>
+            </SfButton>
+          <router-link v-if="!authStore.isAuthenticated" to="/auth/login">
             <SfButton
                 class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
                 aria-label="Log in"

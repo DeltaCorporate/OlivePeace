@@ -20,6 +20,7 @@ import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
 import authRoute from "#app/src/routes/auth.route.js";
 import './scheduler.js';
+import {isAdmin, isAuthenticated} from "#app/src/middlewares/auth.middleware.js";
 const app = express();
 await mdb_connect();
 try {
@@ -49,16 +50,14 @@ app.use('/', indexRouter);
 app.use('/auth', authRoute);
 app.use('/products', productRouter);
 app.use('/product_categories', productCategoriesRouter);
+app.use('/admin',isAuthenticated, isAdmin);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
-app.use('cart', cartRouter);
+app.use('cart', isAuthenticated,cartRouter);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
-    res.status(404).send({
-        status: 404,
-        message: "The requested resource was not found"
-    });
+    res.status(404).send({});
 });
 
 app.get("/status", (req, res) => {

@@ -13,7 +13,7 @@ export const isAuthenticated = (req, res, next) => {
     }
 };
 
-export const checkRole = (...roles) => {
+export const checkRole = (roles) => {
     return (req, res, next) => {
         if (!req.user) return res.error('', 401, { message: 'Token invalide' });
 
@@ -24,6 +24,10 @@ export const checkRole = (...roles) => {
         next();
     };
 };
+
+export const isAdmin = (req,res,next) => {
+    checkRole(['ROLE_ADMIN'])(req,res,next);
+}
 
 export const checkUserId = (userId) => {
     return async (req, res, next) => {

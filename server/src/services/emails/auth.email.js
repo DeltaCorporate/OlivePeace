@@ -8,7 +8,7 @@ export const sendConfirmationEmail = async (email, token) => {
         html: `
             <h1>Confirmation de votre compte</h1>
             <p>Veuillez cliquer sur le lien suivant pour confirmer votre compte :</p>
-            <a href="${process.env.CLIENT_URL}/confirm-email/${token}">Confirmer mon compte</a>
+            <a href="${process.env.CLIENT_URL}/auth/confirm-email/${token}">Confirmer mon compte</a>
         `
     };
 
@@ -23,7 +23,7 @@ export const sendResetPasswordEmail = async (email, token) => {
         html: `
             <h1>Réinitialisation de votre mot de passe</h1>
             <p>Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe :</p>
-            <a href="${process.env.CLIENT_URL}/reset-password/${token}">Réinitialiser mon mot de passe</a>
+            <a href="${process.env.CLIENT_URL}/auth/reset-password/${token}">Réinitialiser mon mot de passe</a>
         `
     };
 
