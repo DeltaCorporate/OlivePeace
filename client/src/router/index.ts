@@ -14,6 +14,8 @@ import ConfirmEmail from "@/pages/ConfirmEmail.vue";
 import Login from "@/pages/Login.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
+import ProductDetail from "@/pages/ProductDetail.vue";
+import AdminProductList from "@/pages/admin/ProductList.vue";
 const routes = [
     {
         path:  '/',
@@ -61,6 +63,10 @@ const routes = [
                 path: '/cart',
                 component: CartLayout
             },
+            {
+                path: '/products/:slug',
+                component: ProductDetail,
+            },
         ]
     },
     {
@@ -78,6 +84,10 @@ const routes = [
             {
                 path: 'promotions',
                 component: PromotionList,
+            },
+            {
+                path: 'products',
+                component: AdminProductList,
             },
         ]
     }

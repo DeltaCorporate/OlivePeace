@@ -6,7 +6,8 @@ export const ProductMessage = {
 }
 
 export const ImageMessage = {
-    uploadError: 'Erreur lors du téléchargement de l\'image'
+    uploadError: 'Erreur lors du téléchargement de l\'image',
+    required: "Une image est requise"
 }
 
 export const PromotionMessage = {

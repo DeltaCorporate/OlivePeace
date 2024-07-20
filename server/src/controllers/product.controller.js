@@ -7,6 +7,8 @@ import {
     ProductMessage,
     GlobalMessage
 } from '#app/src/validations/errors.messages.js';
+import ProductCategory from "#app/src/sequelize/models/product-category.model.js";
+import Promotion from "#app/src/sequelize/models/promotion.model.js";
 
 class ProductController {
     constructor() {}
@@ -15,12 +17,14 @@ class ProductController {
         const errors = [];
         try {
             const { slugOrId } = req.params;
-            const product = await Product.findOne({
+            let product = await Product.findOne({
+                include: [ProductCategory, Promotion],
                 where: isNaN(slugOrId) ? { slug: slugOrId } : { id: parseInt(slugOrId) },
             });
             if (!product) errors.push({ message: ProductMessage.notFound });
             if (errors.length > 0) return res.error(GlobalMessage.validationError, 404, errors);
-            res.success(product);
+            let productData = await product.toJsonWithVirtuals();
+            res.success(productData);
         } catch (error) {
             handleError(res, error);
         }

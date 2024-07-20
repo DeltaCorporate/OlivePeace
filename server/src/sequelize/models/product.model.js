@@ -7,6 +7,7 @@ import ProductMongoose from "#app/src/mongoose/models/product.model.js";
 import {denormalizeProduct} from "../../services/denormalizations/product.denormalizer.js";
 import StockHistory from "#app/src/mongoose/models/stock-history.model.js";
 import ProductService from "#app/src/services/product.service.js";
+import {isChanged} from "#app/src/utils/string.util.js";
 class Product extends Model {
 
     async getApplicablePromotion () {
@@ -19,7 +20,11 @@ class Product extends Model {
             return productCategory.Promotion;
         return null;
     };
-
+    async toJsonWithVirtuals() {
+        const productData = await this.toJSON();
+        productData.discountedPrice = await this.discountedPrice;
+        return productData;
+    }
     getDataForStockHistory() {
         return {
             productId: this.id,
@@ -68,11 +73,10 @@ Product.init({
         },
         afterUpdate: async (product, options) => {
             await denormalizeProduct(product);
-            if (product.changed('stock'))
+            if (isChanged(product,'stock')){
+                if(product.stock == 0) await ProductService.alertLowStock(product);
                 await StockHistory.create(product.getDataForStockHistory());
-            if(product.stock === 0)
-                await ProductService.alertLowStock(product);
-
+            }
         },
         afterDestroy: async (product, options) => {
             try {

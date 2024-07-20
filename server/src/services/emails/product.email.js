@@ -10,7 +10,7 @@ export const sendStockAlertEmail = async (to, product) => {
       <p>Le produit suivant n'est plus en stock :</p>
       <p><strong>${product.name}</strong></p>
       <p>Veuillez vérifier et réapprovisionner le stock dès que possible.</p>
-      <a href="${process.env.CLIENT_URL}/admin/products/${product.id}">Voir le produit</a>
+      <a href="${process.env.CLIENT_URL}/products/${product.slug}">Voir le produit</a>
     `
     };
 

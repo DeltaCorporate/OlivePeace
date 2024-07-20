@@ -71,7 +71,17 @@ class ProductCategoryController {
             }
         });
     }
-
+    static async getAll(req, res) {
+        try {
+            const mongooseFilter = new MongooseFilter(req.query);
+            const { filter, sort } = mongooseFilter.applyFilters();
+            const data = await ProductCategoryMongoose.find(filter)
+                .sort(sort)
+            res.success(data);
+        } catch (error) {
+            handleError(res, error);
+        }
+    }
     static async delete(req, res) {
         const errors = [];
         try {
