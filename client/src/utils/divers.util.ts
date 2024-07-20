@@ -34,3 +34,7 @@ export const getNestedValue = (obj: any, path: string | undefined): any => {
         return prev && typeof prev === 'object' ? prev[curr] : undefined;
     }, obj);
 };
+
+export const toFrenchPrice: string  = (price: number) => {
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
+}

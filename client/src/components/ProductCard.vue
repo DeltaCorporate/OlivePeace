@@ -3,6 +3,7 @@ import { SfLink, SfButton, SfIconShoppingCart } from '@storefront-ui/vue';
 import {computed, defineProps, ref} from 'vue';
 import {errorImage} from "@/utils/image.util.ts";
 import {UPLOAD_PATH} from "../../config/global.ts";
+import {toFrenchPrice} from "@/utils/divers.util.ts";
 const props = defineProps({
   product: {
     type: Object,
@@ -12,9 +13,19 @@ const props = defineProps({
 
 const product = ref(props.product);
 
+const formattedPrice = computed(() => {
+  if (!product.value) return '';
+  return toFrenchPrice(product.value.price);
+});
+
 const discountedPrice = computed(() => {
-  const price = parseFloat(product.value.discountedPrice);
-  return price.toFixed(2);
+  if (!product.value || !product.value.discountedPrice) return '';
+  return toFrenchPrice(product.value.discountedPrice);
+});
+
+const isInStock = computed(() => {
+  if (!product.value) return false;
+  return product.value.stock > 0;
 });
 </script>
   <template>
@@ -34,13 +45,21 @@ const discountedPrice = computed(() => {
       </router-link>
         <div class="p-4 border-t border-neutral-200">
           <router-link :to="'/products/' + product.slug">
-
-            <div class="flex flex-wrap">
+            <div class="flex flex-col flex-wrap">
                  <SfLink variant="secondary" class="no-underline"> {{product.name}} </SfLink>
               <small>{{product.brand}}</small>
             </div>
           </router-link>
-          <span class="block pb-2 font-bold typography-text-lg">{{discountedPrice}}€</span>
+          <div class="flex py-3">
+              <span v-if="product.price == product.discountedPrice">
+                <span class="font-bold text-primary-700 text-xl">{{ formattedPrice }}</span>
+              </span>
+            <span v-else class="flex gap-x-3">
+                <span class="font-bold text-primary-700 text-xl">{{ discountedPrice }}</span>
+                <span class="font-bold text-primary-300 text-md line-through">{{ formattedPrice }}</span>
+              </span>
+
+          </div>
 
         <template v-if="product.stock > 0">
           <SfButton size="sm">
