@@ -18,9 +18,11 @@ clientLayoutStore.setPageTitle("Connexion");
       </router-link>
     </div>
     <div class="mt-2 text-center">
-      <SfLink href="/auth/forgot-password" class="text-primary-600 hover:text-primary-700">
-        Mot de passe oublié ?
-      </SfLink>
+      <router-link to="/auth/forgot-password">
+        <SfLink class="text-primary-600 hover:text-primary-700">
+          Mot de passe oublié ?
+        </SfLink>
+      </router-link>
     </div>
   </div>
 </template>
