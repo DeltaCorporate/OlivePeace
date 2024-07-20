@@ -26,6 +26,8 @@ const discountedPrice = computed(() => {
               @error="errorImage"
               :alt="product.description"
               class="block object-cover h-auto rounded-md aspect-square"
+              width="300"
+              height="300"
           />
           <SfButton variant="primary" size="sm" class="bottom-0 right-0 absolute !py-0 !px-1 text-xs rounded-sm opacity-70">{{product.productCategory.name}}</SfButton>
         </div>
@@ -35,7 +37,7 @@ const discountedPrice = computed(() => {
 
             <div class="flex flex-wrap">
                  <SfLink variant="secondary" class="no-underline"> {{product.name}} </SfLink>
-              <small class>{{product.brand}}</small>
+              <small>{{product.brand}}</small>
             </div>
           </router-link>
           <span class="block pb-2 font-bold typography-text-lg">{{discountedPrice}}€</span>

@@ -26,6 +26,11 @@ const discountedPrice = computed(() => {
   return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(product.value.discountedPrice);
 });
 
+const isInStock = computed(() => {
+  if (!product.value) return false;
+  return product.value.stock > 0;
+});
+
 onMounted(async () => {
   const slug = route.params.slug as string;
     const response = await getProduct(slug);
@@ -44,44 +49,49 @@ onMounted(async () => {
   <div v-if="loading" class="flex justify-center items-center h-64">
     <SfLoaderCircular size="3xl" />
   </div>
-  <div v-else-if="product" class="container mx-auto px-4 py-8">
+  <div v-else-if="product" class="container md:w-2/3 mx-auto px-4 py-8">
     <div class="flex flex-col md:flex-row -mx-4">
       <div class="md:flex-1 px-4">
-        <div class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
+        <div class="h-64 md:h-80 rounded-lg mb-4">
           <img
               :src="UPLOAD_PATH + '/' + product.imageName"
               @error="errorImage"
               :alt="product.name"
-              class="h-full w-full object-cover rounded-lg"
+              class="block object-fit h-auto rounded-md aspect-square"
+              width="300"
+              height="300"
           />
         </div>
       </div>
-      <div class="md:flex-1 px-4">
+      <div class="md:flex-1 px-4 max-sm:mt-10">
         <h2 class="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl md:text-3xl">{{ product.name }}</h2>
-        <p class="text-gray-500 text-sm">Par <a href="#" class="text-secondary-600 hover:underline">{{ product.brand }}</a></p>
+        <p class="text-neutral-400 text-sm">Par <a href="#" class="text-primary-600 hover:underline">{{ product.brand }}</a></p>
 
         <div class="flex items-center space-x-4 my-4">
           <div>
-            <div class="rounded-lg bg-gray-100 flex gap-5 py-2 px-3">
+            <div class="rounded-lg flex py-2 px-3">
               <span v-if="product.price == product.discountedPrice">
-                <span class="font-bold text-primary-600 text-3xl">{{ formattedPrice }}</span>
+                <span class="font-bold text-primary-700 text-3xl">{{ formattedPrice }}</span>
               </span>
-              <span v-else>
-                <span class="font-bold text-secondary-600 text-3xl">{{ discountedPrice }}</span>
+              <span v-else class="flex gap-3">
+                <span class="font-bold text-primary-700 text-3xl">{{ discountedPrice }}</span>
                 <span class="font-bold text-primary-300 text-2xl line-through">{{ formattedPrice }}</span>
               </span>
 
             </div>
           </div>
-          <div class="flex-1">
-            <p class="text-green-500 text-xl font-semibold">En stock</p>
-            <p class="text-gray-400 text-sm">Quantité disponible : {{ product.stock }}</p>
+          <div v-if="isInStock" class="flex-1">
+            <p class="text-primary-500 text-xl font-semibold">En stock</p>
+            <p class="text-neutral-400 text-sm">Quantité disponible : {{ product.stock }}</p>
+          </div>
+          <div class="flex-1" v-else>
+            <p class="text-negative-700 text-xl font-semibold">En rupture de stock</p>
           </div>
         </div>
 
         <p class="text-gray-500">{{ product.description }}</p>
 
-        <div class="flex py-4 space-x-4">
+        <div v-if="isInStock" class="flex py-4 space-x-4">
           <SfButton class="w-full md:w-auto" size="lg">
             <template #prefix>
               <SfIconShoppingCart />

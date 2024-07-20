@@ -3,7 +3,7 @@ export const denormalizeProduct = async (product) => {
     try {
         const promotion = await product.getApplicablePromotion();
         // get product data
-        const productData = product.toJSON();
+        const productData = await product.toJSON();
 
         if(promotion){
             productData.promotion = {

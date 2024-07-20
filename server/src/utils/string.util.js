@@ -19,3 +19,7 @@ export function isEmpty(value){
         return value.length === 0;
     return value == null || value == 'undefined';
 }
+
+export function isChanged(sequelizeModel,key){
+    return sequelizeModel[key] != sequelizeModel.previous(key);
+}

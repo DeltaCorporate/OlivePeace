@@ -56,3 +56,13 @@ export const deleteProductCategory = async (id: number, signal?: AbortSignal): P
         return formatAxiosError(error as AxiosError);
     }
 };
+
+export const getAllProductCategories = async (params?: string,signal?: AbortSignal): Promise<ResponseType<ProductCategoryType[]>> => {
+    try {
+        if(params) params = '?' + params;
+        const response: AxiosResponse<ResponseType<ProductCategoryType[]>> = await apiClient.get('/admin/product_categories/all'+params, { signal });
+        return formatAxiosResponse(response);
+    } catch (error) {
+        return formatAxiosError(error as AxiosError);
+    }
+}
