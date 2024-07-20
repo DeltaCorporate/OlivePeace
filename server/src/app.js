@@ -30,6 +30,7 @@ try {
     console.error('Unable to connect to the database:', error);
 }
 
+
 db.sequelize.sync();
 app.use(helmet({
     crossOriginResourcePolicy: false,

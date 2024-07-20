@@ -10,6 +10,7 @@ import {
 } from '#app/src/validations/errors.messages.js';
 import Promotion from "#app/src/sequelize/models/promotion.model.js";
 import ProductMongoose from "#app/src/mongoose/models/product.model.js";
+import Product from "#app/src/sequelize/models/product.model.js";
 
 class ProductCategoryController {
     constructor() {}

@@ -6,7 +6,7 @@ export const isAuthenticated = (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
     try {
-        req.user = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = jwt.verify(token, process.env.JWT_SECRET, { algorithm: 'HS256' });
         next();
     } catch (error) {
         return res.error('', 401, { message: 'Token invalide' });
