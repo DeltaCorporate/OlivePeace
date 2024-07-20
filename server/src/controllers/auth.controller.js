@@ -70,17 +70,17 @@ class AuthController {
 
             if (user && user.isLoginLocked()) {
                 errors.push({ message: UserMessage.accountLocked });
-                return res.error(GlobalMessage.validationError, 403, errors);
+                return res.error(GlobalMessage.validationError, 422, errors);
             }
             await UserService.handleFailedLogin(user);
             if (!user || !(await user.comparePassword(password))) {
                 errors.push({ message: UserMessage.invalidCredentials });
-                return res.error(GlobalMessage.validationError, 401, errors);
+                return res.error(GlobalMessage.validationError, 422, errors);
             }
 
             if (!user.isConfirmed()) {
                 errors.push({ message: UserMessage.unconfirmedEmail });
-                return res.error(GlobalMessage.validationError, 403, errors);
+                return res.error(GlobalMessage.validationError, 422, errors);
             }
 
 

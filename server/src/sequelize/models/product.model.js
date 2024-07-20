@@ -5,6 +5,8 @@ import Promotion from './promotion.model.js';
 
 import ProductMongoose from "#app/src/mongoose/models/product.model.js";
 import {denormalizeProduct} from "../../services/denormalizations/product.denormalizer.js";
+import StockHistory from "#app/src/mongoose/models/stock-history.model.js";
+import ProductService from "#app/src/services/product.service.js";
 class Product extends Model {
 
     async getApplicablePromotion () {
@@ -17,6 +19,13 @@ class Product extends Model {
             return productCategory.Promotion;
         return null;
     };
+
+    getDataForStockHistory() {
+        return {
+            productId: this.id,
+            stock: this.stock
+        };
+    }
 }
 
 
@@ -54,13 +63,21 @@ Product.init({
     hooks: {
         afterCreate: async (product, options) => {
             await denormalizeProduct(product);
+            await StockHistory.create(product.getDataForStockHistory());
+
         },
         afterUpdate: async (product, options) => {
             await denormalizeProduct(product);
+            if (product.changed('stock'))
+                await StockHistory.create(product.getDataForStockHistory());
+            if(product.stock === 0)
+                await ProductService.alertLowStock(product);
+
         },
         afterDestroy: async (product, options) => {
             try {
                 await ProductMongoose.findByIdAndDelete(product.id);
+                await StockHistory.deleteMany({ productId: product.id });
             } catch (error) {
                 console.error('Failed to delete product in MongoDB:', error);
             }
