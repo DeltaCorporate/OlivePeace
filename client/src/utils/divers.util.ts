@@ -1,3 +1,5 @@
+import {useAuthStore} from "@/stores/auth.store.ts";
+
 export const isEmpty = (value: object): boolean => {
     return Object.keys(value).length === 0;
 }
@@ -21,3 +23,8 @@ export const isNullUndefined = (value: any): boolean => {
     return value == 'undefined' || value === null;
 }
 
+export const hasRoles = (roles: string[]) => {
+    let authStore = useAuthStore();
+    if(!authStore.isAuthenticated) return false;
+    return roles.some(role => authStore.user.roles.includes(role));
+}

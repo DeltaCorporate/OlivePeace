@@ -1,22 +1,13 @@
 <template>
 
-  <div class="flex flex-col min-h-screen">
-    <ClientNavbar />
-    <main class="flex-grow relative p-5">
-
-      <h1 class="typography-headline-1 mt-5 mb-8 w-full text-center">{{ cartLayoutStore.pageTitle }} </h1>
-
-      <SfAlert/>
-      <router-view />
-
-      <div class="cart mx-auto p-4">
-        <Return2Back class="bottom-5 left-5 absolute rtn-btn"/>
-        <div class="cart-header mb-4">
-          <h1 class="text-2xl font-bold">{{ orderSummary.title }}</h1>
-          <p class="text-lg text-gray-600">{{ orderSummary.subTitle }}</p>
-        </div>
-        <div v-if="loading" class="text-center">Loading...</div>
-        <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
+  <div class="cart mx-auto p-4">
+    <Return2Back class="bottom-5 left-5 absolute rtn-btn"/>
+    <div class="cart-header mb-4">
+      <h1 class="text-2xl font-bold">{{ orderSummary.title }}</h1>
+      <p class="text-lg text-gray-600">{{ orderSummary.subTitle }}</p>
+    </div>
+    <div v-if="loading" class="text-center">Loading...</div>
+      <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
         <div class="cart-items grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <div v-for="item in orderSummary.items" :key="item._id" class="cart-item bg-white shadow-md rounded-lg p-4">
             <img :src="item.image" :alt="item.title" class="cart-item-image rounded-lg mb-4 mx-auto" />
@@ -24,16 +15,16 @@
               <h2 class="text-xl font-semibold mb-2 truncate">{{ item.title }}</h2>
               <p class="text-lg text-gray-800 mb-2">{{ formatPrice(item.price) }}</p>
               <p class="text-md text-gray-600 mb-4">Quantity: {{ item.qty }}</p>
-              <SfInput
+                <SfInput
                   v-model="item.qty"
                   type="number"
                   min="1"
                   class="w-full mb-2"
                   @change="updateQuantity(item)"
-              />
-              <SfButton variant="secondary" class="w-full" @click="removeItem(item._id)">Retirer</SfButton>
+                />
+                <SfButton variant="secondary" class="w-full" @click="removeItem(item._id)">Retirer</SfButton>
+              </div>
             </div>
-          </div>
         </div>
         <div class="cart-summary mt-8 p-4 bg-gray-100 rounded-lg text-right">
           <p class="text-lg font-bold mb-4">Total: {{ formatPrice(orderSummary.total) }}</p>
@@ -50,11 +41,9 @@
               <SfButton variant="secondary" size="lg" class="w-full" @click="close">Annuler</SfButton>
             </div>
           </div>
-        </SfModal>
-      </div>
-    </main>
-    <ClientFooter />
-  </div>
+          </SfModal>
+        </div>
+
 </template>
 
 <script setup>

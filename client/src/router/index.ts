@@ -1,7 +1,6 @@
 import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router'
 
 import AdminLayout from '@/layouts/AdminLayout.vue'
-import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryList from "@/pages/ProductCategoryList.vue";
 import CartLayout from "@/layouts/CartLayout.vue";
 import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
@@ -15,8 +14,6 @@ import ConfirmEmail from "@/pages/ConfirmEmail.vue";
 import Login from "@/pages/Login.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
-import {useAuthStore} from "@/stores/auth.store.ts";
-import {useTokenExpirationChecker} from "@/composables/useTokenExpirationChecker.ts";
 const routes = [
     {
         path:  '/',
@@ -60,11 +57,11 @@ const routes = [
                 path: '/auth/reset-password/:token',
                 component: ResetPassword
             },
+            {
+                path: '/cart',
+                component: CartLayout
+            },
         ]
-    },
-    {
-        path: '/cart',
-        component: CartLayout
     },
     {
         path:  '/admin',

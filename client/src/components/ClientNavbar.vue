@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import {
-  SfButton,
   SfIconShoppingCart,
   SfIconPerson,
   SfInput,
-  SfIconSearch,
+  SfIconSearch, SfDropdown, useDisclosure, SfButton, SfIconLogout,
 } from '@storefront-ui/vue';
+
+import {ChevronDown,ChevronUp,FilePenLine} from "lucide-vue-next";
 import ProductSearchBar from "@/components/ProductSearchBar.vue";
 import {useAuthStore} from "@/stores/auth.store.ts";
+import Button from "@/components/ui/Button.vue";
+import {hasRoles} from "@/utils/divers.util.ts";
 
 const actionItems = [
   {
@@ -26,8 +29,7 @@ const actionItems = [
 ];
 
 const authStore = useAuthStore();
-
-
+const { isOpen, toggle } = useDisclosure();
 </script>
 
 
@@ -53,7 +55,7 @@ const authStore = useAuthStore();
       <ProductSearchBar />
       <nav class="flex-1 flex justify-end lg:order-last lg:ml-4">
         <div class="flex flex-row flex-nowrap">
-          <router-link to="/cart">
+          <router-link v-if="authStore.isAuthenticated" to="/cart">
             <SfButton
                 class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
                 aria-label="Cart"
@@ -66,19 +68,42 @@ const authStore = useAuthStore();
             </SfButton>
           </router-link>
 
-            <SfButton
-                @click="authStore.logout()"
-                v-if="authStore.isAuthenticated"
-                class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
-                aria-label="Log out"
-                variant="tertiary"
-                square
-            >
-              <template #prefix>
-                <SfIconPerson />
-              </template>
-              <span class="hidden xl:inline-flex whitespace-nowrap">Déconnexion</span>
-            </SfButton>
+          <SfDropdown v-if="authStore.isAuthenticated" v-model="isOpen">
+            <template #trigger>
+              <Button class="flex flex-1 flex-row-reverse justify-start" :icon="isOpen ? ChevronUp : ChevronDown" variant="tertiary" :label="authStore.fullName" @click="toggle"/>
+            </template>
+
+            <div class="flex py-3 px-5 grid gap-5 bg-neutral-50 shadow z-20 relative">
+              <SfButton
+                  @click="authStore.logout()"
+                  class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
+                  aria-label="Log out"
+                  variant="tertiary"
+                  square
+              >
+                <template #prefix>
+                  <SfIconLogout />
+                </template>
+                <span class="xl:inline-flex cursor-pointer whitespace-nowrap">Déconnexion</span>
+              </SfButton>
+
+              <router-link v-if="hasRoles(authStore.user.roles)" to="/admin/product_categories">
+                <SfButton
+                    class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
+                    aria-label="Log out"
+                    variant="tertiary"
+                    square
+                >
+                  <template #prefix>
+                    <FilePenLine />
+                  </template>
+                  <span class=" xl:inline-flex cursor-pointer">Panel admin</span>
+                </SfButton>
+              </router-link>
+
+            </div>
+
+          </SfDropdown>
           <router-link v-if="!authStore.isAuthenticated" to="/auth/login">
             <SfButton
                 class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
@@ -89,7 +114,7 @@ const authStore = useAuthStore();
               <template #prefix>
                 <SfIconPerson />
               </template>
-              <span class="hidden xl:inline-flex whitespace-nowrap">Connexion</span>
+              <span class="xl:inline-flex whitespace-nowrap">Connexion</span>
             </SfButton>
           </router-link>
         </div>

@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
         if (user.value) {
             return `${user.value.lastName.toUpperCase()} ${user.value.firstName.toLowerCase()}`;
         }
-        return '';
+        return 'Non connecté';
     });
 
     function setAuth(newToken: string, userInfo: UserInfo) {
