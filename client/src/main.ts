@@ -20,9 +20,9 @@ const app= createApp(App)
 
 const {checkExpirationEvery,checkExpiration} = useTokenExpirationChecker();
 const alertStore = useAlertStore();
+const authStore = useAuthStore();
 checkExpirationEvery(20);
 apiClient.interceptors.request.use((config) => {
-    let authStore = useAuthStore();
     if(authStore.isAuthenticated)
         config.headers['Authorization'] = `Bearer ${authStore.token}`;
     return config;
@@ -38,8 +38,10 @@ apiClient.interceptors.response.use(
                 });
         }
         if(errorFormated.code === 401){
+            authStore.clearAuth();
             await router.push('/auth/login');
             alertStore.showAlert("Vous n'êtes pas connecté", 'negative');
+
         }
         return Promise.reject(error);
     }

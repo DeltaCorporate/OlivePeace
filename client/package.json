@@ -12,6 +12,7 @@
     "@frsource/autoresize-textarea": "^2.0.85",
     "@vuepic/vue-datepicker": "^9.0.0",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "joi": "^17.13.1",
@@ -21,6 +22,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-animated": "^1.1.2",
     "vue": "^3.4.21",
+    "vue-chartjs": "^5.3.1",
     "vue-multiselect": "^3.0.0",
     "vue-router": "^4.3.3",
     "vue3-datepicker": "^0.4.0"

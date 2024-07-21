@@ -16,6 +16,7 @@ import ResetPassword from "@/pages/ResetPassword.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
 import ProductDetail from "@/pages/ProductDetail.vue";
 import AdminProductList from "@/pages/admin/ProductList.vue";
+import Dashboard from "@/pages/admin/Dashboard.vue";
 const routes = [
     {
         path:  '/',
@@ -73,6 +74,10 @@ const routes = [
         path:  '/admin',
         component: AdminLayout,
         children: [
+            {
+                path: '',
+                component: Dashboard
+            },
             {
                 path: 'product_categories',
                 component: AdminProductCategoryList

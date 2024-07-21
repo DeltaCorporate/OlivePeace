@@ -6,3 +6,6 @@ export function toFrenchDate(dateString: string): string {
         day: 'numeric',
     });
 }
+export function getCurrentYear(){
+    return new Date().getFullYear();
+}

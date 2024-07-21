@@ -4,6 +4,7 @@ import {
   Box,
     Menu,
   Users,
+    Shirt,
     TicketPercent,
 UserCog,
 } from 'lucide-vue-next';
@@ -23,9 +24,7 @@ const sidebarStore = useSidebarStore();
       <div class="flex flex-col items-center relative py-6">
         <img src="/logo-simple.svg" alt="Admin Logo" class="w-24 mb-6"/>
         <nav class="w-full">
-          <router-link @click="sidebarStore.closeSidebar" to="/admin/product_categories" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
-            <UserCog class="h-5 w-5 mr-3"/> Mon Compte
-          </router-link>
+
           <router-link @click="sidebarStore.closeSidebar" to="/admin/" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
             <Home class="h-5 w-5 mr-3"/> Accueil
           </router-link>
@@ -36,7 +35,7 @@ const sidebarStore = useSidebarStore();
             <TicketPercent class="h-5 w-5 mr-3"/> Catégorie de promotions
           </router-link>
           <router-link @click="sidebarStore.closeSidebar" to="/admin/products" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
-            <Users class="h-5 w-5 mr-3"/> Produits
+            <Shirt class="h-5 w-5 mr-3"/> Produits
           </router-link>
           <router-link @click="sidebarStore.closeSidebar" to="/admin/product_categories" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
             <Users class="h-5 w-5 mr-3"/> Utilisateurs

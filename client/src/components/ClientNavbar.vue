@@ -87,7 +87,7 @@ const { isOpen, toggle } = useDisclosure();
                 <span class="xl:inline-flex cursor-pointer whitespace-nowrap">Déconnexion</span>
               </SfButton>
 
-              <router-link v-if="hasRoles(authStore.user.roles)" to="/admin/product_categories">
+              <router-link v-if="hasRoles(authStore.user.roles)" to="/admin">
                 <SfButton
                     class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
                     aria-label="Log out"

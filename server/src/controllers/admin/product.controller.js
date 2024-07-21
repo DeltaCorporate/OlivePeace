@@ -4,6 +4,9 @@ import { productSchemaCreate, productSchemaUpdate } from '#shared/validations/sc
 import { formatJoiErrors, handleError } from '../../utils/error.util.js';
 import { ProductMessage, ImageMessage, GlobalMessage } from '#app/src/validations/errors.messages.js';
 import upload from "#config/multer.config.js";
+import ProductMongoose from '#app/src/mongoose/models/product.model.js';
+import {getPagedData, getPagination} from "#app/src/utils/pagination.util.js";
+import MongooseFilter from "#app/src/services/filters/mongoose.filter.js";
 class ProductController {
     static async create(req, res) {
         await upload.image.single('image')(req, res, async (err) => {
@@ -56,7 +59,18 @@ class ProductController {
             }
         });
     }
-
+    static async findAll(req, res) {
+        try {
+            const mongooseFilter = new MongooseFilter(req.query);
+            const { filter, sort } = mongooseFilter.applyFilters();
+            const totalItems = await ProductMongoose.countDocuments(filter);
+            const data = await ProductMongoose.find(filter)
+                .sort(sort)
+            res.success(data);
+        } catch (error) {
+            handleError(res, error);
+        }
+    }
     static async delete(req, res) {
         try {
             const { id } = req.params;

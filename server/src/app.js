@@ -20,6 +20,7 @@ import {responseHandler} from "./middlewares/response-handler.middleware.js";
 import {__root} from "#config/filePath.js";
 import authRoute from "#app/src/routes/auth.route.js";
 import adminProductRouter from "#app/src/routes/admin/product.route.js";
+import statsRouter from "#app/src/routes/stats.route.js";
 import './scheduler.js';
 import {isAdmin, isAuthenticated} from "#app/src/middlewares/auth.middleware.js";
 const app = express();
@@ -56,6 +57,7 @@ app.use('/admin',isAuthenticated, isAdmin);
 app.use('/admin/products', adminProductRouter);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
+app.use('/stats', statsRouter);
 app.use('cart', isAuthenticated,cartRouter);
 
 app.use(function(req, res, next) {
