@@ -4,6 +4,7 @@ import db from './index.js';
 import jwt from "jsonwebtoken";
 import {generateToken} from "#app/src/utils/string.util.js";
 import crypto from "crypto";
+import Order from "#app/src/sequelize/models/order.model.js";
 
 class User extends Model {
     static async hashPassword(password) {
@@ -135,4 +136,6 @@ User.init({
     },
 });
 
+User.hasMany(Order);
+Order.belongsTo(User);
 export default User;
