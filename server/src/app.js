@@ -38,7 +38,7 @@ app.use(helmet({
     crossOriginResourcePolicy: false,
 }));
 app.use(cors({
-    origin: process.env.CLIENT_URL, // variable environnement CLIENT_URL sur le .env
+    origin: process.env.CLIENT_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: '*'
 }));
@@ -57,22 +57,13 @@ app.use('/admin',isAuthenticated, isAdmin);
 app.use('/admin/products', adminProductRouter);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
-app.use('/stats', statsRouter);
+app.use('/stats',isAuthenticated, isAdmin, statsRouter);
 app.use('cart', isAuthenticated,cartRouter);
 
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
     res.status(404).send({});
 });
-
-app.get("/status", (req, res) => {
-    logger.info("Checking the API status: Everything is OK");
-    res.status(200).send({
-        status: "UP",
-        message: "The API is up and running!"
-    });
-});
-
 
 // Startup
 app.listen(process.env.PORT, () => {
