@@ -8,6 +8,7 @@ import {denormalizeProduct} from "../../services/denormalizations/product.denorm
 import StockHistory from "#app/src/mongoose/models/stock-history.model.js";
 import ProductService from "#app/src/services/product.service.js";
 import {isChanged} from "#app/src/utils/string.util.js";
+import OrderDetail from "#app/src/sequelize/models/order-detail.model.js";
 class Product extends Model {
 
     async getApplicablePromotion () {
@@ -92,6 +93,7 @@ Product.init({
 
 Product.belongsTo(ProductCategory);
 Product.belongsTo(Promotion);
+Product.hasMany(OrderDetail);
 
-
+OrderDetail.belongsTo(Product);
 export default Product;

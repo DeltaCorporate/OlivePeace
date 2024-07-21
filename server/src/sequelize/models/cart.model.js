@@ -1,5 +1,6 @@
 import {Model, DataTypes, NOW} from 'sequelize';
 import db from './index.js';
+import User from "#app/src/sequelize/models/user.model.js";
 
 class Cart extends Model {}
 
