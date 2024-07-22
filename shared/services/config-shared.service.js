@@ -13,7 +13,6 @@ export default class ConfigSharedService {
         if (selectedLayout)
             return layouts.find(layout => layout.id === selectedLayout);
 
-
         return null;
     }
 }
