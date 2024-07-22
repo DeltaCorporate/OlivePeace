@@ -6,6 +6,8 @@ import {UPLOAD_PATH} from "../../config/global.ts";
 import {toFrenchPrice} from "@/utils/divers.util.ts";
 import { useStore } from 'vuex';
 import {addToCart} from "@/api/cart.api";
+import {useAlertStore} from "@/stores/alerts.store.ts";
+import {pickError} from "@/utils/response.util.ts";
 
 const props = defineProps({
   product: {
@@ -32,15 +34,16 @@ const isInStock = computed(() => {
   return product.value.stock > 0;
 });
 
-const addToCart2 = async (product: any) => {
-  try {
-    await store.dispatch('cart/addToCart', { productId: product._id, quantity: 1 });
-    alert('Produit ajouté au panier');
-  } catch (err) {
-    console.error(err)
-    alert('Erreur lors de l\'ajout au panier');
-  }
+
+const alertStore = useAlertStore();
+const addItemToCard = async (productId,quantity = 1) => {
+  let response = await addToCart({productId, quantity});
+  if(response.isSuccess)
+    alertStore.showAlert('Produit ajouté au panier','positive');
+  else
+    alertStore.showAlert(pickError(response.errors)?.message ?? "Le produit n'a pas pu être ajouté au panier",'negative');
 };
+
 
 </script>
   <template>
@@ -77,7 +80,7 @@ const addToCart2 = async (product: any) => {
           </div>
 
         <template v-if="product.stock > 0">
-          <SfButton size="sm" @click="addToCart(product)">
+          <SfButton size="sm" @click="addItemToCard(product._id,1)">
             <template #prefix>
               <SfIconShoppingCart size="sm" />
             </template>

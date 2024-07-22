@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {UUID} from "sequelize";
 
 const { Schema } = mongoose;
 
@@ -24,9 +25,7 @@ const CartItemSchema = new Schema({
 
 const CartSchema = new Schema({
     user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+        userId: String
     },
     items: [CartItemSchema],
     totalPrice: {

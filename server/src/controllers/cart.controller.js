@@ -7,32 +7,29 @@ class CartController {
     constructor() {}
 
     static async addToCart(req, res) {
-        console.log('test');
-        console.log('test');
-        console.log('test');
         const errors = [];
         try {
             const { productId, quantity } = req.body;
-            const userId = req.user._id;
+            const userId = req.user.id;
 
-            const product = await Product.findById(productId);
+            const product = await Product.findById(parseInt(productId));
             if (!product || product.stock < quantity) {
                 errors.push({message: 'test'})
+                console.log(errors);
                 return res.error('', 422, errors);
             }
 
-            let cart = await Cart.findOne({ userId });
-            if (!cart) {
-                cart = new Cart({ userId, items: [] });
-            }
+            let cart = await Cart.findOne({user: {userId}});
+            if (!cart)
+                cart = new Cart({ user: {userId} })
 
             const itemIndex = cart.items.findIndex(item => item.productId.equals(productId));
             if (itemIndex > -1) {
                 cart.items[itemIndex].quantity += quantity;
                 cart.items[itemIndex].reservedUntil = new Date(Date.now() + 15 * 60000); // 15 minutes
-            } else {
+            } else
                 cart.items.push({ productId, quantity, reservedUntil: new Date(Date.now() + 15 * 60000) });
-            }
+
 
             await cart.save();
             res.success(cart);
