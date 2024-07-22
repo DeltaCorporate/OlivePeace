@@ -9,9 +9,13 @@ src/uploads/*
 src/tmp/*
 !src/tmp/.gitkeep
 !src/uploads/.gitkeep
-!src/uploads/test.jpg
-!src/uploads/test2.webp
-!src/uploads/test3.webp
+!src/uploads/example1.webo
+!src/uploads/example2.webp
+!src/uploads/example3.webp
+!src/uploads/example4.webp
+!src/uploads/example5.webp
+!src/uploads/example6.webp
+!src/uploads/example7.webp
 
 # Runtime data
 pids

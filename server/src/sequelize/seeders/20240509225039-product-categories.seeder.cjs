@@ -17,7 +17,7 @@ module.exports = {
     for (let i = 1; i <= 20; i++) {
       bulkCategories.push({
         name: faker.commerce.department(),
-        imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
+        imageName: ['example5.webp', 'example6.webp', 'example7.webp'][Math.floor(Math.random() * 3)],
         description: faker.commerce.productDescription(),
         slug: faker.helpers.slugify(generateRandomString(15)),
         promotionId: promotionIds.length ? faker.helpers.arrayElement(promotionIds) : null,

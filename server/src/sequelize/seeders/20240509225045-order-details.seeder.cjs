@@ -19,7 +19,7 @@ module.exports = {
         });
 
         for (const order of orders) {
-            const selectedProducts = faker.helpers.arrayElements(products, 3);
+            const selectedProducts = faker.helpers.arrayElements(products, 7);
             for (const product of selectedProducts) {
                 const promotion = product.Promotion;
                 await OrderDetail.create({
@@ -33,7 +33,7 @@ module.exports = {
                     promotionName: promotion ? promotion.name : null,
                     promotionValue: promotion ? promotion.value : null,
                     createdAt: order.createdAt,
-                    updatedAt: new Date()
+                    updatedAt: order.createdAt
                 });
             }
         }

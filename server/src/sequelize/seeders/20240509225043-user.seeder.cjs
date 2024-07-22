@@ -6,7 +6,7 @@ module.exports = {
         const { mdb_connect } = await import('../../mongoose/index.js');
         await mdb_connect();
         const User = (await import('../models/user.model.js')).default;
-
+        const { randomDate } = await import('../../utils/string.util.js');
         const users = [
             {
                 id: faker.string.uuid(),
@@ -20,7 +20,8 @@ module.exports = {
         ];
 
         // Créer 10 utilisateurs réguliers
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 20; i++) {
+            let createdDate = randomDate(2021,2024);
             users.push({
                 id: faker.string.uuid(),
                 email: faker.internet.email(),
@@ -29,6 +30,8 @@ module.exports = {
                 lastName: faker.person.lastName(),
                 roles: ['ROLE_USER'],
                 lastPasswordChangeAt: new Date(),
+                createdAt: createdDate,
+                updatedAt: createdDate
             });
         }
 

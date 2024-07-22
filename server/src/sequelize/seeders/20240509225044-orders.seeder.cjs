@@ -10,16 +10,21 @@ module.exports = {
 
         const users = await User.findAll();
         const orders = [];
+        const { randomDate } = await import('../../utils/string.util.js');
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 30; i++) {
+            let createdDate = randomDate(2023, 2024);
+            let deliveryStatus = faker.helpers.arrayElement(['processing', 'shipping', 'delivered', 'delivery_issue']);
+            let isPaid = ( deliveryStatus == "shipping" ||  deliveryStatus == "delivered") ? true : false;
+            let paymentFailedMessage = (deliveryStatus == "processing" && faker.datatype.boolean() == true) ? "Payment failed" : null;
             orders.push({
                 id: faker.string.uuid(),
                 UserId: faker.helpers.arrayElement(users).id,
-                isPaid: faker.datatype.boolean(),
-                paymentFailedMessage: faker.datatype.boolean() ? faker.lorem.sentence() : null,
-                deliveryStatus: faker.helpers.arrayElement(['processing', 'shipping', 'delivered', 'delivery_issue']),
-                createdAt: faker.date.past(),
-                updatedAt: new Date()
+                isPaid: isPaid,
+                paymentFailedMessage: paymentFailedMessage,
+                deliveryStatus: deliveryStatus,
+                createdAt: createdDate,
+                updatedAt: createdDate
             });
         }
 

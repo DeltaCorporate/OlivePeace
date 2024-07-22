@@ -29,7 +29,9 @@ class Product extends Model {
     getDataForStockHistory() {
         return {
             productId: this.id,
-            stock: this.stock
+            stock: this.stock,
+            createdAt: this.updatedAt,
+            updatedAt: this.updatedAt
         };
     }
 }

@@ -23,3 +23,10 @@ export function isEmpty(value){
 export function isChanged(sequelizeModel,key){
     return sequelizeModel[key] != sequelizeModel.previous(key);
 }
+
+export function randomDate(startYear, endYear) {
+    const year = Math.floor(Math.random() * (endYear - startYear + 1)) + startYear;
+    const month = Math.floor(Math.random() * 12);
+    const day = Math.floor(Math.random() * (new Date(year, month + 1, 0).getDate())) + 1;
+    return new Date(year, month, day);
+}

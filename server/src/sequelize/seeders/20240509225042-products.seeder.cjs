@@ -16,17 +16,22 @@ module.exports = {
     const promotions = await Promotion.findAll({ attributes: ['id'] });
     const promotionIds = promotions.map(promo => promo.id);
     const bulkProducts = [];
-    for (let i = 1; i <= 20; i++) {
+    const { randomDate } = await import('../../utils/string.util.js');
+
+    for (let i = 1; i <= 15; i++) {
+      let createdDate = randomDate(2021, 2024);
       bulkProducts.push({
         name: faker.commerce.productName(),
         brand: faker.company.name(),
         description: faker.commerce.productDescription(),
         price: parseFloat(faker.commerce.price()),
         stock: faker.number.int({ min: 0, max: 100 }),
-        imageName: ['test1.jpg', 'test2.webp', 'test3.webp'][Math.floor(Math.random() * 3)],
+        imageName: ['example1.webp', 'example2.webp', 'example3.webp','example4.webp'][Math.floor(Math.random() * 4)],
         slug: faker.helpers.slugify(generateRandomString(15)),
         ProductCategoryId: faker.helpers.arrayElement(categoryIds),
-        PromotionId: faker.helpers.arrayElement(promotionIds)
+        PromotionId: faker.helpers.arrayElement(promotionIds),
+        createdAt: createdDate,
+        updatedAt: createdDate,
       });
     }
 
