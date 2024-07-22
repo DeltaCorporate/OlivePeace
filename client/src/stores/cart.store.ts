@@ -3,6 +3,7 @@ import axios from 'axios';
 
 interface CartState {
     items: Array<{ productId: string; quantity: number; product: any; }>;
+    showCartAnimation: boolean;
 }
 
 interface RootState {
@@ -10,8 +11,10 @@ interface RootState {
 }
 
 export const cart: Module<CartState, RootState> = {
+    namespaced: true,
     state: {
-        items: []
+        items: [],
+        showCartAnimation: false
     },
     mutations: {
         setCart(state, cart) {
@@ -19,27 +22,57 @@ export const cart: Module<CartState, RootState> = {
         },
         clearCart(state) {
             state.items = [];
+        },
+        setShowCartAnimation(state, show) {
+            state.showCartAnimation = show;
         }
     },
     actions: {
         async fetchCart({ commit }) {
-            const response = await axios.get('/api/cart');
-            commit('setCart', response.data);
-            return response.data;
+            try {
+                const response = await axios.get('/api/cart');
+                console.log('Fetched cart data:', response.data);
+                commit('setCart', response.data);
+                return response.data;
+            } catch (error) {
+                console.error('Error in fetchCart action:', error);
+                throw error;
+            }
         },
         async removeFromCart({ commit }, productId) {
-            const response = await axios.post('/api/cart/remove', { productId });
-            commit('setCart', response.data);
+            try {
+                const response = await axios.post('/api/cart/remove', { productId });
+                commit('setCart', response.data);
+            } catch (error) {
+                console.error('Error in removeFromCart action:', error);
+                throw error;
+            }
         },
         async updateCartItem({ commit }, { productId, quantity }) {
-            const response = await axios.post('/api/cart/update', { productId, quantity });
-            commit('setCart', response.data);
+            try {
+                const response = await axios.post('/api/cart/update', { productId, quantity });
+                commit('setCart', response.data);
+            } catch (error) {
+                console.error('Error in updateCartItem action:', error);
+                throw error;
+            }
         },
         async placeOrder({ commit }) {
             try {
                 await axios.post('/api/order/create');
                 commit('clearCart');
             } catch (error) {
+                throw error;
+            }
+        },
+        async addToCart({ commit }, { productId, quantity }) {
+            try {
+                console.log('Dispatching addToCart with:', { productId, quantity });
+                const response = await axios.post('/api/cart/add', { productId, quantity });
+                console.log('Cart after addToCart:', response.data);
+                commit('setCart', response.data);
+            } catch (error) {
+                console.error('Error in addToCart action:', error);
                 throw error;
             }
         }

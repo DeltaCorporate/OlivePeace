@@ -4,6 +4,8 @@ import {computed, defineProps, ref} from 'vue';
 import {errorImage} from "@/utils/image.util.ts";
 import {UPLOAD_PATH} from "../../config/global.ts";
 import {toFrenchPrice} from "@/utils/divers.util.ts";
+import { useStore } from 'vuex';
+
 const props = defineProps({
   product: {
     type: Object,
@@ -11,6 +13,7 @@ const props = defineProps({
   }
 });
 
+const store = useStore();
 const product = ref(props.product);
 
 const formattedPrice = computed(() => {
@@ -27,6 +30,17 @@ const isInStock = computed(() => {
   if (!product.value) return false;
   return product.value.stock > 0;
 });
+
+const addToCart = async (product: any) => {
+  try {
+    await store.dispatch('cart/addToCart', { productId: product._id, quantity: 1 });
+    alert('Produit ajouté au panier');
+  } catch (err) {
+    console.error(err)
+    alert('Erreur lors de l\'ajout au panier');
+  }
+};
+
 </script>
   <template>
     <div class="border border-neutral-200 rounded-md hover:shadow-lg max-w-[200px]">
@@ -51,7 +65,7 @@ const isInStock = computed(() => {
             </div>
           </router-link>
           <div class="flex py-3">
-              <span v-if="product.price == product.discountedPrice">
+              <span v-if="product.price === product.discountedPrice">
                 <span class="font-bold text-primary-700 text-xl">{{ formattedPrice }}</span>
               </span>
             <span v-else class="flex gap-x-3">
@@ -62,7 +76,7 @@ const isInStock = computed(() => {
           </div>
 
         <template v-if="product.stock > 0">
-          <SfButton size="sm">
+          <SfButton size="sm" @click="addToCart(product)">
             <template #prefix>
               <SfIconShoppingCart size="sm" />
             </template>

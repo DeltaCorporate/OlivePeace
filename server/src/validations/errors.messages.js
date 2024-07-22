@@ -5,6 +5,10 @@ export const ProductMessage = {
     notFound: 'Produit non trouvé',
 }
 
+export const CartMessage = {
+    notFound: 'Panier non trouvé',
+}
+
 export const ImageMessage = {
     uploadError: 'Erreur lors du téléchargement de l\'image',
     required: "Une image est requise"

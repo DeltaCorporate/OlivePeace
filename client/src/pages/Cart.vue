@@ -8,7 +8,7 @@ clientLayoutStore.setPageTitle("Cart");
 </script>
 
 <template>
-  <div class="max-w-md mx-auto mt-8">
+  <div class="max-w mx-auto mt-8">
     <Cart />
   </div>
 </template>
