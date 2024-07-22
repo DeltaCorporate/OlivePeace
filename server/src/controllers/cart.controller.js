@@ -1,175 +1,72 @@
-// controllers/CartController.js
+const Cart = require('../mongoose/models/cart.model');
+const Product = require('../mongoose/models/product.model');
 
-import { updateCartWithVersioning, performTransactionalOperation } from '../utils/cart.util.js';
-import Cart from '../mongoose/models/cart.model.js';
-import Product from '../sequelize/models/product.model.js';
-import customJoi from '#shared/config/joi.config.js';
-import { getPagedData } from '../utils/pagination.util.js';
-import mongoose from 'mongoose';
+exports.addToCart = async (req, res) => {
+    const { productId, quantity } = req.body;
+    const userId = req.user._id;
 
-class CartController {
-    static cartSchemaCreate = customJoi.object({
-        userId: customJoi.string().required(),
-        items: customJoi.array().items(
-            customJoi.object({
-                product: customJoi.string().required(),
-                quantity: customJoi.number().integer().min(1).required(),
-            })
-        ).required(),
-    });
-
-    static cartSchemaUpdate = customJoi.object({
-        items: customJoi.array().items(
-            customJoi.object({
-                product: customJoi.string().required(),
-                quantity: customJoi.number().integer().min(1).required(),
-            })
-        ).required(),
-    });
-
-    constructor() {}
-
-    static async create(req, res, next) {
-        try {
-            const data = req.body;
-            await CartController.cartSchemaCreate.validateAsync(data);
-
-            let totalPrice = 0;
-
-            for (const item of data.items) {
-                const product = await Product.findByPk(item.product);
-                if (!product) {
-                    return res.error('Product not found', 404);
-                }
-                totalPrice += product.price * item.quantity;
-            }
-
-            const cart = new Cart({
-                user: mongoose.Types.ObjectId(data.userId),
-                items: data.items.map(item => ({
-                    product: mongoose.Types.ObjectId(item.product),
-                    quantity: item.quantity,
-                })),
-                totalPrice,
-            });
-
-            await cart.save();
-            return res.created(cart);
-        } catch (error) {
-            next(error);
-        }
+    const product = await Product.findById(productId);
+    if (!product || product.stock < quantity) {
+        return res.status(400).json({ message: 'Product not in stock' });
     }
 
-    static async update(req, res, next) {
-        try {
-            const { cartId } = req.params;
-            const data = req.body;
-            await CartController.cartSchemaUpdate.validateAsync(data);
-
-            // Utilisation de transactions pour les opérations atomiques
-            await performTransactionalOperation(cartId, data);
-
-            return res.success('Cart updated successfully');
-        } catch (error) {
-            next(error);
-        }
+    let cart = await Cart.findOne({ userId });
+    if (!cart) {
+        cart = new Cart({ userId, items: [] });
     }
 
-    static async delete(req, res, next) {
-        try {
-            const { cartId } = req.params;
-            const cart = await Cart.findById(cartId);
-            if (!cart) return res.error('Cart not found', 404);
-
-            await cart.remove();
-            return res.status(204).send();
-        } catch (error) {
-            next(error);
-        }
+    const itemIndex = cart.items.findIndex(item => item.productId.equals(productId));
+    if (itemIndex > -1) {
+        cart.items[itemIndex].quantity += quantity;
+        cart.items[itemIndex].reservedUntil = new Date(Date.now() + 15 * 60000); // 15 minutes
+    } else {
+        cart.items.push({ productId, quantity, reservedUntil: new Date(Date.now() + 15 * 60000) });
     }
 
-    static async findOne(req, res, next) {
-        try {
-            const { cartId } = req.params;
-            const cart = await Cart.findById(cartId);
-            if (cart) res.success(cart);
-            else res.error('Cart not found', 404);
-        } catch (error) {
-            next(error);
-        }
+    await cart.save();
+    res.status(200).json(cart);
+};
+
+exports.removeFromCart = async (req, res) => {
+    const { productId } = req.body;
+    const userId = req.user._id;
+
+    let cart = await Cart.findOne({ userId });
+    if (!cart) {
+        return res.status(400).json({ message: 'Cart not found' });
     }
 
-    static async getCart(req, res, next) {
-        try {
-            const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
-            if (!cart) return res.status(404).send({ message: 'Cart not found' });
+    cart.items = cart.items.filter(item => !item.productId.equals(productId));
 
-            const items = await Promise.all(cart.items.map(async (item) => {
-                const product = await Product.findByPk(item.product._id);
-                return {
-                    id: item._id,
-                    product: {
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                    },
-                    quantity: item.quantity,
-                    reserved: item.reserved,
-                    reservationExpiry: item.reservationExpiry,
-                };
-            }));
+    await cart.save();
+    res.status(200).json(cart);
+};
 
-            res.send({
-                items,
-                totalPrice: cart.totalPrice,
-                shippingPrice: 10, // Exemple, à remplacer
-                discountPrice: 5, // Exemple, à remplacer
-            });
-        } catch (error) {
-            next(error);
-        }
+exports.updateCartItem = async (req, res) => {
+    const { productId, quantity } = req.body;
+    const userId = req.user._id;
+
+    let cart = await Cart.findOne({ userId });
+    if (!cart) {
+        return res.status(400).json({ message: 'Cart not found' });
     }
 
-    static async reserveItems(req, res, next) {
-        try {
-            const { cartId } = req.params;
-            const cart = await Cart.findById(cartId);
-            if (!cart) return res.error('Cart not found', 404);
-
-            const now = new Date();
-            const reservationExpiry = new Date(now.getTime() + 15 * 60000); // 15 minutes from now
-
-            cart.items.forEach(item => {
-                item.reserved = true;
-                item.reservationExpiry = reservationExpiry;
-            });
-
-            await cart.save();
-            res.success(cart);
-        } catch (error) {
-            next(error);
-        }
+    const item = cart.items.find(item => item.productId.equals(productId));
+    if (!item) {
+        return res.status(400).json({ message: 'Item not found in cart' });
     }
 
-    static async releaseExpiredReservations() {
-        const now = new Date();
-        const carts = await Cart.find({ 'items.reservationExpiry': { $lte: now } });
+    item.quantity = quantity;
+    await cart.save();
 
-        for (const cart of carts) {
-            let updated = false;
-            cart.items.forEach(item => {
-                if (item.reservationExpiry && item.reservationExpiry <= now) {
-                    item.reserved = false;
-                    item.reservationExpiry = null;
-                    updated = true;
-                }
-            });
-            if (updated) {
-                await cart.save();
-            }
-        }
+    res.status(200).json(cart);
+};
+
+exports.getCart = async (req, res) => {
+    const userId = req.user._id;
+    const cart = await Cart.findOne({ userId }).populate('items.productId');
+    if (!cart) {
+        return res.status(400).json({ message: 'Cart not found' });
     }
-}
-
-export default CartController;
+    res.status(200).json(cart);
+};

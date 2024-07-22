@@ -2,7 +2,7 @@ import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router'
 
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import ProductCategoryList from "@/pages/ProductCategoryList.vue";
-import CartLayout from "@/layouts/CartLayout.vue";
+import Cart from "@/pages/Cart.vue";
 import AdminProductCategoryList from "@/pages/admin/ProductCategoryList.vue";
 import ProductCategoryDetail from "@/pages/admin/ProductCategoryDetail.vue";
 import PromotionList from "@/pages/admin/PromotionList.vue";
@@ -67,7 +67,7 @@ const routes = [
             },
             {
                 path: '/cart',
-                component: CartLayout
+                component: Cart
             },
             {
                 path: '/products/:slug',

@@ -1,11 +1,12 @@
-import express from 'express';
-import CartController from "#app/src/controllers/cart.controller.js";
+const express = require('express');
+const cartController = require('../controllers/cart.controller');
+import { isAuthenticated } from '../middlewares/auth.middleware';
+
 const router = express.Router();
 
-router.post('/',CartController.create);
-router.get('/', CartController.getCart);
-router.get('/:slug', CartController.findOne);
-router.patch('/:id', CartController.update);
-router.delete('/:id', CartController.delete);
+router.post('/add', isAuthenticated, cartController.addToCart);
+router.post('/remove', isAuthenticated, cartController.removeFromCart);
+router.post('/update', isAuthenticated, cartController.updateCartItem);
+router.get('/', isAuthenticated, cartController.getCart);
 
-export default router;
+module.exports = router;

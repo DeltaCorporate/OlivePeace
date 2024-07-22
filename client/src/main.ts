@@ -6,15 +6,16 @@ import router from './router/index.ts'
 import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import {useAuthStore} from "@/stores/auth.store.ts";
+import {store} from '@/stores/index.store.ts';
 import apiClient from '@/../config/axios';
 import {useTokenExpirationChecker} from "@/composables/useTokenExpirationChecker.ts";
 import {useAlertStore} from "@/stores/alerts.store.ts";
-import {useRouter} from "vue-router";
 import {formatAxiosError, pickError} from "@/utils/response.util.ts";
 const pinia = createPinia()
 
 const app= createApp(App)
     .use(pinia)
+    .use(store)
     .use(router)
     .component('VueDatePicker',VueDatePicker)
 
