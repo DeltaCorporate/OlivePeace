@@ -5,6 +5,7 @@ import {errorImage} from "@/utils/image.util.ts";
 import {UPLOAD_PATH} from "../../config/global.ts";
 import {toFrenchPrice} from "@/utils/divers.util.ts";
 import { useStore } from 'vuex';
+import {addToCart} from "@/api/cart.api";
 
 const props = defineProps({
   product: {
@@ -31,7 +32,7 @@ const isInStock = computed(() => {
   return product.value.stock > 0;
 });
 
-const addToCart = async (product: any) => {
+const addToCart2 = async (product: any) => {
   try {
     await store.dispatch('cart/addToCart', { productId: product._id, quantity: 1 });
     alert('Produit ajouté au panier');

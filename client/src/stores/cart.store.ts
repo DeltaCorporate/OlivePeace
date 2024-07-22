@@ -1,5 +1,6 @@
 import { Module } from 'vuex';
 import axios from 'axios';
+import apiClient from "../../config/axios";
 
 interface CartState {
     items: Array<{ productId: string; quantity: number; product: any; }>;
@@ -30,7 +31,7 @@ export const cart: Module<CartState, RootState> = {
     actions: {
         async fetchCart({ commit }) {
             try {
-                const response = await axios.get('/api/cart');
+                const response = await apiClient.get('/api/cart');
                 console.log('Fetched cart data:', response.data);
                 commit('setCart', response.data);
                 return response.data;
@@ -41,7 +42,7 @@ export const cart: Module<CartState, RootState> = {
         },
         async removeFromCart({ commit }, productId) {
             try {
-                const response = await axios.post('/api/cart/remove', { productId });
+                const response = await apiClient.post('/api/cart/remove', { productId });
                 commit('setCart', response.data);
             } catch (error) {
                 console.error('Error in removeFromCart action:', error);
@@ -50,7 +51,7 @@ export const cart: Module<CartState, RootState> = {
         },
         async updateCartItem({ commit }, { productId, quantity }) {
             try {
-                const response = await axios.post('/api/cart/update', { productId, quantity });
+                const response = await apiClient.post('/api/cart/update', { productId, quantity });
                 commit('setCart', response.data);
             } catch (error) {
                 console.error('Error in updateCartItem action:', error);
@@ -59,7 +60,7 @@ export const cart: Module<CartState, RootState> = {
         },
         async placeOrder({ commit }) {
             try {
-                await axios.post('/api/order/create');
+                await apiClient.post('/api/order/create');
                 commit('clearCart');
             } catch (error) {
                 throw error;
@@ -68,7 +69,7 @@ export const cart: Module<CartState, RootState> = {
         async addToCart({ commit }, { productId, quantity }) {
             try {
                 console.log('Dispatching addToCart with:', { productId, quantity });
-                const response = await axios.post('/api/cart/add', { productId, quantity });
+                const response = await apiClient.post('/cart/add', { productId, quantity });
                 console.log('Cart after addToCart:', response.data);
                 commit('setCart', response.data);
             } catch (error) {

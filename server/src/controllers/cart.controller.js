@@ -7,13 +7,18 @@ class CartController {
     constructor() {}
 
     static async addToCart(req, res) {
+        console.log('test');
+        console.log('test');
+        console.log('test');
+        const errors = [];
         try {
             const { productId, quantity } = req.body;
             const userId = req.user._id;
 
             const product = await Product.findById(productId);
             if (!product || product.stock < quantity) {
-                return res.status(400).json({ message: 'Le produit n\'est plus en stock !' });
+                errors.push({message: 'test'})
+                return res.error('', 422, errors);
             }
 
             let cart = await Cart.findOne({ userId });
@@ -30,7 +35,7 @@ class CartController {
             }
 
             await cart.save();
-            res.status(200).json(cart);
+            res.success(cart);
         } catch (error) {
             handleError(res, error);
         }
@@ -43,13 +48,13 @@ class CartController {
 
             let cart = await Cart.findOne({ userId });
             if (!cart) {
-                return res.status(400).json({ message: 'Panier non trouvé !' });
+                return res.error(400);
             }
 
             cart.items = cart.items.filter(item => !item.productId.equals(productId));
 
             await cart.save();
-            res.status(200).json(cart);
+            res.success(cart);
         } catch (error) {
             handleError(res, error);
         }
@@ -67,13 +72,13 @@ class CartController {
 
             const item = cart.items.find(item => item.productId.equals(productId));
             if (!item) {
-                return res.status(400).json({ message: 'Le produit n\'est pas présent dans le panier !' });
+                return res.error(400);
             }
 
             item.quantity = quantity;
             await cart.save();
 
-            res.status(200).json(cart);
+            res.success(cart);
         } catch (error) {
             handleError(res, error);
         }
@@ -84,9 +89,9 @@ class CartController {
             const userId = req.user._id;
             const cart = await Cart.findOne({ userId }).populate('items.productId');
             if (!cart) {
-                return res.status(400).json({ message: 'Panier non trouvé !' });
+                return res.error(404);
             }
-            res.status(200).json(cart);
+            res.success(cart);
         } catch (error) {
             handleError(res, error);
         }
