@@ -1,17 +1,5 @@
-import { createStore } from 'vuex';
+import { Module } from 'vuex';
 import axios from 'axios';
-import {defineStore} from "pinia";
-
-export const useClientLayoutStore = defineStore('clientLayout', {
-    state: () => ({
-        pageTitle: ''
-    }),
-    actions: {
-        setPageTitle(title: string) {
-            this.pageTitle = title;
-        }
-    }
-});
 
 interface CartState {
     items: Array<{ productId: string; quantity: number; product: any; }>;
@@ -21,37 +9,39 @@ interface RootState {
     cart: CartState;
 }
 
-export const store = createStore<RootState>({
+export const cart: Module<CartState, RootState> = {
     state: {
-        cart: {
-            items: []
-        }
+        items: []
     },
     mutations: {
         setCart(state, cart) {
-            state.cart = cart;
+            state.items = cart.items;
         },
         clearCart(state) {
-            state.cart = { items: [] };
+            state.items = [];
         }
     },
     actions: {
         async fetchCart({ commit }) {
             const response = await axios.get('/api/cart');
             commit('setCart', response.data);
+            return response.data;
         },
         async removeFromCart({ commit }, productId) {
             const response = await axios.post('/api/cart/remove', { productId });
+            commit('setCart', response.data);
+        },
+        async updateCartItem({ commit }, { productId, quantity }) {
+            const response = await axios.post('/api/cart/update', { productId, quantity });
             commit('setCart', response.data);
         },
         async placeOrder({ commit }) {
             try {
                 await axios.post('/api/order/create');
                 commit('clearCart');
-                alert('Order placed successfully!');
             } catch (error) {
                 throw error;
             }
         }
     }
-});
+};
