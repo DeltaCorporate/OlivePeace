@@ -67,7 +67,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment constiables file
-.env
+../.env
 
 # next.js build output
 .next

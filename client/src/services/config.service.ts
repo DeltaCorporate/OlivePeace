@@ -20,10 +20,5 @@ export class ConfigService extends ConfigSharedService {
         return await dashboardLayoutsApi.setDashboardLayoutSelection(selection);
     }
 
-    static async getDashboardLayouts(): Promise<ResponseType<any[]>> {
-            const response = await dashboardLayoutsApi.getDashboardLayouts();
-            if (response.isSuccess)
-                return response;
-            else return [];
-    }
+
 }
