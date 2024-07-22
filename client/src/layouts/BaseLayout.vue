@@ -16,7 +16,8 @@ clientLayoutStore.pageTitle = 'Liste des produits'
     <ClientNavbar />
     <main class="flex-grow relative p-5">
 
-      <h1 class="typography-headline-1 mt-5 mb-8 w-full text-center">{{ clientLayoutStore.pageTitle }} </h1>
+
+      <h1 v-if="!clientLayoutStore.isCustomTitle" class="typography-headline-1 mt-5 mb-8 w-full text-center">{{ clientLayoutStore.pageTitle }} </h1>
 
       <SfAlert/>
       <router-view />

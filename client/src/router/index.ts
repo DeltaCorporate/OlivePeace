@@ -17,6 +17,8 @@ import ForgotPassword from "@/pages/ForgotPassword.vue";
 import ProductDetail from "@/pages/ProductDetail.vue";
 import AdminProductList from "@/pages/admin/ProductList.vue";
 import Dashboard from "@/pages/admin/Dashboard.vue";
+import DashboardLayoutEditor from "@/components/admin/DashboardLayoutEditor.vue";
+import DashboardLayoutList from "@/components/admin/DashboardLayoutList.vue";
 const routes = [
     {
         path:  '/',
@@ -95,7 +97,16 @@ const routes = [
                 component: AdminProductList,
             },
         ]
-    }
+    },
+    {
+        path: '/admin/dashboard-layouts',
+        component: AdminLayout,
+        children: [
+            { path: '', name: 'DashboardLayoutList', component: DashboardLayoutList },
+            { path: 'create', name: 'CreateDashboardLayout', component: DashboardLayoutEditor },
+            { path: 'edit/:id', name: 'EditDashboardLayout', component: DashboardLayoutEditor },
+        ],
+    },
 ]
 
 const router = createRouter({

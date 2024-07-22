@@ -23,6 +23,7 @@ import adminProductRouter from "#app/src/routes/admin/product.route.js";
 import statsRouter from "#app/src/routes/stats.route.js";
 import './scheduler.js';
 import {isAdmin, isAuthenticated} from "#app/src/middlewares/auth.middleware.js";
+import dashboardLayoutsRoute from "#app/src/routes/dashboard-layouts.route.js";
 const app = express();
 await mdb_connect();
 try {
@@ -59,7 +60,7 @@ app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
 app.use('/stats',isAuthenticated, isAdmin, statsRouter);
 app.use('cart', isAuthenticated,cartRouter);
-
+app.use('/config',dashboardLayoutsRoute);
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
     res.status(404).send({});
