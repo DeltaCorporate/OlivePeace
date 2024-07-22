@@ -1,81 +1,68 @@
-import { Module } from 'vuex';
-import axios from 'axios';
-import apiClient from "../../config/axios";
+import { defineStore } from 'pinia';
+import apiClient from '../../config/axios';
+
+interface CartItem {
+    productId: string;
+    quantity: number;
+    product: any;
+}
 
 interface CartState {
-    items: Array<{ productId: string; quantity: number; product: any; }>;
-    showCartAnimation: boolean;
+    items: CartItem[];
 }
 
-interface RootState {
-    cart: CartState;
-}
-
-export const cart: Module<CartState, RootState> = {
-    namespaced: true,
-    state: {
+export const useCartStore = defineStore('cart', {
+    state: (): CartState => ({
         items: [],
-        showCartAnimation: false
-    },
-    mutations: {
-        setCart(state, cart) {
-            state.items = cart.items;
-        },
-        clearCart(state) {
-            state.items = [];
-        },
-        setShowCartAnimation(state, show) {
-            state.showCartAnimation = show;
-        }
-    },
+    }),
     actions: {
-        async fetchCart({ commit }) {
+        async fetchCart() {
             try {
                 const response = await apiClient.get('/api/cart');
                 console.log('Fetched cart data:', response.data);
-                commit('setCart', response.data);
+                this.items = response.data.items;
                 return response.data;
             } catch (error) {
                 console.error('Error in fetchCart action:', error);
                 throw error;
             }
         },
-        async removeFromCart({ commit }, productId) {
+        async removeFromCart(productId: string) {
             try {
                 const response = await apiClient.post('/api/cart/remove', { productId });
-                commit('setCart', response.data);
+                this.items = response.data.items;
             } catch (error) {
                 console.error('Error in removeFromCart action:', error);
                 throw error;
             }
         },
-        async updateCartItem({ commit }, { productId, quantity }) {
+        async updateCartItem({ productId, quantity }: { productId: string; quantity: number }) {
             try {
                 const response = await apiClient.post('/api/cart/update', { productId, quantity });
-                commit('setCart', response.data);
+                this.items = response.data.items;
             } catch (error) {
                 console.error('Error in updateCartItem action:', error);
                 throw error;
             }
         },
-        async placeOrder({ commit }) {
+        async placeOrder() {
             try {
                 await apiClient.post('/api/order/create');
-                commit('clearCart');
+                this.items = [];
             } catch (error) {
                 throw error;
             }
         },
-        async addToCart({ commit }, { productId, quantity }) {
+        async addToCart({ productId, quantity }: { productId: string; quantity: number }) {
             try {
                 console.log('Dispatching addToCart with:', { productId, quantity });
                 const response = await apiClient.post('/cart/add', { productId, quantity });
                 console.log('Cart after addToCart:', response.data);
-                commit('setCart', response.data);
+                this.items = response.data.items;
             } catch (error) {
                 console.error('Error in addToCart action:', error);
                 throw error;
             }
-        }
-    }
-};
+        },
+    },
+});

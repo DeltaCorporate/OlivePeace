@@ -1,38 +1,38 @@
-import { Module } from 'vuex';
-import axios from 'axios';
+import { defineStore } from 'pinia';
+import apiClient from '@/../config/axios.ts';
+
+interface OrderItem {
+    productId: {
+        _id: string;
+        name: string;
+    };
+    quantity: number;
+}
 
 interface Order {
     _id: string;
     total: number;
-    items: Array<{ productId: string; quantity: number; product: any; }>;
+    items: OrderItem[];
 }
 
 interface OrderState {
     orders: Order[];
 }
 
-interface RootState {
-    order: OrderState;
-}
-
-export const order: Module<OrderState, RootState> = {
-    state: {
-        orders: []
-    },
-    mutations: {
-        setOrders(state, orders) {
-            state.orders = orders;
-        }
-    },
+export const useOrderStore = defineStore('order', {
+    state: (): OrderState => ({
+        orders: [],
+    }),
     actions: {
-        async fetchUserOrders({ commit }) {
+        async fetchUserOrders() {
             try {
-                const response = await axios.get('/api/order');
-                commit('setOrders', response.data);
+                const response = await apiClient.get('/api/orders/user');
+                this.orders = response.data;
                 return response.data;
             } catch (error) {
+                console.error('Error fetching user orders', error);
                 throw error;
             }
         }
     }
-};
+});

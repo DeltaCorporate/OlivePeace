@@ -4,7 +4,6 @@ import {computed, defineProps, ref} from 'vue';
 import {errorImage} from "@/utils/image.util.ts";
 import {UPLOAD_PATH} from "../../config/global.ts";
 import {toFrenchPrice} from "@/utils/divers.util.ts";
-import { useStore } from 'vuex';
 import {addToCart} from "@/api/cart.api";
 import {useAlertStore} from "@/stores/alerts.store.ts";
 import {pickError} from "@/utils/response.util.ts";
@@ -16,7 +15,6 @@ const props = defineProps({
   }
 });
 
-const store = useStore();
 const product = ref(props.product);
 
 const formattedPrice = computed(() => {
@@ -36,7 +34,7 @@ const isInStock = computed(() => {
 
 
 const alertStore = useAlertStore();
-const addItemToCard = async (productId,quantity = 1) => {
+const addItemToCard = async (productId: string,quantity = 1) => {
   let response = await addToCart({productId, quantity});
   if(response.isSuccess)
     alertStore.showAlert('Produit ajouté au panier','positive');

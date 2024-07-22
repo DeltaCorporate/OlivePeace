@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { useOrderStore } from '@/stores/order.store';
 
-const store = useStore();
+const orderStore = useOrderStore();
 const orders = ref([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
@@ -13,7 +13,7 @@ const formatPrice = (price: number) => {
 
 onMounted(async () => {
   try {
-    const response = await store.dispatch('order/fetchUserOrders');
+    const response = await orderStore.fetchUserOrders();
     orders.value = response;
   } catch (err) {
     error.value = 'Erreur lors du chargement des commandes';

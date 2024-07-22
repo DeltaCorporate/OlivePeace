@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { SfButton, SfInput, SfModal, useDisclosure } from '@storefront-ui/vue';
-import { useStore } from 'vuex';
 import Return2Back from "@/components/ui/Return2Back.vue";
-import { fetchCart } from '@/api/cart.api.ts';
+import { useCartStore } from '@/stores/cart.store';
 
-const store = useStore();
+const cartStore = useCartStore();
 const { isOpen, open, close } = useDisclosure({ initialValue: false });
 
 const orderSummary = ref({
@@ -22,13 +21,13 @@ const formatPrice = (price: number) => {
 };
 
 const updateQuantity = (item: any) => {
-  store.dispatch('updateCartItem', { productId: item._id, quantity: item.qty });
+  cartStore.updateCartItem({ productId: item._id, quantity: item.qty });
   item.totalPrice = item.price * item.qty;
   updateTotal();
 };
 
 const removeItem = (id: string) => {
-  store.dispatch('removeFromCart', id);
+  cartStore.removeFromCart(id);
   orderSummary.value.items = orderSummary.value.items.filter(item => item._id !== id);
   updateTotal();
 };
@@ -39,7 +38,7 @@ const updateTotal = () => {
 
 const placeOrder = async () => {
   try {
-    await store.dispatch('placeOrder');
+    await cartStore.placeOrder();
     alert('Commande passée !');
   } catch (err) {
     error.value = 'Erreur lors de la validation de la commande';
@@ -48,8 +47,8 @@ const placeOrder = async () => {
 
 onMounted(async () => {
   try {
-    const cartData = await store.dispatch('fetchCart');
-    orderSummary.value.items = cartData.items.map((item: any) => ({
+    await cartStore.fetchCart();
+    orderSummary.value.items = cartStore.items.map((item: any) => ({
       _id: item.product._id,
       image: item.product.image,
       title: item.product.name,

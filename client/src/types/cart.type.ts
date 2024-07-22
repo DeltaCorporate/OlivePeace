@@ -8,9 +8,6 @@ export interface CartItemType {
 }
 
 export interface CartType {
-    _id?: string;
     userId: string;
     items: CartItemType[];
-    createdAt?: string;
-    updatedAt?: string;
 }
