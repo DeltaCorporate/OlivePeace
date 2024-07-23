@@ -85,7 +85,7 @@ const deleteMyAccount = async () => {
       <ProductSearchBar />
       <nav class="flex-1 flex justify-end lg:order-last lg:ml-4">
         <div class="flex flex-row flex-nowrap">
-          <router-link v-if="authStore.isAuthenticated" to="/cart">
+          <router-link v-if="authStore.isAuthenticated" to="/cart/${userId}">
             <SfButton
                 class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
                 aria-label="Cart"

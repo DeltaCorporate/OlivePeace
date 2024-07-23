@@ -66,7 +66,7 @@ const routes = [
                 component: ResetPassword
             },
             {
-                path: '/cart',
+                path: '/cart/:userId',
                 component: Cart
             },
             {

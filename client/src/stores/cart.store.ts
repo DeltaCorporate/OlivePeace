@@ -16,9 +16,9 @@ export const useCartStore = defineStore('cart', {
         items: [],
     }),
     actions: {
-        async fetchCart() {
+        async getCart() {
             try {
-                const response = await apiClient.get('/api/cart');
+                const response = await apiClient.get('/api/cart/${userId}');
                 console.log('Fetched cart data:', response.data);
                 this.items = response.data.items;
                 return response.data;
@@ -29,7 +29,7 @@ export const useCartStore = defineStore('cart', {
         },
         async removeFromCart(productId: string) {
             try {
-                const response = await apiClient.post('/api/cart/remove', { productId });
+                const response = await apiClient.post('/api/cart/${userId}/remove', { productId });
                 this.items = response.data.items;
             } catch (error) {
                 console.error('Error in removeFromCart action:', error);
@@ -38,7 +38,7 @@ export const useCartStore = defineStore('cart', {
         },
         async updateCartItem({ productId, quantity }: { productId: string; quantity: number }) {
             try {
-                const response = await apiClient.post('/api/cart/update', { productId, quantity });
+                const response = await apiClient.post('/api/cart/${userId}/update', { productId, quantity });
                 this.items = response.data.items;
             } catch (error) {
                 console.error('Error in updateCartItem action:', error);
@@ -47,7 +47,7 @@ export const useCartStore = defineStore('cart', {
         },
         async placeOrder() {
             try {
-                await apiClient.post('/api/order/create');
+                await apiClient.post('/api/order/create/${userId}');
                 this.items = [];
             } catch (error) {
                 throw error;
@@ -56,7 +56,7 @@ export const useCartStore = defineStore('cart', {
         async addToCart({ productId, quantity }: { productId: string; quantity: number }) {
             try {
                 console.log('Dispatching addToCart with:', { productId, quantity });
-                const response = await apiClient.post('/cart/add', { productId, quantity });
+                const response = await apiClient.post('/api/cart/${userId}/add', { productId, quantity });
                 console.log('Cart after addToCart:', response.data);
                 this.items = response.data.items;
             } catch (error) {

@@ -1,7 +1,6 @@
 import Cart from '../mongoose/models/cart.model.js';
 import Product from '../mongoose/models/product.model.js';
 import { handleError } from '../utils/error.util.js';
-import { CartMessage, GlobalMessage } from '#app/src/validations/errors.messages.js';
 
 class CartController {
     constructor() {}
@@ -14,21 +13,19 @@ class CartController {
 
             const product = await Product.findById(parseInt(productId));
             if (!product || product.stock < quantity) {
-                errors.push({message: 'test'})
-                console.log(errors);
                 return res.error('', 422, errors);
             }
 
             let cart = await Cart.findOne({user: {userId}});
             if (!cart)
-                cart = new Cart({ user: {userId} })
+                cart = new Cart({ userId })
 
             const itemIndex = cart.items.findIndex(item => item.productId.equals(productId));
             if (itemIndex > -1) {
                 cart.items[itemIndex].quantity += quantity;
                 cart.items[itemIndex].reservedUntil = new Date(Date.now() + 15 * 60000); // 15 minutes
             } else
-                cart.items.push({ productId, quantity, reservedUntil: new Date(Date.now() + 15 * 60000) });
+                cart.items.push({ productId, name: product.name, price: product.price, quantity, image: product.imageName, reservedUntil: new Date(Date.now() + 15 * 60000) });
 
 
             await cart.save();

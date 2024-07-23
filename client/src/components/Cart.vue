@@ -3,7 +3,10 @@ import { ref, onMounted } from 'vue';
 import { SfButton, SfInput, SfModal, useDisclosure } from '@storefront-ui/vue';
 import Return2Back from "@/components/ui/Return2Back.vue";
 import { useCartStore } from '@/stores/cart.store';
+import {getCart} from "@/api/cart.api";
+import {useAuthStore} from "@/stores/auth.store";
 
+const authStore = useAuthStore();
 const cartStore = useCartStore();
 const { isOpen, open, close } = useDisclosure({ initialValue: false });
 
@@ -45,15 +48,34 @@ const placeOrder = async () => {
   }
 };
 
-onMounted(async () => {
+const fetchUserCart = async (userId: string) => {
   try {
-    await cartStore.fetchCart();
+    const response = await getCart(userId);
+    orderSummary.value.items = response.items.map((item: any) => ({
+      _id: item.product._id,
+      image: item.product.image,
+      name: item.product.name,
+      price: item.product.price,
+      quantity: item.quantity
+    }));
+    updateTotal();
+  } catch (err) {
+    error.value = 'Erreur lors du chargement des données panier';
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(async () => {
+  const userId = authStore.user?.id;
+  await fetchUserCart(userId);
+  try {
     orderSummary.value.items = cartStore.items.map((item: any) => ({
       _id: item.product._id,
       image: item.product.image,
-      title: item.product.name,
+      name: item.product.name,
       price: item.product.price,
-      qty: item.quantity
+      quantity: item.quantity
     }));
     updateTotal();
   } catch (err) {
@@ -79,7 +101,7 @@ onMounted(async () => {
         <div class="cart-item-details">
           <h2 class="text-xl font-semibold mb-2 truncate">{{ item.title }}</h2>
           <p class="text-lg text-gray-800 mb-2">{{ formatPrice(item.price) }}</p>
-          <p class="text-md text-gray-600 mb-4">Quantity: {{ item.qty }}</p>
+          <p class="text-md text-gray-600 mb-4">Quantity: {{ item.quantity }}</p>
           <SfInput
               v-model="item.qty"
               type="number"
