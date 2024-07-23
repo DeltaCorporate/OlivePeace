@@ -34,8 +34,8 @@ const isInStock = computed(() => {
 
 const alertStore = useAlertStore();
 
-const addItemToCard = async (productId: string, name: string, price:number, quantity = 1, image: string) => {
-  let response = await addToCart({productId, name, price, quantity, image});
+const addItemToCard = async (userId: string, productId: string, name: string, price:number, quantity = 1, image: string) => {
+  let response = await addToCart(userId, {productId, name, price, quantity, image});
   if(response.isSuccess)
     alertStore.showAlert('Produit ajouté au panier','positive');
   else
@@ -78,7 +78,7 @@ const addItemToCard = async (productId: string, name: string, price:number, quan
           </div>
 
         <template v-if="product.stock > 0">
-          <SfButton size="sm" @click="addItemToCard(product._id, product.name, product.price, 1, product.image)">
+          <SfButton size="sm" @click="addItemToCard(userId, product._id, product.name, product.price, 1, product.image)">
             <template #prefix>
               <SfIconShoppingCart size="sm" />
             </template>

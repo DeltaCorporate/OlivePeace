@@ -8,8 +8,10 @@ class CartController {
     static async addToCart(req, res) {
         const errors = [];
         try {
-            const { productId, quantity } = req.body;
+            const { productId, name, price, quantity, image } = req.body;
             const userId = req.user.id;
+
+            console.log('Received data:', { productId, name, price, quantity, image });
 
             const product = await Product.findById(parseInt(productId));
             if (!product || product.stock < quantity) {
@@ -18,7 +20,7 @@ class CartController {
 
             let cart = await Cart.findOne({user: {userId}});
             if (!cart)
-                cart = new Cart({ userId })
+                cart = new Cart({ userId, items: [] })
 
             const itemIndex = cart.items.findIndex(item => item.productId.equals(productId));
             if (itemIndex > -1) {

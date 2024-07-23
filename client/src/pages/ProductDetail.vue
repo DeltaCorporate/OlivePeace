@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, defineProps } from 'vue';
 import { useRoute } from 'vue-router';
 import { getProduct } from '@/api/product.api';
 import { useAlertStore } from '@/stores/alerts.store';
@@ -14,7 +14,14 @@ const route = useRoute();
 const alertStore = useAlertStore();
 const clientLayoutStore = useClientLayoutStore();
 
-const product = ref(null);
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true
+  }
+});
+
+const product = ref(props.product);
 const loading = ref(true);
 
 const formattedPrice = computed(() => {
@@ -32,8 +39,8 @@ const isInStock = computed(() => {
   return product.value.stock > 0;
 });
 
-const addItemToCard = async (productId: string, name: string, price:number, quantity = 1, image: string) => {
-  let response = await addToCart({productId, name, price, quantity, image});
+const addItemToCard = async (userId: string, productId: string, name: string, price:number, quantity = 1, image: string) => {
+  let response = await addToCart(userId, {productId, name, price, quantity, image});
   if(response.isSuccess)
     alertStore.showAlert('Produit ajouté au panier','positive');
   else
@@ -101,7 +108,7 @@ onMounted(async () => {
         <p class="text-gray-500">{{ product.description }}</p>
 
         <div v-if="isInStock" class="flex py-4 space-x-4">
-          <SfButton class="w-full md:w-auto" size="lg" @click="addItemToCard(product._id, product.name, product.price, 1, product.image)">
+          <SfButton class="w-full md:w-auto" size="lg" @click="addItemToCard(userId, product._id, product.name, product.price, 1, product.image)">
             <template #prefix>
               <SfIconShoppingCart />
             </template>
