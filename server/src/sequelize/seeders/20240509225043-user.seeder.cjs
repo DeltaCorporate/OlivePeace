@@ -10,7 +10,7 @@ module.exports = {
         const users = [
             {
                 id: faker.string.uuid(),
-                email: 'admin@example.com',
+                email: 'jawad.ahmindache@gmail.com',
                 password: 'Test123456789@',
                 firstName: 'Admin',
                 lastName: 'User',
