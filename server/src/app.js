@@ -67,6 +67,6 @@ app.use(function(req, res, next) {
 });
 
 // Startup
-app.listen(process.env.PORT, () => {
-    logger.info('Server is running on port '+ process.env.PORT);
+app.listen(3000, () => {
+    logger.info('Server is running on port '+ 3000);
 });

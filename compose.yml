@@ -3,7 +3,7 @@ services:
   server:
     image: node:20-alpine
     ports:
-      - "3000:3000"
+      - "${PORT}:3000"
     volumes:
       - ./server:/usr/src/app
       - ./shared:/usr/src/app/shared
@@ -14,13 +14,10 @@ services:
     depends_on:
         - mongodb
         - postgresdb
-        - mailhog
-
   mongodb:
     image: mongo
     ports:
       - "27017:27017"
-
   postgresdb:
     image: postgres
     environment:
@@ -29,11 +26,6 @@ services:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
     ports:
       - "5432:5432"
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "8025:8025"
-      - "1025:1025"
   vuejs:
     image: node:20-alpine
     working_dir: /app
@@ -41,5 +33,7 @@ services:
       - ./client:/app
       - ./shared:/app/shared
     command: sh -c "npm install && npm run dev"
+    environment:
+      VITE_API_URL: "${API_URL}"
     ports:
-      - "5173:5173"
+      - "5175:5173"

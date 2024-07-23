@@ -13,6 +13,7 @@ export const sendConfirmationEmail = async (email, token) => {
     };
 
     let send = await mailer.sendMail(mailOptions);
+    console.log(send);
 };
 
 export const sendResetPasswordEmail = async (email, token) => {
