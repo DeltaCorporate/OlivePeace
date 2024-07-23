@@ -10,3 +10,4 @@ const mailer = nodemailer.createTransport({
 });
 
 export default mailer;
+
