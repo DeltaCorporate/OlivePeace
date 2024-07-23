@@ -9,19 +9,17 @@ import { SfBadge, SfButton, SfLink, SfIconShoppingCart, SfLoaderCircular } from 
 import { useClientLayoutStore } from '@/stores/client-layout.store';
 import {pickError} from "@/utils/response.util.ts";
 import {addToCart} from "@/api/cart.api";
+import {useAuthStore} from "@/stores/auth.store";
 
 const route = useRoute();
 const alertStore = useAlertStore();
 const clientLayoutStore = useClientLayoutStore();
 
-const props = defineProps({
-  product: {
-    type: Object,
-    required: true
-  }
-});
+const authStore = useAuthStore();
 
-const product = ref(props.product);
+const userId = computed(() => authStore.user?.id);
+
+const product = ref(null);
 const loading = ref(true);
 
 const formattedPrice = computed(() => {
@@ -39,13 +37,9 @@ const isInStock = computed(() => {
   return product.value.stock > 0;
 });
 
-const addItemToCard = async (userId: string, productId: string, name: string, price:number, quantity = 1, image: string) => {
-  let response = await addToCart(userId, {productId, name, price, quantity, image});
-  if(response.isSuccess)
-    alertStore.showAlert('Produit ajouté au panier','positive');
-  else
-    alertStore.showAlert(pickError(response.errors)?.message ?? "Le produit n'a pas pu être ajouté au panier",'negative');
-};
+const getProductId = computed(() => {
+  return product.value.id;
+})
 
 onMounted(async () => {
   const slug = route.params.slug as string;
@@ -59,6 +53,16 @@ onMounted(async () => {
     loading.value = false;
 
 });
+
+const addItemToCard = async (userId: string, productId: string, quantity = 1) => {
+  console.log('Adding to cart:', { userId, productId, quantity }); // Debug log
+
+  let response = await addToCart(userId, {productId, quantity });
+  if(response.isSuccess)
+    alertStore.showAlert('Produit ajouté au panier','positive');
+  else
+    alertStore.showAlert(pickError(response.errors)?.message ?? "Le produit n'a pas pu être ajouté au panier",'negative');
+};
 </script>
 
 <template>
@@ -106,9 +110,8 @@ onMounted(async () => {
         </div>
 
         <p class="text-gray-500">{{ product.description }}</p>
-
         <div v-if="isInStock" class="flex py-4 space-x-4">
-          <SfButton class="w-full md:w-auto" size="lg" @click="addItemToCard(userId, product._id, product.name, product.price, 1, product.image)">
+          <SfButton class="w-full md:w-auto" size="lg" @click="addItemToCard(userId, getProductId, 1)">
             <template #prefix>
               <SfIconShoppingCart />
             </template>

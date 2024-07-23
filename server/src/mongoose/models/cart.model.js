@@ -4,10 +4,7 @@ const { Schema } = mongoose;
 
 const CartItemSchema = new Schema({
     productId: { type: String, required: true },
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
     quantity: { type: Number, required: true },
-    image: { type: String, required: true },
     reservedUntil: { type: Date, required: true }
 });
 
@@ -21,8 +18,8 @@ CartSchema.pre('save', function (next) {
     next();
 });
 
-CartSchema.index({ user: 1 });
-CartSchema.index({ "items.reservationExpiry": 1 });
+CartSchema.index({ userId: 1 });
+CartSchema.index({ "items.reservedUntil": 1 });
 
 const Cart = mongoose.model('Cart', CartSchema);
 

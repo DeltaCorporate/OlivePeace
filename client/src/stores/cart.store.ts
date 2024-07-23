@@ -16,9 +16,9 @@ export const useCartStore = defineStore('cart', {
         items: [],
     }),
     actions: {
-        async getCart() {
+        async getCart(userId: string) {
             try {
-                const response = await apiClient.get('/api/cart/${userId}');
+                const response = await apiClient.get(`/cart/${userId}`);
                 console.log('Fetched cart data:', response.data);
                 this.items = response.data.items;
                 return response.data;
@@ -27,36 +27,36 @@ export const useCartStore = defineStore('cart', {
                 throw error;
             }
         },
-        async removeFromCart(productId: string) {
+        async removeFromCart(userId: string, productId: string) {
             try {
-                const response = await apiClient.post('/api/cart/${userId}/remove', { productId });
+                const response = await apiClient.post(`/cart/${userId}/remove`, { productId });
                 this.items = response.data.items;
             } catch (error) {
                 console.error('Error in removeFromCart action:', error);
                 throw error;
             }
         },
-        async updateCartItem({ productId, quantity }: { productId: string; quantity: number }) {
+        async updateCartItem(userId: string, { productId, quantity }: { productId: string; quantity: number }) {
             try {
-                const response = await apiClient.post('/api/cart/${userId}/update', { productId, quantity });
+                const response = await apiClient.post(`/cart/${userId}/update`, { productId, quantity });
                 this.items = response.data.items;
             } catch (error) {
                 console.error('Error in updateCartItem action:', error);
                 throw error;
             }
         },
-        async placeOrder() {
+        async placeOrder(userId: string) {
             try {
-                await apiClient.post('/api/order/create/${userId}');
+                await apiClient.post(`/order/create/${userId}`);
                 this.items = [];
             } catch (error) {
                 throw error;
             }
         },
-        async addToCart({ productId, quantity }: { productId: string; quantity: number }) {
+        async addToCart(userId: string, { productId, quantity }: { productId: string; quantity: number }) {
             try {
                 console.log('Dispatching addToCart with:', { productId, quantity });
-                const response = await apiClient.post('/api/cart/${userId}/add', { productId, quantity });
+                const response = await apiClient.post(`/cart/${userId}/add`, { productId, quantity });
                 console.log('Cart after addToCart:', response.data);
                 this.items = response.data.items;
             } catch (error) {

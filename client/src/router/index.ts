@@ -1,5 +1,4 @@
 import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router'
-
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import ProductCategoryList from "@/pages/ProductCategoryList.vue";
 import Cart from "@/pages/Cart.vue";

@@ -8,27 +8,25 @@ class CartController {
     static async addToCart(req, res) {
         const errors = [];
         try {
-            const { productId, name, price, quantity, image } = req.body;
+            const { productId, quantity } = req.body;
             const userId = req.user.id;
 
-            console.log('Received data:', { productId, name, price, quantity, image });
-
-            const product = await Product.findById(parseInt(productId));
+            const product = await Product.findById(productId);
             if (!product || product.stock < quantity) {
                 return res.error('', 422, errors);
             }
 
-            let cart = await Cart.findOne({user: {userId}});
+            let cart = await Cart.findOne({ userId });
             if (!cart)
-                cart = new Cart({ userId, items: [] })
+                cart = new Cart({ userId, items: [] });
 
-            const itemIndex = cart.items.findIndex(item => item.productId.equals(productId));
+            const itemIndex = cart.items.findIndex(item => (item.productId)===(productId));
             if (itemIndex > -1) {
                 cart.items[itemIndex].quantity += quantity;
                 cart.items[itemIndex].reservedUntil = new Date(Date.now() + 15 * 60000); // 15 minutes
-            } else
-                cart.items.push({ productId, name: product.name, price: product.price, quantity, image: product.imageName, reservedUntil: new Date(Date.now() + 15 * 60000) });
-
+            } else {
+                cart.items.push({ productId, quantity, reservedUntil: new Date(Date.now() + 15 * 60000) });
+            }
 
             await cart.save();
             res.success(cart);
@@ -83,10 +81,21 @@ class CartController {
     static async getCart(req, res) {
         try {
             const userId = req.user._id;
+
             const cart = await Cart.findOne({ userId }).populate('items.productId');
             if (!cart) {
                 return res.error(404);
             }
+
+            const populatedItems = await Promise.all(cart.items.map(async item => {
+                const product = await Product.findById(item.productId);
+                return {
+                    ...item.toObject(),
+                    product,
+                };
+            }));
+
+            cart.items = populatedItems;
             res.success(cart);
         } catch (error) {
             handleError(res, error);

@@ -5,7 +5,9 @@ import Return2Back from "@/components/ui/Return2Back.vue";
 import { useCartStore } from '@/stores/cart.store';
 import {getCart} from "@/api/cart.api";
 import {useAuthStore} from "@/stores/auth.store";
+import {useClientLayoutStore} from "@/stores/client-layout.store";
 
+const clientLayoutStore = useClientLayoutStore();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
 const { isOpen, open, close } = useDisclosure({ initialValue: false });
@@ -67,7 +69,8 @@ const fetchUserCart = async (userId: string) => {
 };
 
 onMounted(async () => {
-  const userId = authStore.user?.id;
+  clientLayoutStore.setPageTitle("Panier");
+  const userId = authStore.user.id;
   await fetchUserCart(userId);
   try {
     orderSummary.value.items = cartStore.items.map((item: any) => ({
