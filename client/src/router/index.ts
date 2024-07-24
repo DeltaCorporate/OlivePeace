@@ -20,6 +20,8 @@ import Dashboard from "@/pages/admin/Dashboard.vue";
 import DashboardLayoutEditor from "@/components/admin/DashboardLayoutEditor.vue";
 import DashboardLayoutList from "@/components/admin/DashboardLayoutList.vue";
 import UserList from "@/pages/admin/UserList.vue";
+import OrderHistory from "@/pages/OrderHistory.vue";
+import Order from "@/pages/Order.vue";
 const routes = [
     {
         path:  '/',
@@ -71,6 +73,14 @@ const routes = [
                 path: '/products/:slug',
                 component: ProductDetail,
             },
+            {
+                path: 'orders',
+                component: OrderHistory,
+            },
+            {
+                path: 'orders/:id',
+                component: Order
+            }
         ]
     },
     {

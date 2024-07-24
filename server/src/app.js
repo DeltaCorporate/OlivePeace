@@ -24,6 +24,7 @@ import './scheduler.js';
 import usersRoute from "#app/src/routes/admin/users.route.js";
 import {checkRole, isAdmin, isAuthenticated} from "#app/src/middlewares/auth.middleware.js";
 import dashboardLayoutsRoute from "#app/src/routes/dashboard-layouts.route.js";
+import orderRoute from "#app/src/routes/order.route.js";
 const app = express();
 await mdb_connect();
 try {
@@ -63,6 +64,7 @@ app.use('/stats',isAuthenticated, isAdmin, statsRouter);
 app.use('cart', isAuthenticated,cartRouter);
 app.use('/config',isAuthenticated,checkRole(['ROLE_ADMIN','ROLE_STORE_KEEPER']));
 app.use('/config',dashboardLayoutsRoute);
+app.use('/orders',isAuthenticated,orderRoute)
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
     res.status(404).send({});
