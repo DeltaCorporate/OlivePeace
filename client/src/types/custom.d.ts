@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
+import 'express';
 
-declare module 'express' {
-    export interface Request {
+declare module 'express-serve-static-core' {
+    interface Request {
         user?: any;
     }
 
-    export interface Response {
+    interface Response {
         created?: any;
         error?: any;
         success?: any;
