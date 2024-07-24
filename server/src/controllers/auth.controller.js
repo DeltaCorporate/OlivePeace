@@ -155,7 +155,7 @@ class AuthController {
     }
 
     static async isExpired(req, res) {
-        res.success();
+        return res.success();
     }
 
 
