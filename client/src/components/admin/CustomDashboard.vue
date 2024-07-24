@@ -6,21 +6,24 @@ import { useAuthStore } from '@/stores/auth.store';
 import { ConfigService } from '@/services/config.service';
 import * as dashboardComponents from '@/services/dashboard-components.service.ts'
 
-const authStore = useAuthStore();
-const layout = ref(null);
+const props = defineProps({
+  layout: {
+    required: true
+  }
 
+})
+
+const layout = ref(props.layout);
 const getComponent = (componentName: string) => {
   return dashboardComponents[componentName] || null;
 };
 
-onMounted(async () => {
-  layout.value = await ConfigService.getDashboardLayout(authStore.user.roles);
-});
+
 </script>
 
 <template>
   <div>
-    <grid-layout
+    <GridLayout
         v-if="layout"
         :layout="layout"
         :col-num="12"
@@ -40,6 +43,6 @@ onMounted(async () => {
       >
         <component :is="getComponent(item.component)" />
       </grid-item>
-    </grid-layout>
+    </GridLayout>
   </div>
 </template>

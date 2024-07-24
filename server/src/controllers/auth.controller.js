@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import User from '../sequelize/models/user.model.js';
 import { sendConfirmationEmail, sendResetPasswordEmail, sendPasswordChangeReminder } from '../services/emails/auth.email.js';
-import { registerSchema, loginSchema, resetPasswordSchema } from '#shared/validations/schema/user.validation-schema.js';
+import { registerSchema, loginSchema, resetPasswordSchema } from '#shared/validations/schema/auth.validation-schema.js';
 import { UserMessage, GlobalMessage } from '../validations/errors.messages.js';
 import { formatJoiErrors, handleError } from '../utils/error.util.js';
 import {generateToken} from "#app/src/utils/string.util.js";
@@ -155,7 +155,7 @@ class AuthController {
     }
 
     static async isExpired(req, res) {
-        res.success();
+        return res.success();
     }
 
 

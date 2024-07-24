@@ -7,13 +7,17 @@ import upload from "#config/multer.config.js";
 import ProductMongoose from '#app/src/mongoose/models/product.model.js';
 import {getPagedData, getPagination} from "#app/src/utils/pagination.util.js";
 import MongooseFilter from "#app/src/services/filters/mongoose.filter.js";
+import {isEmpty} from "#app/src/utils/string.util.js";
 class ProductController {
     static async create(req, res) {
         await upload.image.single('image')(req, res, async (err) => {
             const errors = [];
             if (err) errors.push({ field: 'image', message: ImageMessage.uploadError });
+            if(isEmpty(req.body['PromotionId']))
+                req.body['PromotionId'] = null;
             try {
                 const data = req.body;
+
                 errors.concat(formatJoiErrors(productSchemaCreate, data));
                 if (req.file) {
                     data.imageName = req.file.filename;
@@ -34,14 +38,23 @@ class ProductController {
     static async update(req, res) {
         await upload.image.single('image')(req, res, async (err) => {
             const errors = [];
+
             if (err) errors.push({ field: 'image', message: ImageMessage.uploadError });
+
 
             try {
                 const { id } = req.params;
+
                 const data = req.body;
                 errors.concat(formatJoiErrors(productSchemaUpdate, data));
 
                 const product = await Product.findByPk(id);
+
+                if(isEmpty(req.body['PromotionId'])){
+                    product.setPromotion(null);
+                    req.body['PromotionId'] = null;
+                }
+
                 if (!product) errors.push({ message: ProductMessage.notFound });
 
                 if (errors.length > 0) return res.error(GlobalMessage.validationError, 422, errors);

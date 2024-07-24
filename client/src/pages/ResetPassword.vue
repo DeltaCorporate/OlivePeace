@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { useForm } from '@/composables/useForm';
-import { resetPasswordSchema } from '#shared/validations/schema/user.validation-schema.js';
+import { resetPasswordSchema } from '#shared/validations/schema/auth.validation-schema.js';
 import { resetPassword } from '@/api/auth.api';
 import Field from '@/components/ui/Field.vue';
 import Button from '@/components/ui/Button.vue';

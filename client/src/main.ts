@@ -21,7 +21,7 @@ const app= createApp(App)
 const {checkExpirationEvery,checkExpiration} = useTokenExpirationChecker();
 const alertStore = useAlertStore();
 const authStore = useAuthStore();
-checkExpirationEvery(20);
+checkExpirationEvery(60);
 apiClient.interceptors.request.use((config) => {
     if(authStore.isAuthenticated)
         config.headers['Authorization'] = `Bearer ${authStore.token}`;

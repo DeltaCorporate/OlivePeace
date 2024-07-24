@@ -6,7 +6,7 @@ import { useGraph } from '@/composables/useGraph';
 import {getAllProduct} from "@/api/admin/product.api.ts";
 
 const props = defineProps({
-  title: { type: String, required: true }
+  title: { type: String, required: true,default: 'Stock par mois' }
 });
 
 const products = ref([]);

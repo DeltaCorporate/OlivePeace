@@ -54,7 +54,8 @@ class ProductCategoryController {
                 if (!isEmpty(data.PromotionId)) {
                     const isPromotionExistAndNotExpired = await PromotionRepository.isPromotionExistAndNotExpired(data.PromotionId);
                     if (!isPromotionExistAndNotExpired) errors.push({ field: 'PromotionId', message: PromotionMessage.notAvailable });
-                }
+                }else
+                    data.PromotionId = null
                 errors = errors.concat(formatJoiErrors(productCategorySchemaUpdate,data))
                 const category = await ProductCategory.findByPk(id);
                 if (!category) errors.push({ message: ProductCategoryMessage.notFound });

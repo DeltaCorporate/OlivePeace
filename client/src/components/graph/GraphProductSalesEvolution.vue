@@ -5,9 +5,7 @@ import {getProductSalesEvolution} from '@/api/stats.api';
 import { useGraph } from '@/composables/useGraph';
 import {getAllProduct} from "@/api/admin/product.api.ts";
 
-const props = defineProps({
-  title: { type: String, required: true }
-});
+
 
 const products = ref([]);
 const selectedProductId = ref(null);
@@ -37,7 +35,7 @@ onMounted(loadProducts);
 
 <template>
   <GraphCard
-      :title="title"
+      title="Évolution des ventes d'un produit"
       :chartData="chartData"
       :loading="loading"
       :error="error"

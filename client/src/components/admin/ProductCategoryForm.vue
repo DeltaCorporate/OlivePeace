@@ -121,6 +121,7 @@ onMounted(async () => {
           v-model="formData.PromotionId"
           name="promotionId"
           class="w-full">
+        <option value="">Aucune promotion</option>
         <option
             v-for="promotion in promotions"
             :key="promotion._id"

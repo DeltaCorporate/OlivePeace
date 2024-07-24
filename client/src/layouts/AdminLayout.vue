@@ -7,7 +7,7 @@ import {useTokenExpirationChecker} from "@/composables/useTokenExpirationChecker
 import {checkRole} from "@/middlewares/auth.middleware.ts";
 const adminLayoutStore = useAdminLayoutStore();
 const pageTitle = computed(() => adminLayoutStore.pageTitle);
-checkRole(['ROLE_ADMIN']);
+checkRole(['ROLE_ADMIN','ROLE_STORE_KEEPER']);
 useTokenExpirationChecker();
 </script>
 <template>

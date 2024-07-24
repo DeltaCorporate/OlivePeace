@@ -7,6 +7,7 @@ import {
     Shirt,
     TicketPercent,
 UserCog,
+    Layout
 } from 'lucide-vue-next';
 import { RouterLink } from 'vue-router';
 import {useSidebarStore} from "@/stores/admin/sidebar.store.ts";
@@ -37,10 +38,12 @@ const sidebarStore = useSidebarStore();
           <router-link @click="sidebarStore.closeSidebar" to="/admin/products" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
             <Shirt class="h-5 w-5 mr-3"/> Produits
           </router-link>
-          <router-link @click="sidebarStore.closeSidebar" to="/admin/product_categories" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
+          <router-link @click="sidebarStore.closeSidebar" to="/admin/users" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
             <Users class="h-5 w-5 mr-3"/> Utilisateurs
           </router-link>
-
+          <router-link @click="sidebarStore.closeSidebar" to="/admin/dashboard-layouts" class="flex items-center w-full text-center py-3 px-4 hover:bg-gray-700 transition-colors duration-200">
+            <Layout class="h-5 w-5 mr-3"/> Config Dashboard
+          </router-link>
         </nav>
       </div>
       <Return2Back class="bottom-5 left-5 absolute"/>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@/composables/useForm';
-import { registerSchema } from '#shared/validations/schema/user.validation-schema.js';
+import { registerSchema } from '#shared/validations/schema/auth.validation-schema.js';
 import { register } from '@/api/auth.api';
 import Field from '@/components/ui/Field.vue';
 import Button from '@/components/ui/Button.vue';
@@ -46,14 +46,26 @@ onMounted(() => {
       <SfInput v-model="formData.password" type="password" name="password" required />
     </Field>
 
-    <Field label="Prénom" id="firstName" :error="errors.firstName">
-      <SfInput v-model="formData.firstName" name="firstName" required />
-    </Field>
 
+    <!--- address layout --->
+    <div class="grid grid-cols-2 w-full  gap-3">
+      <Field label="Code Postal" id="zipCode" :error="errors.zipCode">
+        <SfInput v-model="formData.zipCode" pattern="\d{5,5}" name="zipCode" required />
+      </Field>
+
+      <Field label="Ville" id="city" :error="errors.city">
+        <SfInput v-model="formData.city" name="city" required />
+      </Field>
+    </div>
+    <Field class="w-full" label="Adresse" id="address" :error="errors.address">
+      <SfInput v-model="formData.address" name="address" required />
+    </Field>
     <Field label="Nom" id="lastName" :error="errors.lastName">
       <SfInput v-model="formData.lastName" name="lastName" required />
     </Field>
-
+    <Field label="Prénom" id="firstName" :error="errors.firstName">
+      <SfInput v-model="formData.firstName" name="firstName" required />
+    </Field>
     <Button
         :loading="isSubmitting"
         :disabled="isSubmitting"

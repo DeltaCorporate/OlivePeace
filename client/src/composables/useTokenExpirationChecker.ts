@@ -12,19 +12,13 @@ export function useTokenExpirationChecker() {
     const checkExpiration = async () => {
         if (!authStore.isAuthenticated || isChecking.value)
             return;
-        isChecking.value = true;
-        try {
+            isChecking.value = true;
             const response = await checkTokenExpiration();
-            if (response.data?.expired) {
+            if (response.code === 401) {
                 authStore.clearAuth();
                await router.push('/auth/login');
             }
-        } catch (error) {
-            authStore.clearAuth();
-            await router.push('/auth/login');
-        } finally {
             isChecking.value = false;
-        }
     };
 
     function checkExpirationEvery(seconds: number) {

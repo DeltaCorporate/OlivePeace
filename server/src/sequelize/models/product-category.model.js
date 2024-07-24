@@ -2,7 +2,7 @@ import { Model, DataTypes, NOW } from 'sequelize';
 import db from './index.js';
 import Promotion from './promotion.model.js';
 import ProductCategoryMongoose from '../../mongoose/models/product-category.model.js';
-import {denormalizeProductCategory} from "../../services/denormalizations/product-category.denormalizer.js"; // Import du modèle Mongoose
+import {denormalizeProductCategory} from "../../services/denormalizations/product-category.denormalizer.js";
 
 class ProductCategory extends Model {}
 
@@ -38,6 +38,8 @@ ProductCategory.init({
         },
         afterUpdate: async (category, options) => {
             await denormalizeProductCategory(category);
+
+
         },
         afterDestroy: async (category, options) => {
            try {
@@ -50,5 +52,4 @@ ProductCategory.init({
 });
 
 ProductCategory.belongsTo(Promotion);
-
 export default ProductCategory;

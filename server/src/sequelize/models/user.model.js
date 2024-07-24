@@ -3,9 +3,9 @@ import bcrypt from 'bcryptjs';
 import db from './index.js';
 import jwt from "jsonwebtoken";
 import {generateToken} from "#app/src/utils/string.util.js";
-import crypto from "crypto";
 import Order from "#app/src/sequelize/models/order.model.js";
-
+import {denormalizeUser} from "#app/src/services/denormalizations/user.denormalizer.js";
+import UserMongoose from "#app/src/mongoose/models/user.model.js";
 class User extends Model {
     static async hashPassword(password) {
         return bcrypt.hash(password, 12);
@@ -19,7 +19,7 @@ class User extends Model {
         return jwt.sign(
             { id: this.id, email: this.email, roles: this.roles },
             process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRATION,algorithm: 'HS256' }
+            { expiresIn: process.env.JWT_EXPIRATION}
         );
     }
     isLoginLocked(){
@@ -60,6 +60,9 @@ class User extends Model {
     async anonymize(){
         this.email = `deleted_${generateToken(10)}@${generateToken(15)}.com`;
         this.firstName = generateToken(10);
+        this.zipCode = generateToken(5);
+        this.address = generateToken(10);
+        this.city = generateToken(10);
         this.lastName = generateToken(10);
         this.password = await User.hashPassword(generateToken(20));
         this.roles = ['ROLE_USER'];
@@ -79,6 +82,18 @@ User.init({
         validate: {
             isEmail: true,
         },
+    },
+    zipCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    city: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     password: {
         type: DataTypes.STRING,
@@ -126,6 +141,7 @@ User.init({
     hooks: {
         beforeCreate: async (user) => {
             user.password = await User.hashPassword(user.password);
+
         },
         beforeUpdate: async (user) => {
             if (user.changed('password')) {
@@ -133,6 +149,13 @@ User.init({
                 user.lastPasswordChangeAt = new Date();
             }
         },
+        afterCreate: async (user) => {
+            await denormalizeUser(user);
+        },
+        afterUpdate: async (user) => {
+            await denormalizeUser(user);
+        },
+
     },
 });
 

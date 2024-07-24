@@ -8,7 +8,7 @@ const productSchema = customJoi.object({
     stock: customJoi.number().integer().min(0).required(),
     slug: customJoi.slug().min(1).max(200).required(),
     ProductCategoryId: customJoi.number().integer().positive().required(),
-    PromotionId: customJoi.any().optional(),
+    PromotionId: customJoi.any().allow(null).optional(),
     image: customJoi.any().required()
 });
 
