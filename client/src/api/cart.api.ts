@@ -13,7 +13,6 @@ export const getCart = async (userId: string, signal?: AbortSignal): Promise<any
         const response: AxiosResponse<ResponseType<any>> = await apiClient.get(`/cart/${userId}`, {signal});
         return formatAxiosResponse(response);
     } catch (error) {
-        console.error('Error fetching cart data', error);
         return formatAxiosError(error);
     }
 };

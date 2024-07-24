@@ -17,8 +17,9 @@ class CartController {
             }
 
             let cart = await Cart.findOne({ userId });
-            if (!cart)
-                cart = new Cart({ userId, items: [] });
+            if (!cart) {
+                cart = new Cart({userId, items: []});
+            }
 
             const itemIndex = cart.items.findIndex(item => (item.productId)===(productId));
             if (itemIndex > -1) {
@@ -38,7 +39,7 @@ class CartController {
     static async removeFromCart(req, res) {
         try {
             const { productId } = req.body;
-            const userId = req.user._id;
+            const userId = req.user.id;
 
             let cart = await Cart.findOne({ userId });
             if (!cart) {
@@ -57,7 +58,7 @@ class CartController {
     static async updateCartItem(req, res) {
         try {
             const { productId, quantity } = req.body;
-            const userId = req.user._id;
+            const userId = req.user.id;
 
             let cart = await Cart.findOne({ userId });
             if (!cart) {
@@ -79,12 +80,14 @@ class CartController {
     }
 
     static async getCart(req, res) {
+        const errors = [];
         try {
-            const userId = req.user._id;
+            const userId = req.user.id;
 
             const cart = await Cart.findOne({ userId }).populate('items.productId');
+            return res.success();
             if (!cart) {
-                return res.error(404);
+                return res.error('', 404, errors);
             }
 
             const populatedItems = await Promise.all(cart.items.map(async item => {
