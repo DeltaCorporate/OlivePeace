@@ -6,7 +6,7 @@ import {
   SfIconSearch, SfDropdown, useDisclosure, SfButton, SfIconLogout, SfModal,
 } from '@storefront-ui/vue';
 
-import {ChevronDown,ChevronUp,FilePenLine} from "lucide-vue-next";
+import {ChevronDown,ChevronUp,FilePenLine,ClipboardList} from "lucide-vue-next";
 import ProductSearchBar from "@/components/ProductSearchBar.vue";
 import {useAuthStore} from "@/stores/auth.store.ts";
 import Button from "@/components/ui/Button.vue";
@@ -104,23 +104,26 @@ const deleteMyAccount = async () => {
             </template>
 
             <div class="flex py-3 px-5 grid gap-5 bg-neutral-50 shadow z-20 relative">
-              <SfButton
-                  @click="authStore.logout()"
-                  class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
-                  aria-label="Log out"
-                  variant="tertiary"
-                  square
-              >
-                <template #prefix>
-                  <SfIconLogout />
-                </template>
-                <span class="xl:inline-flex cursor-pointer whitespace-nowrap">Déconnexion</span>
-              </SfButton>
+              <div>
+                <SfButton
+                    @click="authStore.logout()"
+                    class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
+                    aria-label="Log out"
+                    variant="tertiary"
+                    square
+                >
+                  <template #prefix>
+                    <SfIconLogout />
+                  </template>
+                  <span class="xl:inline-flex cursor-pointer whitespace-nowrap">Déconnexion</span>
+                </SfButton>
+              </div>
+
 
               <router-link v-if="hasRoles(['ROLE_ADMIN'])" to="/admin">
                 <SfButton
                     class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
-                    aria-label="Log out"
+                    aria-label="Panel admin"
                     variant="tertiary"
                     square
                 >
@@ -137,7 +140,14 @@ const deleteMyAccount = async () => {
                 </template>
                 <span class="xl:inline-flex cursor-pointer whitespace-nowrap">Supprimer mon compte</span>
               </SfButton>
-
+              <router-link to="/orders" custom v-slot="{ navigate }">
+                <SfButton @click="navigate" class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700" aria-label="Order History" variant="tertiary" square>
+                  <template #prefix>
+                    <ClipboardList />
+                  </template>
+                  <span class="xl:inline-flex cursor-pointer whitespace-nowrap">Historique des commandes</span>
+                </SfButton>
+              </router-link>
               <SfModal v-model="showDeleteAccountModal">
                 <h2>Confirmation de suppression de compte</h2>
                 <p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
@@ -149,6 +159,7 @@ const deleteMyAccount = async () => {
             </div>
 
           </SfDropdown>
+
           <router-link v-if="!authStore.isAuthenticated" to="/auth/login">
             <SfButton
                 class="mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-600 active:text-primary-700"
