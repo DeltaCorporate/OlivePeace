@@ -40,7 +40,9 @@ Projet challenge OlivePeace
 1) cloner le projet
 2) Copier le .env.example en .env à la racine du projet
 3) Modifier les informations SMTP du .env (par défaut smtp de myges) donc mettre son email myges dans MAIL_FROM et MAIL_USER puis mettre son mot de passe myges dans MAIL_PASS.
+
 (Si pas myges choisir un autre smtp mais faudra alors mettre un autre MAIL_HOST et peut être un autre port.)
+
 4) Lancer le docker compose puis aller sur le conteneur olivepeace-server et faire un npm run seed
 
 Les adresses par défaut de l'app : 
