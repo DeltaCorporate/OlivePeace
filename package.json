@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DeltaCorporate/OlivePeace/issues"
   },
-  "homepage": "https://github.com/DeltaCorporate/OlivePeace#readme"
+  "homepage": "https://github.com/DeltaCorporate/OlivePeace#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }

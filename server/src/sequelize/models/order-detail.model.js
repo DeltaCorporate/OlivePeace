@@ -6,6 +6,7 @@ import {denormalizeOrder} from "#app/src/services/denormalizations/order.denorma
 
 class OrderDetail extends Model {}
 
+
 OrderDetail.init({
     id: {
         type: DataTypes.UUID,
