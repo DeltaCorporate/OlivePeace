@@ -38,3 +38,14 @@ export const getNestedValue = (obj: any, path: string | undefined): any => {
 export const toFrenchPrice: string  = (price: number) => {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
 }
+
+export const object2Array = (obj: object): any[] => {
+    return Object.keys(obj).map(key => obj[key]);
+}
+
+export const array2Object = (arr: any[]): object => {
+    return arr.reduce((acc, item) => {
+        acc[item.id] = item;
+        return acc;
+    }, {});
+}

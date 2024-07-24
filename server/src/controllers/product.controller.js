@@ -40,7 +40,7 @@ class ProductController {
             const data = await ProductMongoose.find(filter)
                 .sort(sort)
                 .skip(offset)
-                .limit(paginationLimit)
+                .limit(paginationLimit);
 
             const products = getPagedData(data, page, paginationLimit, totalItems);
             res.success(products);

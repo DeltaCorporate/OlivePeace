@@ -30,5 +30,9 @@ export const UserMessage = {
     resetPasswordEmailSent: "Un email de réinitialisation de mot de passe a été envoyé",
     invalidResetToken: "Token de réinitialisation invalide ou expiré veuillez renouveler votre demande",
     passwordResetSuccess: "Mot de passe réinitialisé avec succès",
-    accountDeleted: "Compte supprimé avec succès"
+    accountDeleted: "Compte supprimé avec succès",
+    notFound: 'Utilisateur non trouvé',
+    alreadyConfirmed: 'Le compte est déjà confirmé',
+    anonymized: 'Utilisateur anonymisé avec succès',
+    confirmationEmailSent: 'Email de confirmation envoyé'
 };

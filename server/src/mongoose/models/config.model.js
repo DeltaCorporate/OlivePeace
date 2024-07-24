@@ -4,8 +4,6 @@ const ConfigSchema = new Schema({
     key: {
         type: String,
         required: true,
-        unique: true,
-        index: true
     },
     value: {
         type: Schema.Types.Mixed,

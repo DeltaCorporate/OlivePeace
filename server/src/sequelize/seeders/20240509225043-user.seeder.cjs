@@ -13,8 +13,11 @@ module.exports = {
                 email: 'jawad.ahmindache@gmail.com',
                 password: 'Test123456789@',
                 firstName: 'Admin',
+                zipCode: faker.location.zipCode(),
+                address: '5 rue de la chaise montante',
+                city: faker.location.city(),
                 lastName: 'User',
-                roles: ['ROLE_ADMIN', 'ROLE_USER'],
+                roles: ['ROLE_ADMIN', 'ROLE_USER','ROLE_STORE_KEEPER'],
                 lastPasswordChangeAt: new Date(),
             }
         ];
@@ -29,6 +32,9 @@ module.exports = {
                 firstName: faker.person.firstName(),
                 lastName: faker.person.lastName(),
                 roles: ['ROLE_USER'],
+                zipCode: faker.location.zipCode(),
+                address: '5 rue de la chaise montante',
+                city: faker.location.city(),
                 lastPasswordChangeAt: new Date(),
                 createdAt: createdDate,
                 updatedAt: createdDate

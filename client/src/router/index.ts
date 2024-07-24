@@ -19,6 +19,7 @@ import AdminProductList from "@/pages/admin/ProductList.vue";
 import Dashboard from "@/pages/admin/Dashboard.vue";
 import DashboardLayoutEditor from "@/components/admin/DashboardLayoutEditor.vue";
 import DashboardLayoutList from "@/components/admin/DashboardLayoutList.vue";
+import UserList from "@/pages/admin/UserList.vue";
 const routes = [
     {
         path:  '/',
@@ -95,6 +96,10 @@ const routes = [
             {
                 path: 'products',
                 component: AdminProductList,
+            },
+            {
+                path: 'users',
+                component: UserList,
             },
         ]
     },

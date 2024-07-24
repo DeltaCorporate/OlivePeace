@@ -10,7 +10,6 @@ import cors from 'cors';
 import {mdb_connect} from "./mongoose/index.js";
 import morganMiddleware from './middlewares/morgan.middleware.js';
 import indexRouter from './routes/index.route.js';
-import usersRouter from './routes/users.route.js';
 import adminProductCategoriesRouter from './routes/admin/product-categories.route.js';
 import productCategoriesRouter from './routes/product-categories.route.js';
 import adminPromotionRouter from './routes/admin/promotion.route.js';
@@ -22,7 +21,8 @@ import authRoute from "#app/src/routes/auth.route.js";
 import adminProductRouter from "#app/src/routes/admin/product.route.js";
 import statsRouter from "#app/src/routes/stats.route.js";
 import './scheduler.js';
-import {isAdmin, isAuthenticated} from "#app/src/middlewares/auth.middleware.js";
+import usersRoute from "#app/src/routes/admin/users.route.js";
+import {checkRole, isAdmin, isAuthenticated} from "#app/src/middlewares/auth.middleware.js";
 import dashboardLayoutsRoute from "#app/src/routes/dashboard-layouts.route.js";
 const app = express();
 await mdb_connect();
@@ -55,18 +55,19 @@ app.use('/auth', authRoute);
 app.use('/products', productRouter);
 app.use('/product_categories', productCategoriesRouter);
 app.use('/admin',isAuthenticated, isAdmin);
-app.use('/admin/products', adminProductRouter);
+app.use('/admin/products',adminProductRouter);
 app.use('/admin/product_categories', adminProductCategoriesRouter);
 app.use('/admin/promotions', adminPromotionRouter);
+app.use('/admin/users',usersRoute);
 app.use('/stats',isAuthenticated, isAdmin, statsRouter);
 app.use('cart', isAuthenticated,cartRouter);
+app.use('/config',isAuthenticated,checkRole(['ROLE_ADMIN','ROLE_STORE_KEEPER']));
 app.use('/config',dashboardLayoutsRoute);
 app.use(function(req, res, next) {
     logger.error("404 Not Found")
     res.status(404).send({});
 });
 
-// Startup
 app.listen(3000, () => {
     logger.info('Server is running on port '+ 3000);
 });

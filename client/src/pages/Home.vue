@@ -9,6 +9,7 @@ import ReviewCard from '@/components/ui/ReviewCard.vue';
 import { getProducts } from '@/api/product.api';
 import { getProductCategories } from '@/api/product-category.api';
 import {useClientLayoutStore} from "@/stores/client-layout.store.ts";
+import {getUsers} from "@/api/admin/user.api.ts";
 
 const clientLayoutStore = useClientLayoutStore();
 clientLayoutStore.pageTitle = 'Bienvenue chez OlivePeace'

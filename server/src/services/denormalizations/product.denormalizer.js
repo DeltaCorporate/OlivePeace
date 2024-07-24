@@ -5,12 +5,12 @@ export const denormalizeProduct = async (product) => {
         // get product data
         const productData = await product.toJSON();
 
-        if(promotion){
+        if(promotion) {
             productData.promotion = {
                 name: promotion.name,
                 value: promotion.value
             };
-            }
+        }
         const productCategory = await product.getProductCategory();
         productData.productCategory = {
             name: productCategory.name

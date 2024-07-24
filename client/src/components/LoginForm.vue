@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@/composables/useForm';
-import { loginSchema } from '#shared/validations/schema/user.validation-schema.js';
+import { loginSchema } from '#shared/validations/schema/auth.validation-schema.js';
 import { login } from '@/api/auth.api';
 import Field from '@/components/ui/Field.vue';
 import Button from '@/components/ui/Button.vue';

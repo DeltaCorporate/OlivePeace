@@ -21,7 +21,6 @@ const {
     fetchTableData
 } = useTable({
   fetchData: getProductCategories,
-
 });
 
 const productCategoryFormModalId = ref<number>();

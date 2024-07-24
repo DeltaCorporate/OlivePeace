@@ -24,7 +24,7 @@ loadSalesByYears();
       <GraphUserByMonth />
       <TopSellingProduct title="Produits les plus vendus par mois" :year="2023" />
       <GraphStockByMonth title="Stock par mois" />
-      <GraphProductSalesEvolution title="Évolution des ventes d'un produit" />
+      <GraphProductSalesEvolution />
 
     </div>
   </div>
