@@ -58,3 +58,12 @@ export const checkTokenExpiration = async (signal?: AbortSignal): Promise<Respon
         return formatAxiosError(error as any);
     }
 };
+
+export const deleteAccount = async (signal?: AbortSignal): Promise<ResponseType<any>> => {
+    try {
+        const response: AxiosResponse<ResponseType<{ expired: boolean }>> = await apiClient.delete('/auth/delete-account', { signal });
+        return formatAxiosResponse(response);
+    } catch (error) {
+        return formatAxiosError(error as any);
+    }
+}
