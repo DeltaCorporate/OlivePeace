@@ -44,7 +44,9 @@ Projet challenge OlivePeace
 4) Lancer le docker compose puis aller sur le conteneur olivepeace-server et faire un npm run seed
 
 Les adresses par défaut de l'app : 
+
 Front : http://localhost:5175
+
 Api : http://localhost:3026
 
 Url de la prod : https://olivepeace.hyarotech.com/
