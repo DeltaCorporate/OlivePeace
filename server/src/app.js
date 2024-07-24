@@ -20,7 +20,6 @@ import {__root} from "#config/filePath.js";
 import authRoute from "#app/src/routes/auth.route.js";
 import adminProductRouter from "#app/src/routes/admin/product.route.js";
 import statsRouter from "#app/src/routes/stats.route.js";
-import './scheduler.js';
 import usersRoute from "#app/src/routes/admin/users.route.js";
 import {checkRole, isAdmin, isAuthenticated} from "#app/src/middlewares/auth.middleware.js";
 import dashboardLayoutsRoute from "#app/src/routes/dashboard-layouts.route.js";

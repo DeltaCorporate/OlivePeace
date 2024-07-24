@@ -8,18 +8,18 @@ interface AddToCartInterface {
     quantity?: number;
 }
 
-export const getCart = async (userId: string, signal?: AbortSignal): Promise<any> => {
+export const getCart = async (signal?: AbortSignal): Promise<any> => {
     try {
-        const response: AxiosResponse<ResponseType<any>> = await apiClient.get(`/cart/${userId}`, {signal});
+        const response: AxiosResponse<ResponseType<any>> = await apiClient.get(`/cart/`, {signal});
         return formatAxiosResponse(response);
     } catch (error) {
         return formatAxiosError(error);
     }
 };
 
-export const addToCart = async (userId: string, data: AddToCartInterface, signal?: AbortSignal): Promise<any> => {
+export const addToCart = async (data: AddToCartInterface, signal?: AbortSignal): Promise<any> => {
     try {
-        const response: AxiosResponse<ResponseType<any>> = await apiClient.post(`/cart/${userId}/add`, data, {signal});
+        const response: AxiosResponse<ResponseType<any>> = await apiClient.post(`/cart/add`, data, {signal});
         return formatAxiosResponse(response);
     } catch (error) {
         return formatAxiosError(error);

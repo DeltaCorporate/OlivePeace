@@ -42,7 +42,6 @@ export const useCartStore = defineStore('cart', {
             }
         },
 
-        // à corriger
         async placeOrder(userId: string) {
             try {
                 await apiClient.post(`/order/create/${userId}`);
