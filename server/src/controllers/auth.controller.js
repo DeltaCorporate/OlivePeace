@@ -144,6 +144,7 @@ class AuthController {
     static async deleteAccount(req, res) {
         try {
             const userId = req.user.id;
+
             const user = await User.findByPk(userId);
             if (!user) return res.error(UserMessage.userNotFound, 404);
             await user.anonymize();
