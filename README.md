@@ -30,7 +30,7 @@ Projet challenge OlivePeace
     
 ### Lazarevic Stéphane
   - Système de Panier
-  - Gestion des stock v1 (Non mis en prod)
+  - Gestion des stock CRUD v1 (Non mis en prod)
   
 ### Imami Hajar
   - Création d'un premier composable useForm (non achevé)
