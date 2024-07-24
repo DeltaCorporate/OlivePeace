@@ -72,5 +72,3 @@ const openProductCategoryFormModal = (id: number) => {
 
 </template>
 
-<style scoped>
-</style>

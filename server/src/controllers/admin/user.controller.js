@@ -94,8 +94,8 @@ class UserController {
         try {
             const { id } = req.params;
             const user = await User.findByPk(id);
-            if (!user) return res.error(UserMessage.notFound, 404);
-            if (user.isConfirmed()) return res.error(UserMessage.alreadyConfirmed, 400);
+            if (!user) return res.error(UserMessage.notFound, 404,[{message: UserMessage.notFound}]);
+            if (user.isConfirmed()) return res.error('', 400,[{message: UserMessage.alreadyConfirmed}]);
 
             user.regenerateConfirmationToken();
             await user.save();

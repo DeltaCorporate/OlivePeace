@@ -10,6 +10,7 @@ import { getUsers, deleteUser, sendConfirmationEmail } from "@/api/admin/user.ap
 import { useAdminLayoutStore } from "@/stores/admin/admin-layout.store";
 import UserForm from '@/components/admin/UserForm.vue';
 import OpTableActions from "@/components/ui/OpTableActions.vue";
+import {pickError} from "@/utils/response.util.ts";
 
 const router = useRouter();
 const alertStore = useAlertStore();
@@ -42,7 +43,7 @@ const handleSendConfirmation = async (id: string) => {
   if (response.isSuccess) {
     alertStore.showAlert('Email de confirmation envoyé', 'positive');
   } else {
-    alertStore.showAlert('Erreur lors de l\'envoi de l\'email de confirmation', 'negative');
+    alertStore.showAlert(pickError(response.errors).message ?? 'Erreur lors de l\'envoi de l\'email de confirmation', 'negative');
   }
 };
 
@@ -73,19 +74,22 @@ onMounted(async () => { await fetchTableData});
       <OpTableCol header="Nom" property="lastName" sortable searchable/>
       <OpTableCol header="Email" property="email" sortable searchable />
       <OpTableCol header="Rôles" property="roles"/>
-      <OpTableCol header="Confirmé" property="isConfirmed">
+      <OpTableCol header="Confirmé" sortable property="isConfirmed">
         <template #default="{ value }">{{ value ? 'Oui' : 'Non' }}</template>
       </OpTableCol>
 
       <OpTableCol header="Actions">
         <template #default="row">
-          <OpTableActions
-              :row="row"
-              :data="data"
-              :editMethod="() => openUserModal(row.value._id)"
-              :deleteMethod="deleteUser"
-          />
-          <SfButton @click="handleSendConfirmation(row.value._id)" v-if="!row.value.isConfirmed" variant="secondary">Confirmer Email</SfButton>
+          <div class="flex flex-col gap-2">
+            <OpTableActions
+                :row="row"
+                :data="data"
+                :editMethod="() => openUserModal(row.value._id)"
+                :deleteMethod="deleteUser"
+            />
+            <SfButton @click="handleSendConfirmation(row.value._id)" v-if="!row.value.isConfirmed" size="sm" variant="secondary">Confirmer Email</SfButton>
+          </div>
+
         </template>
       </OpTableCol>
     </OpTable>

@@ -39,6 +39,7 @@ const thClasses = computed(() => {
       v-if="props.renderAs === 'header'"
       :class="thClasses"
       @click="handleSortAsk"
+      class="max-w-[250px]"
   >
     <div class="flex items-center">
       <slot name="header" :header="props.header">
@@ -50,12 +51,12 @@ const thClasses = computed(() => {
       </span>
     </div>
   </th>
-  <td v-else-if="props.renderAs === 'cell'" class="px-3 py-1.5">
+  <td v-else-if="props.renderAs === 'cell'" class="px-3 py-1.5 max-w-[250px] break-words">
     <slot :value="property ? props.row[property] : props.row">
       {{ property ? props.row[property] : '' }}
     </slot>
   </td>
-  <td v-else-if="props.renderAs === 'search'" class="px-3 py-1.5">
+  <td v-else-if="props.renderAs === 'search'" class="px-3 py-1.5 max-w-[250px]">
     <SfInput
         v-if="props.searchable"
         :placeholder="props.header"
