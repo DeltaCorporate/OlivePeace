@@ -30,12 +30,20 @@ Projet challenge OlivePeace
     
 ### Lazarevic Stéphane
   - Système de Panier
+  - Réservation de 15 minutes d'un produit
+  - Modification de la navbar (pour le panier)
+  - Commande associé au panier (order - non achevé)
+  - Création du composant réutilisable modale de suppression
   - Gestion des stock CRUD v1 (Non mis en prod)
+  - Création d'un modèle de données user v1 (Non mis en prod)
+  - CartTable Mongo
+  - Tests unitaires (controllers)
   
 ### Imami Hajar
   - Création d'un premier composable useForm (non achevé)
   - Envoi de mail alerte (non achevé)
   - Dossier RGPD pdf
+    
 ## Installation du projet
 1) cloner le projet
 2) Copier le .env.example en .env à la racine du projet
